@@ -1,19 +1,20 @@
-drop table if exists Utilisateur;
-drop table if exists ModeleJDR;
-drop table if exists ModeleEquipe;
-drop table if exists [Role];
-drop table if exists ModeleAction;
-drop table if exists Cible;
-drop table if exists Autorise;
-drop table if exists Permet;
-drop table if exists JDR;
-drop table if exists MJ;
-drop table if exists Joueur;
-drop table if exists EstUn;
-drop table if exists [Action];
-drop table if exists Equipe;
+drop table if exists Message_;
 drop table if exists EstDans;
-drop table if exists [Message];
+drop table if exists Equipe;
+drop table if exists Action_;
+drop table if exists EstUn;
+drop table if exists Joueur;
+drop table if exists MJ;
+drop table if exists JDR;
+drop table if exists Permet;
+drop table if exists Autorise;
+drop table if exists Cible;
+drop table if exists ModeleAction;
+drop table if exists Role_;
+drop table if exists ModeleEquipe;
+drop table if exists ModeleJDR;
+drop table if exists Utilisateur;
+
 
 create table Utilisateur (
     id integer not null primary key auto_increment,
@@ -30,7 +31,7 @@ create table ModeleJDR (
     img_banniere varchar(32) not null,
     img_fond varchar(32) not null,
     img_logo varchar(32) not null,
-    nb_equipes_max integer not null
+    nb_equipes_max integer not null,
 
     foreign key (id_createur) references Utilisateur (id)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
@@ -45,7 +46,7 @@ create table ModeleEquipe (
     foreign key (id_modele_jdr) references ModeleJDR (id_modele_jdr)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
-create table [Role] (
+create table Role_ (
     id_role integer not null primary key auto_increment,
     id_modele_jdr integer,
     img_role varchar(32) not null,
@@ -71,7 +72,7 @@ create table Cible (
     id_modele_equipe_cible integer,
     id_modele_action integer,
 
-    foreign key (id_modele_equipe_cible) references ModeleEquipe (id_modele_equipe)
+    foreign key (id_modele_equipe_cible) references ModeleEquipe (id_modele_equipe),
     foreign key (id_modele_action) references ModeleAction (id_modele_action)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
@@ -79,7 +80,7 @@ create table Autorise (
     id_modele_equipe_autorise integer,
     id_modele_action integer,
 
-    foreign key (id_modele_equipe_autorise) references ModeleEquipe (id_modele_equipe)
+    foreign key (id_modele_equipe_autorise) references ModeleEquipe (id_modele_equipe),
     foreign key (id_modele_action) references ModeleAction (id_modele_action)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
@@ -87,16 +88,16 @@ create table Permet (
     id_role integer,
     id_modele_action integer,
 
-    foreign key (id_role) references [Role] (id_role),
+    foreign key (id_role) references Role_ (id_role),
     foreign key (id_modele_action) references ModeleAction (id_modele_action)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 create table JDR (
     id_jdr integer not null primary key auto_increment,
-    id_modele_jdr,
-    code_invite,
-    nb_max_joueurs,
-    nb_min_joueurs,
+    id_modele_jdr integer,
+    code_invite varchar(8),
+    nb_max_joueurs integer not null,
+    nb_min_joueurs integer not null,
 
     foreign key (id_modele_jdr) references ModeleJDR (id_modele_jdr)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
@@ -126,12 +127,12 @@ create table EstUn (
     id_role integer,
 
     foreign key (id_joueur) references Joueur (id_joueur),
-    foreign key (id_role) references [Role] (id_role),
+    foreign key (id_role) references Role_ (id_role),
 
     primary key (id_joueur, id_role)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
-create table [Action] (
+create table Action_ (
     id_action integer not null primary key auto_increment,
     id_modele_action integer,
     id_jdr integer,
@@ -140,14 +141,14 @@ create table [Action] (
 
     foreign key (id_modele_action) references ModeleAction (id_modele_action),
     foreign key (id_jdr) references JDR (id_jdr),
-    foreign key (id_joueur_cible) references Joueur (id_joueur),
+    foreign key (id_joueur_cible) references Joueur (id_joueur)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 create table Equipe (
     id_equipe integer not null primary key auto_increment,
     id_modele_equipe integer,
 
-    foreign key (id_modele_equipe) references ModeleEquipe (id_modele_equipe),
+    foreign key (id_modele_equipe) references ModeleEquipe (id_modele_equipe)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 create table EstDans  (
@@ -160,12 +161,12 @@ create table EstDans  (
     primary key (id_joueur, id_equipe)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
-create table [Message] (
+create table Message_ (
     id_message integer not null primary key auto_increment,
     id_joueur integer,
     id_equipe integer,
     horaire_publi date not null,
-    texte varchar(255) not null
+    texte varchar(255) not null,
 
     foreign key (id_joueur) references Joueur (id_joueur),
     foreign key (id_equipe) references Equipe (id_equipe)
