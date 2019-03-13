@@ -61,8 +61,10 @@ create table Role_ (
 create table ModeleAction (
     id_modele_action integer not null primary key auto_increment,
     id_modele_jdr integer,
+    titre_action varchar(32) not null,
     desc_action varchar(256) not null,
     message_action varchar(256) not null,
+    horaire_activ time not null,
     action_effet enum('ressusciter', 'tuer') not null,
     action_fct enum('voteMajoritaire', 'voteMinoritaire', 'pouvoir') not null,
 
@@ -139,7 +141,6 @@ create table Action_ (
     id_modele_action integer,
     id_jdr integer,
     id_joueur_cible integer,
-    horaire_activ date not null,
 
     foreign key (id_modele_action) references ModeleAction (id_modele_action),
     foreign key (id_jdr) references JDR (id_jdr),
@@ -167,7 +168,7 @@ create table Message_ (
     id_message integer not null primary key auto_increment,
     id_joueur integer,
     id_equipe integer,
-    horaire_publi date not null,
+    horaire_publi timestamp not null,
     texte varchar(256) not null,
 
     foreign key (id_joueur) references Joueur (id_joueur),

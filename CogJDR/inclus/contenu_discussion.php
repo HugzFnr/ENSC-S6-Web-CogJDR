@@ -1,19 +1,29 @@
-<?php
-    require_once "connection.php";
+<ul>
+    <?php
+        require_once "./session.php";
+        require_once "./connection.php";
 
-    $r = sql_select(
-        'Message_',
-        array('id_joueur', 'horaire_publi', 'text'),
-        array('id_equipe' => $_SESSION['equipes'], 'horaire_publi'),
-        'ORDER BY horaire_publi'
-    );
+        if (empty($_REQUEST['message_text'])) { // si 'message' est vide, c'est qu'on est en train de recharger les messages
+            $r = sql_select(
+                'Message_',
+                array('id_joueur', 'horaire_publi', 'texte'),
+                array('id_equipe' => $_SESSION['id_equipe_liste']),
+                'ORDER BY horaire_publi'
+            );
 
-    while($message = $r->fetch()) { ?>
-        <li>
-            <ul class="discussion_message">
-                <p class="discussion_debut">[<?=$message['horaire_publi']?>]<?=sql_select('Joueur', 'pseudo', array('id_joueur' => $message['id_joueur']))?></p>
-                <p class="discussion_text"><?=$message['text']?></p>
-            </ul>
-        </li>
-    <?php }
-?>
+            while($message = $r->fetch()) { ?>
+                <li class="discussion_message"><b class="discussion_debut">[<?=$message['horaire_publi']?>] <?=sql_select('Joueur', 'pseudo', array('id_joueur' => $message['id_joueur']))->fetch()['pseudo']?> : </b><i class="discussion_texte"><?=$message['texte']?></i></li>
+            <?php }
+        } else { // sinon, c'est que la pages est solicitée pour evoyer un message
+            $r = sql_insert('Message_', array(
+                'id_message' => null,
+                'id_joueur' => $_SESSION['id_joueur'],
+                'id_equipe' => $_SESSION['id_equipe_discussion'],
+                'horaire_publi' => null,
+                'texte' => $_REQUEST['message_text']
+            ));
+
+            header("Location: ".$_REQUEST['page_form']);
+        }
+    ?>
+</ul>

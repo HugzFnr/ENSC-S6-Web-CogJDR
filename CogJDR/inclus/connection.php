@@ -13,17 +13,18 @@
         $values_builder = "";
         if ($values == "*" || $values == -1) {
             $values_builder = "*";
-            $values = array();
+            //$values = array();
         } elseif (is_array($values)) {
             $sep = "";
 
-            foreach ($values as $k => $v) {
-                $values_builder.= "$sep$k";
+            foreach ($values as $v) {
+                $values_builder.= "$sep$v";
                 $sep = ", ";
+                //$values = array();
             }
         } else {
             $values_builder = $values;
-            $value = array();
+            //$values = array();
         }
 
         $where_builder = "";
@@ -45,10 +46,10 @@
         
         if (empty($where)) {
             $r = $conn->prepare("SELECT $values_builder FROM `$table` $more");
-            $r->execute($values);
+            $r->execute();
         } else {
             $r = $conn->prepare("SELECT $values_builder FROM `$table` WHERE $where_builder $more");
-            $r->execute($values + $where);
+            $r->execute($where);
         }
         
         return $r;

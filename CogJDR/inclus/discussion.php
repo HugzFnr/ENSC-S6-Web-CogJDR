@@ -4,17 +4,20 @@
         $.ajaxSetup({ cache: false });
     });
     
-    function SubForm() {
-        $.ajax({
-            url:'./',
-            type:'post',
-            data:$('#myForm').serialize(),
-            success:function(){
-                alert("worked");
-            }
-        });
-    }
+    /*$('#form_envoie_message').submit(function(e) {
+        e.preventDefault();
+        alert("coucou");
+        /*alert("prevented");
+        $.post('./inclus/contenu_discussion.php', $(this).serialize(), function(data) {
+            alert(data);
+        });*
+    });*/
+
 </script>
 
-<div id="discussion">Merci de patienter...</div>
-<input type="text" name="message" id="discussion_boite_message" hint="Entrez votre message !" action="SubForm()">
+<div id="discussion">...</div>
+<form id="form_envoie_message" action="./inclus/contenu_discussion.php">
+    <input type="text" name="message_text" id="discussion_boite_message" placeholder="Entrez votre message !" autofocus>
+    <input type="hidden" name="page_form" value="<?=$_SERVER['REQUEST_URI']?>">
+    <input type="submit" value="Envoyer">
+</form>
