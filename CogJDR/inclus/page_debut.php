@@ -13,5 +13,12 @@
     </head>
 
     <body>
-        Utilisateur <?=$_SESSION['id_utilisateur']?> connect&eacute; en tant que <?=$_SESSION['id_joueur']?>.
-        Affichage de la discussion de l'&eacute;quipe <?=$_SESSION['id_equipe_discussion']?> :
+        <?php
+            if (isset($_SESSION['id'])) { ?>
+                Utilisateur <?=$_SESSION['email']?> (no<?=$_SESSION['id']?>) connect&eacute; en tant que <?=$_SESSION['id_joueur']?>.
+                <br>Affichage de la discussion de l'&eacute;quipe <?=$_SESSION['id_equipe_discussion']?>.
+            <?php }
+        ?>
+
+        <h1>Yo!</h1>
+        <hr>

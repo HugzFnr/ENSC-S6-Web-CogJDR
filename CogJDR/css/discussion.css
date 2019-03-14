@@ -1,38 +1,19 @@
-* {
-    box-sizing: border-box;
-}
-
-body {
-    padding: 20px;
-}
-
 ul {
     top: 20px;
     bottom: 20px;
     left: 20px;
     right: 20px;
-    overflow: scroll;
+    min-height: 149px;
+    max-height: 149px;
+    overflow: auto;
     margin: 0;
     padding: 0;
 
     border: 2px solid #ccc;
-
-    font-size: 16px;
-    font-family: Arial, sans-serif;
-
-    -webkit-overflow-scrolling: touch;
 }
 
 li {
-    padding: 10px 20px;
+    padding: 5px 15px;
 
-    border-bottom: 1px solid #ccc;
-
-    &:last-child {
-        border-bottom: none;
-    }
-
-    &:nth-child(even) {
-        background: #f8f8f8;
-    }
+    border-top: 1px solid #ccc;
 }
