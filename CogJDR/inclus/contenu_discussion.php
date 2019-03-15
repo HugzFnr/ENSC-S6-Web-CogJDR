@@ -9,7 +9,7 @@
             'Message_',
             array('id_joueur', 'horaire_publi', 'texte'),
             array('id_equipe' => $donnees_jdr['id_equipe_liste']),
-            'ORDER BY horaire_publi'
+            'ORDER BY horaire_publi ASC'
         );
 
         while($message = $r->fetch()) {

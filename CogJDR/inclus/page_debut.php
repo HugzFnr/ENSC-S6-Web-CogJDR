@@ -14,9 +14,16 @@
 
     <body>
         <?php
-            if (isset($_SESSION['id'])) { ?>
-                Utilisateur <?=$_SESSION['email']?> (no<?=$_SESSION['id']?>) connect&eacute; en tant que <?=$_SESSION['id_joueur']?>.
-                <br>Affichage de la discussion de l'&eacute;quipe <?=$_SESSION['id_equipe_discussion']?>.
+            if (isset($_SESSION['id'])) {
+                $donnees_jdr = empty($_SESSION['liste_donnees_jd']) ? "" : $_SESSION['liste_donnees_jd'][$_SESSION['indice_jdr_suivi']] ?>
+                Utilisateur <?=$_SESSION['email']?> (no<?=$_SESSION['id']?>)
+                
+                <?php
+                    if (!empty($donnees_jdr)) { ?>
+                        connect&eacute; en tant que <?=$donnees_jdr['nom_joueur']?>.
+                        <br>Affichage de la discussion de l'&eacute;quipe <?=$donnees_jdr['nom_equipe_discussion_suivi']?>.
+                    <?php }
+                ?>
             <?php }
         ?>
 

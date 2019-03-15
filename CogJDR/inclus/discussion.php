@@ -23,7 +23,7 @@
     });
 </script>
 
-<ul id="discussion"><?=include "./inclus/contenu_discussion.php"?></ul>
+<ul id="discussion"><?php include "./inclus/contenu_discussion.php"?></ul>
 <form id="form_envoie_message" action="./inclus/contenu_discussion.php">
     <input type="text" name="message_text" id="discussion_boite_message" placeholder="Entrez votre message !" autofocus>
     <input type="hidden" name="page_form" value="<?=$_SERVER['REQUEST_URI']?>">

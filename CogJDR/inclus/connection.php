@@ -43,12 +43,33 @@
             
             $sep = " AND ";
         }
+
+        $table_builder = "";
+        $sep = "";
+
+        if (is_array($table)) {
+            foreach ($table as $v) {
+                $table_builder.= "$sep`$v`";
+                $sep = " JOIN ";
+            }
+            $table = array();
+        } else {
+            $table_builder = "`$table`";
+            $table = array();
+        }
         
         if (empty($where)) {
-            $r = $conn->prepare("SELECT $values_builder FROM `$table` $more");
+            $r = $conn->prepare("SELECT $values_builder FROM $table_builder $more");
             $r->execute();
         } else {
-            $r = $conn->prepare("SELECT $values_builder FROM `$table` WHERE $where_builder $more");
+            $r = $conn->prepare("SELECT $values_builder FROM $table_builder WHERE $where_builder $more");
+
+            echo "<br><br>";
+            var_dump($r);
+            echo "<br><br>";
+            var_dump($where);
+            echo "<br><br>";
+
             $r->execute($where);
         }
         

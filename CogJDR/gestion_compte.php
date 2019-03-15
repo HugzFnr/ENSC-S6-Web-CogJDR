@@ -30,9 +30,9 @@
                 } else {
                     $is = sql_insert('Utilisateur', array(
                         'id' => null,
-                        'mdp' => $_REQUEST['mdp'],
-                        'email' => $_REQUEST['email'],
-                        'img' => $_REQUEST['img'] // TODO: gestion d'images (voir `connection.php`)
+                        'mdp' => htmlentities($_REQUEST['mdp']),
+                        'email' => htmlentities($_REQUEST['email']),
+                        'img' => htmlentities($_REQUEST['img']) // TODO: gestion d'images (voir `./inclus/connection.php`)
                     ));
                     
                     if ($is)
@@ -46,9 +46,9 @@
         
         case "modifier":
                 $is = sql_update('Utilisateur', array(
-                    'mdp' => $_REQUEST['mdp'],
-                    'email' => $_REQUEST['email'],
-                    'img' => $_REQUEST['img'] // TODO: gestion d'images (voir `connection.php`)
+                    'mdp' => htmlentities($_REQUEST['mdp']),
+                    'email' => htmlentities($_REQUEST['email']),
+                    'img' => htmlentities($_REQUEST['img']) // TODO: gestion d'images (voir `./inclus/connection.php`)
                 ), array('id' => $_SESSION['id']));
                     
                 if ($is)
@@ -60,28 +60,53 @@
             break;
         
         case "connecter":
-                $r = sql_select('Utilisateur', "*", array('mdp' => $_REQUEST['mdp'], 'email' => $_REQUEST['email']));
+                $r = sql_select('Utilisateur', "*", array('email' => $_REQUEST['email']));
                 if ($utilisateur = $r->fetch()) {
-                    $_SESSION['id'] = $utilisateur['id'];
-                    $_SESSION['email'] = $utilisateur['email'];
-                    $_SESSION['img'] = $utilisateur['img'];
-                    $redirige = $_REQUEST['redirection_succes'];
-                } else {
-                    $_SESSION['erreur'] = "Erreur d'authentification";
-                    //$redirige = $_REQUEST['redirection_echec'];
-                }
+                    if ($_REQUEST['mdp'] == $utilisateur['mdp']) {
+                        $_SESSION['id'] = $utilisateur['id'];
+                        $_SESSION['email'] = $utilisateur['email'];
+                        $_SESSION['img'] = $utilisateur['img'];
+                        
+                        $liste_constructeur = array();
+                        $r_ = sql_select('Joueur', "*", array('id_utilisateur' => $_SESSION['id']));
+                        while($joueur = $r_->fetch()) {
+                            array_push($liste_constructeur, array(
+                                'id_jdr' => $joueur['id_jrd_participe'],
+
+                                'id_joueur' => $joueur['id_joueur'],
+                                'nom_joueur' => "<code>Joueur(id_joueur=1, id_jrd_participe=0) # pseudo</code>",
+
+                                // SELECT DISTINCT Equipe.id_equipe, ModeleEquipe.titre_equipe
+                                // FROM EstDans JOIN Equipe JOIN ModeleEquipe
+                                // WHERE EstDans.id_equipe = Equipe.id_equipe
+                                //     AND Equipe.id_modele_equipe = ModeleEquipe.id_modele_equipe
+                                //     AND EstDans.id_joueur = $joueur['id_joueur'];
+                                'liste_equipe' => sql_select(
+                                        array('EstDans', 'Equipe', 'ModeleEquipe'),
+                                        "DISTINCT Equipe.id_equipe, ModeleEquipe.titre_equipe",
+                                        array(
+                                            'EstDans.id_equipe' => 'Equipe.id_equipe',
+                                            'Equipe.id_modele_equipe' => 'ModeleEquipe.id_modele_equipe',
+                                            'EstDans.id_joueur' => $joueur['id_joueur']
+                                        )
+                                    )->fetchAll(),
+                                
+                                'indice_equipe_discussion_suivi' => 0
+                            ));
+                        }
+
+                        $redirige = $_REQUEST['redirection_succes'];
+                    } else
+                        $_SESSION['erreur'] = "Erreur d'authentification - mauvais mot de passe";
+                } else
+                    $_SESSION['erreur'] = "Erreur d'authentification - compte innexistant";
             break;
 
         case "supprimer":
                 sql_delete('Utilisateur', array('id' => $_SESSION['id']));
 
         case "deconnecter":
-                unset($_SESSION['id']);
-                unset($_SESSION['email']);
-                unset($_SESSION['img']);
-                unset($_SESSION['liste_donnees_jd']);
-                unset($_SESSION['indice_jdr_suivi']);
-
+                session_unset();
                 session_destroy();
             break;
         
