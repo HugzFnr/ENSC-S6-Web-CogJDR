@@ -109,21 +109,21 @@ create table JDR (
 create table MJ (
     id_mj integer not null primary key auto_increment,
     id_utilisateur integer,
-    id_jrd_dirige integer,
+    id_jdr_dirige integer,
     pseudo_mj varchar(32) not null,
 
     foreign key (id_utilisateur) references Utilisateur (id),
-    foreign key (id_jrd_dirige) references JDR (id_jdr)
+    foreign key (id_jdr_dirige) references JDR (id_jdr)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 create table Joueur (
     id_joueur integer not null primary key auto_increment,
     id_utilisateur integer,
-    id_jrd_participe integer,
+    id_jdr_participe integer,
     pseudo varchar(32) not null,
 
     foreign key (id_utilisateur) references Utilisateur (id),
-    foreign key (id_jrd_participe) references JDR (id_jdr)
+    foreign key (id_jdr_participe) references JDR (id_jdr)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 create table EstUn (

@@ -15,16 +15,16 @@
     <body>
         <?php
             if (isset($_SESSION['id'])) {
-                $donnees_jdr = empty($_SESSION['liste_donnees_jd']) ? "" : $_SESSION['liste_donnees_jd'][$_SESSION['indice_jdr_suivi']] ?>
-                Utilisateur <?=$_SESSION['email']?> (no<?=$_SESSION['id']?>)
-                
-                <?php
-                    if (!empty($donnees_jdr)) { ?>
-                        connect&eacute; en tant que <?=$donnees_jdr['nom_joueur']?>.
-                        <br>Affichage de la discussion de l'&eacute;quipe <?=$donnees_jdr['nom_equipe_discussion_suivi']?>.
-                    <?php }
-                ?>
-            <?php }
+                $donnees_jdr = empty($_SESSION['liste_donnees_jdr']) ? "" : $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']] ?>
+                Utilisateur <?=$_SESSION['email']?> (no<?=$_SESSION['id']?>) <?php
+
+                if (!empty($donnees_jdr)) { ?>
+                    connect&eacute; en tant que <?=$donnees_jdr['nom_joueur'] ?>.<?php 
+                    if (-1 < $donnees_jdr['indice_equipe_discussion_suivi']) { ?>
+                        <br>Affichage de la discussion de l'&eacute;quipe <?=$donnees_jdr['liste_equipe'][$donnees_jdr['indice_equipe_discussion_suivi']]['titre_equipe']?>.<?php
+                    }
+                }
+            }
         ?>
 
         <h1>Yo!</h1>

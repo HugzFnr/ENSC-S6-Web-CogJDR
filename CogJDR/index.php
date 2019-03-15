@@ -13,7 +13,7 @@
     }
 ?>
 
-<form action="./gestion_compte.php" method="post">
+<form action="./compte.php" method="post">
     <input type="hidden" name="action" value="<?=isset($_SESSION['id']) ? "modifier" : "connecter" ?>">
     <input type="hidden" name="redirection_echec" value="<?=$_SERVER['REQUEST_URI']?>">
     <input type="hidden" name="redirection_succes" value="<?=$_SERVER['REQUEST_URI']?>">
@@ -24,9 +24,12 @@
 
     <button type="submit"><?=isset($_SESSION['id']) ? "Modifier les Donn&eacute;es" : "Se Connecter"?></button>
 </form>
-<hr>
 
-<?php include "./inclus/discussion.php" ?>
-<hr>
+<?php
+    if (isset($_SESSION['liste_donnees_jdr'])) {
+        echo "<hr>";
+        include "./inclus/discussion.php";
+    }
+?>
 
 <?php require "./inclus/page_fin.php" ?>

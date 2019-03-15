@@ -7,72 +7,80 @@
         return $conn->query($c);
     }
 
-    function sql_select($table, $values, $where, $more="") {
+    function parms($string, $data) {
+        $indexed = $data == array_values($data);
+        foreach ($data as $k=>$v) {
+            if (is_string($v))
+                $v = "'$v'";
+            if ($indexed)
+                $string = preg_replace('/\?/', $v, $string, 1);
+            else
+                $string = str_replace(":$k", $v, $string);
+        }
+        return $string;
+    }
+
+    function sql_select($table, $value, $where, $order=null, $distinct=false) {
         global $conn;
 
-        $values_builder = "";
-        if ($values == "*" || $values == -1) {
-            $values_builder = "*";
-            //$values = array();
-        } elseif (is_array($values)) {
-            $sep = "";
+        $execute_array = array();
+        $execute_index = 'a';
 
-            foreach ($values as $v) {
-                $values_builder.= "$sep$v";
-                $sep = ", ";
-                //$values = array();
-            }
-        } else {
-            $values_builder = $values;
-            //$values = array();
-        }
+        // SELECT ..
+        $value_builder = empty($distinct) ? "SELECT " : "SELECT DISTINCT ";
+        if ($value == "*" || empty($value))
+            $value_builder.= "*";
+        elseif (is_array($value))
+            $value_builder.= join(", ", $value);
+        else
+            $value_builder.= $value;
 
-        $where_builder = "";
+        // FROM ..
+        $table_builder = "FROM `".(is_array($table) ? join("` JOIN `", $table) : $table)."`";
+
+        // WHERE ..
+        $where_builder = empty($where) ? "" : "WHERE ";
         $sep = "";
-
         foreach ($where as $k => $v) {
             $where_builder.= "$sep$k";
 
-            if (empty($v)) {
-                unset($where[$k]);
-            } elseif (is_array($v)) {
-                $where[$k] = join(", ", $where[$k]);
-                $where_builder.= " IN (:$k)";
-            } else
-                $where_builder.= " = :$k";
+            if (is_array($v)) {
+                $where_builder.= " IN (";
+                $sep_ = "";
+                foreach ($v as $v_) {
+                    $where_builder.= "$sep_:$execute_index";
+                    $execute_array[$execute_index++] = $v_;
+
+                    $sep_ = ", ";
+                }
+                $where_builder.= ")";
+            } else {
+                $where_builder.= " = :$execute_index";
+                $execute_array[$execute_index++] = $v;
+            }
             
             $sep = " AND ";
         }
 
-        $table_builder = "";
+        // ORDER BY ..
+        $order_builder = empty($order) ? "" : "ORDER BY ";
         $sep = "";
+        if (is_array($order))
+            foreach ($order as $k => $v) {
+                $order_builder.= "$sep:$execute_index ";
+                $execute_array[$execute_index++] = $k;
 
-        if (is_array($table)) {
-            foreach ($table as $v) {
-                $table_builder.= "$sep`$v`";
-                $sep = " JOIN ";
+                $order_builder.= "$v";
+
+                $sep = ", ";
             }
-            $table = array();
-        } else {
-            $table_builder = "`$table`";
-            $table = array();
-        }
-        
-        if (empty($where)) {
-            $r = $conn->prepare("SELECT $values_builder FROM $table_builder $more");
-            $r->execute();
-        } else {
-            $r = $conn->prepare("SELECT $values_builder FROM $table_builder WHERE $where_builder $more");
 
-            echo "<br><br>";
-            var_dump($r);
-            echo "<br><br>";
-            var_dump($where);
-            echo "<br><br>";
+        /*-*/
+        /*-echo "<code>".parms("$value_builder $table_builder $where_builder $order_builder", $execute_array)."</code><br>";*/
+        /*-*/
 
-            $r->execute($where);
-        }
-        
+        $r = $conn->prepare("$value_builder $table_builder $where_builder $order_builder");
+        $r->execute($execute_array);
         return $r;
     }
 

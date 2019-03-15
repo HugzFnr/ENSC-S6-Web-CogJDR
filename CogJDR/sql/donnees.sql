@@ -18,7 +18,7 @@ insert into ModeleJDR (`id_modele_jdr`, `id_createur`, `titre`, `desc_jdr`, `fic
 insert into JDR (`id_jdr`, `id_modele_jdr`, `code_invite`, `nb_max_joueurs`, `nb_min_joueurs`, `jours_ouvrables`) values
     (0, 0, "12da0fde", 42, 0, '7 jours');
 
-insert into Joueur (`id_joueur`, `id_utilisateur`, `id_jrd_participe`, `pseudo`) values
+insert into Joueur (`id_joueur`, `id_utilisateur`, `id_jdr_participe`, `pseudo`) values
     (0, 0, 0, 'Jps'),
     (1, 1, 0, 'Sel');
 

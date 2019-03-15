@@ -24,29 +24,26 @@
     switch (isset($_REQUEST['action']) ? $_REQUEST['action'] : "") {
         case "creer":
                 $r = sql_select('Utilisateur', "email", array('email' => $_REQUEST['email']));
-                if ($r->fetch()) {
+                if ($r->fetch())
                     $_SESSION['erreur'] = "Erreur compte existant";
-                    //$redirige = $_REQUEST['redirection_echec'];
-                } else {
+                else {
                     $is = sql_insert('Utilisateur', array(
                         'id' => null,
-                        'mdp' => htmlentities($_REQUEST['mdp']),
+                        'mdp' => $_REQUEST['mdp'],
                         'email' => htmlentities($_REQUEST['email']),
                         'img' => htmlentities($_REQUEST['img']) // TODO: gestion d'images (voir `./inclus/connection.php`)
                     ));
                     
                     if ($is)
                         $redirige = $_REQUEST['redirection_succes'];
-                    else {
+                    else
                         $_SESSION['erreur'] = "Erreur /*-*/";
-                        //$redirige = $_REQUEST['redirection_echec'];
-                    } 
                 }
             break;
         
         case "modifier":
                 $is = sql_update('Utilisateur', array(
-                    'mdp' => htmlentities($_REQUEST['mdp']),
+                    'mdp' => $_REQUEST['mdp'],
                     'email' => htmlentities($_REQUEST['email']),
                     'img' => htmlentities($_REQUEST['img']) // TODO: gestion d'images (voir `./inclus/connection.php`)
                 ), array('id' => $_SESSION['id']));
@@ -71,10 +68,10 @@
                         $r_ = sql_select('Joueur', "*", array('id_utilisateur' => $_SESSION['id']));
                         while($joueur = $r_->fetch()) {
                             array_push($liste_constructeur, array(
-                                'id_jdr' => $joueur['id_jrd_participe'],
+                                'id_jdr' => $joueur['id_jdr_participe'],
 
                                 'id_joueur' => $joueur['id_joueur'],
-                                'nom_joueur' => "<code>Joueur(id_joueur=1, id_jrd_participe=0) # pseudo</code>",
+                                'nom_joueur' => $joueur['pseudo'],
 
                                 // SELECT DISTINCT Equipe.id_equipe, ModeleEquipe.titre_equipe
                                 // FROM EstDans JOIN Equipe JOIN ModeleEquipe
@@ -82,18 +79,29 @@
                                 //     AND Equipe.id_modele_equipe = ModeleEquipe.id_modele_equipe
                                 //     AND EstDans.id_joueur = $joueur['id_joueur'];
                                 'liste_equipe' => sql_select(
-                                        array('EstDans', 'Equipe', 'ModeleEquipe'),
-                                        "DISTINCT Equipe.id_equipe, ModeleEquipe.titre_equipe",
+                                        array(
+                                            'EstDans',
+                                            'Equipe',
+                                            'ModeleEquipe'
+                                        ),
+                                        array(
+                                            'Equipe.id_equipe',
+                                            'ModeleEquipe.titre_equipe'
+                                        ),
                                         array(
                                             'EstDans.id_equipe' => 'Equipe.id_equipe',
                                             'Equipe.id_modele_equipe' => 'ModeleEquipe.id_modele_equipe',
                                             'EstDans.id_joueur' => $joueur['id_joueur']
-                                        )
-                                    )->fetchAll(),
-                                
+                                        ),
+                                        null,
+                                        true
+                                    )->fetchAll(PDO::FETCH_ASSOC),
                                 'indice_equipe_discussion_suivi' => 0
                             ));
                         }
+                        var_dump($liste_constructeur);
+                        $_SESSION['liste_donnees_jdr'] = $liste_constructeur;
+                        $_SESSION['indice_jdr_suivi'] = 0; // indice dans la liste d'au dessus :)
 
                         $redirige = $_REQUEST['redirection_succes'];
                     } else
@@ -129,7 +137,7 @@
             break;
         
         default:
-                $_SESSION['erreur'] = "Erreur d'action dans `gestion_compte.php`";
+                $_SESSION['erreur'] = "Erreur d'action dans `compte.php`";
                 //$redirige = $_REQUEST['redirection_echec'];
     }
 
