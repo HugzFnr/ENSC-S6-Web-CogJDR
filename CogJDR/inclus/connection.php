@@ -136,7 +136,7 @@
         return $conn->prepare("DELETE FROM `$table` WHERE $where_builder")->execute($where);
     }
 
-    function envoi_image($file, $name) {
+    function send_image($file, $name) {
         $name = str_replace("%", "_", rawurlencode(str_replace(" ", "-", $name)));
 
         $target_dir = "./images/";
@@ -161,11 +161,6 @@
             $r.= "Sorry, file already exists. ";
             $upload_success = false;
         }
-
-        if (512000 < $file["size"]) {
-            $r.= "Sorry, your file is too large. ";
-            $upload_success = false;
-        }
         
         if($image_type != "jpg" && $image_type != "png" && $image_type != "jpeg" && $image_type != "gif" ) {
             $r.= "Sorry, only JPG, JPEG, PNG & GIF files are allowed. ";
@@ -180,6 +175,6 @@
                 $r.= "Sorry, there was an error uploading your file. ";
         }
 
-        return array('msg' => $r, 'success' => true, 'fileName' => "$name.$image_type");
+        return array('msg' => $r, 'success' => $upload_success, 'fileName' => "$name.$image_type");
     }
 ?>

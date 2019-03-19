@@ -2,12 +2,13 @@
     require_once __DIR__."/session.php";
     require_once __DIR__."/connection.php";
 
-    $donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']];
-    if ($donnees_jdr['indice_equipe_discussion_suivi'] < 0) {
+    if (-1 < $_SESSION['indice_jdr_suivi'])
+        $donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']];
+    if (empty($donnees_jdr) || $donnees_jdr['indice_equipe_discussion_suivi'] < 0) {
         echo "Rejoiniez un groupe pour entamer une discussion !";
         if (isset($_REQUEST['page_form']))
             header("Location: ".$_REQUEST['page_form']);
-        return;
+        return false;
     }
 
     if (!isset($_REQUEST['message_text'])) { // si pas de messages, c'est qu'on est en train de recharger les messages

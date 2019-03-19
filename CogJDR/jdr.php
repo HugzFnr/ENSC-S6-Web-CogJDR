@@ -36,7 +36,6 @@
             break;
 
         case "quitter":
-                // oups: Integrity constraint violation (il faut delete dans l'ordre selon les ref de cléf externes...)
                 $id_joueur = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']]['id_joueur'];
                 sql_delete('Message_', array('id_joueur' => $id_joueur));
                 sql_delete('EstUn', array('id_joueur' => $id_joueur));
@@ -127,7 +126,7 @@
 
                     unset($redirige);
                 } else
-                    $_SESSION['Erreur JDR non trouver'];
+                    $_SESSION['erreur'] = "Erreur JDR non trouver";
             break;
             
         default:

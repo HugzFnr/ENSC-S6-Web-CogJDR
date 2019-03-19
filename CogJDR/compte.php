@@ -10,6 +10,7 @@
      *  0. `supprimer` : suppression du compte
      *  0. `deconnecter` : finire la session
      *  0. `afficher` : affiche les informations publiques du compte (ne redirige pas en cas de succès)
+     *              c'est l'action par défaut si non précisée (ne redirige pas en cas de succès)
      *
      * == redirections :
      * 
@@ -21,27 +22,9 @@
 
     $redirige = isset($_REQUEST['redirection_echec']) ? $_REQUEST['redirection_echec'] : "./#";
 
-    switch (isset($_REQUEST['action']) ? $_REQUEST['action'] : "") {
-        case "creer":
-                $r = sql_select('Utilisateur', "email", array('email' => $_REQUEST['email']));
-                if ($r->fetch())
-                    $_SESSION['erreur'] = "Erreur compte existant";
-                else {
-                    $is = sql_insert('Utilisateur', array(
-                        'id' => null,
-                        'mdp' => $_REQUEST['mdp'],
-                        'email' => htmlentities($_REQUEST['email']),
-                        'img' => htmlentities($_REQUEST['img']) // TODO: gestion d'images (voir `./inclus/connection.php`)
-                    ));
-                    
-                    if ($is)
-                        $redirige = $_REQUEST['redirection_succes'];
-                    else
-                        $_SESSION['erreur'] = "Erreur /*-*/";
-                }
-            break;
-        
-        case "modifier":
+    switch (isset($_REQUEST['action']) ? $_REQUEST['action'] : "afficher") {
+
+        case "modifier": // pas à jour
                 $is = sql_update('Utilisateur', array(
                     'mdp' => $_REQUEST['mdp'],
                     'email' => htmlentities($_REQUEST['email']),
@@ -55,6 +38,27 @@
                     //$redirige = $_REQUEST['redirection_echec'];
                 }
             break;
+
+        case "creer":
+                var_dump($_FILES['img']);
+                $r = sql_select('Utilisateur', "email", array('email' => $_REQUEST['email']));
+                if ($r->fetch()) {
+                    $_SESSION['erreur'] = "Erreur compte existant";
+                    break;
+                } else {
+                    $envoi = send_image($_FILES['img'], $_REQUEST['email']);
+                    if ($envoi['success'] && sql_insert('Utilisateur', array(
+                                'id' => null,
+                                'mdp' => $_REQUEST['mdp'],
+                                'email' => htmlentities($_REQUEST['email']),
+                                'img' => "images/utilisateurs/".$envoi['fileName']
+                            )))
+                        $redirige = $_REQUEST['redirection_succes'];
+                    else {
+                        $_ESSION['erreur'] = "Erreur /*-*/ : ".$envoi['msg'];
+                        break;
+                    }
+                }
         
         case "connecter":
                 $r = sql_select('Utilisateur', "*", array('email' => $_REQUEST['email']));
@@ -101,7 +105,7 @@
                         }
                         var_dump($liste_constructeur);
                         $_SESSION['liste_donnees_jdr'] = $liste_constructeur;
-                        $_SESSION['indice_jdr_suivi'] = 0; // indice dans la liste d'au dessus :)
+                        $_SESSION['indice_jdr_suivi'] = count($liste_constructeur) - 1; // indice dans la liste d'au dessus :)
 
                         $redirige = $_REQUEST['redirection_succes'];
                     } else
