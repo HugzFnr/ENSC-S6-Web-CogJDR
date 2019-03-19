@@ -1,0 +1,18 @@
+img.img {
+    height: 4em;
+    width: 4em;
+}
+
+div.cercle {
+    height: 4em;
+    width: 4em;
+    text-align: center;
+    background-color: rgb(142, 142, 142);
+    border-radius: 50%;
+    display: table; 
+}
+
+div.cercle #heure {
+    display: table-cell;
+    vertical-align: middle;
+}

@@ -1,34 +1,40 @@
 <?php require "./inclus/page_debut.php" ?>
 
-<!--
-    Plusieurs de ces pages sont à caractère de tests !
-    (evidement_lol.php)
--->
+<h1>Cog' JDR</h1>
+
+<p>
+    Ce site vous permet de jouer à des parties de jeux de rôle type boîte mail avec vos camarades de promo que vous aimez tant; mais aussi de créer vos propres JDR et les inviter ! ...
+</p>
+<p>
+    Placeat amet rem fuga. Iste earum dolor est dolorem. Labore nihil voluptas porro non et neque. Quaerat quaerat doloremque nihil alias consequatur. Rerum reprehenderit et dignissimos et.
+</p>
+<p>
+    Omnis aspernatur provident illum quod sit rerum provident aut. Tenetur alias in aut et porro. Necessitatibus id ut fugit qui ducimus sed non.
+</p>
+<p>
+    Et quaerat ut sequi sed minima sit. Fugit tenetur sit vero voluptatum eaque ut sit. Occaecati placeat nesciunt consequatur vel. Deleniti earum sit iure voluptates rem dignissimos eveniet sit. Tempore sapiente corporis ipsum dolores ut et sed praesentium. Ea quia velit unde.
+</p>
+<p>
+    Assumenda dicta quod at esse. Culpa et et placeat voluptatem voluptatum cumque recusandae. Assumenda iusto quam ipsum qui minus beatae distinctio error. Nam cupiditate iure explicabo nemo et natus maxime nostrum. Beatae eos molestias culpa rem consequatur maxime accusamus. Voluptatum consequatur esse molestiae non vero.
+</p>
+<p>
+    Dicta dignissimos molestiae cupiditate error et. Error voluptate ducimus exercitationem saepe amet. Cumque est eum dolorem aut ratione beatae. Pariatur velit error enim quaerat sed rerum et.
+</p>
+<p>
+    Consequatur quam rerum enim quae. Illum et beatae dolores corporis voluptates quos dolorem. Nesciunt magni omnis ullam natus omnis sed odio et. Ea beatae aperiam quia ea aut. Amet reiciendis voluptatem laboriosam nostrum adipisci.
+</p>
+<p>
+    Vel et sit quo repudiandae. Nesciunt asperiores iure qui in quis et. Aut dolorum dolore molestiae ad.
+</p>
 
 <?php
-    if (isset($_SESSION['erreur'])) { ?>
-        <h2><?=$_SESSION['erreur']?></h2>
-        <hr><?php
-        unset($_SESSION['erreur']);
-    }
-?>
-
-<form action="./compte.php" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="redirection_echec" value="<?=$_SERVER['REQUEST_URI']?>">
-    <input type="hidden" name="redirection_succes" value="<?=$_SERVER['REQUEST_URI']?>">
-
-    <input type="text" name="email" id="gestion_compte_email" placeholder="Entrez votre <?=isset($_SESSION['id']) ? "nouvel " : ""?>email"<?=isset($_SESSION['email']) ? " value=".$_SESSION['email'] : ""?>>
-    <input type="password" name="mdp" id="gestion_compte_mdp" placeholder="Entrez un <?=isset($_SESSION['id']) ? "nouveaux " : ""?>mot de passe"<?=isset($_SESSION['mdp']) ? " value=".$_SESSION['mdp'] : ""?>>
-    <input type="file" name="img" id="gestion_compte_img"<?=isset($_SESSION['img']) ? " value=".$_SESSION['img'] : ""?>>
-
-    <button type="submit" name="action" value="connecter">Se Connecter</button>
-    <button type="submit" name="action" value="creer">Créer le Compte</button>
-</form>
-
-<?php
-    if (isset($_SESSION['liste_donnees_jdr'])) {
-        echo "<hr>";
-        include "./inclus/discussion.php";
+    if (isset($_SESSION['liste_donnees_jdr'])) { ?>
+        <hr>
+        <div class="card">
+            <article class="card-body">
+                <?php include "./inclus/discussion.php" ?>
+            </article>
+        </div><?php
     }
 ?>
 

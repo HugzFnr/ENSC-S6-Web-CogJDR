@@ -70,9 +70,17 @@
                         
                         $liste_constructeur = array();
                         $r_ = sql_select('Joueur', "*", array('id_utilisateur' => $_SESSION['id']));
-                        while($joueur = $r_->fetch()) {
+                        while ($joueur = $r_->fetch()) {
                             array_push($liste_constructeur, array(
                                 'id_jdr' => $joueur['id_jdr_participe'],
+                                'titre_jdr' => sql_select(
+                                        array('JDR', 'ModeleJDR'),
+                                        array('ModeleJDR.titre'),
+                                        array(
+                                            'JDR.id_modele_jdr' => 'ModeleJDR.id_modele_jdr',
+                                            'JDR.id_jdr' => $joueur['id_jdr_participe'],
+                                        )
+                                    )->fetch()['titre'],
 
                                 'id_joueur' => $joueur['id_joueur'],
                                 'nom_joueur' => $joueur['pseudo'],
@@ -103,7 +111,6 @@
                                 'indice_equipe_discussion_suivi' => 0
                             ));
                         }
-                        var_dump($liste_constructeur);
                         $_SESSION['liste_donnees_jdr'] = $liste_constructeur;
                         $_SESSION['indice_jdr_suivi'] = count($liste_constructeur) - 1; // indice dans la liste d'au dessus :)
 

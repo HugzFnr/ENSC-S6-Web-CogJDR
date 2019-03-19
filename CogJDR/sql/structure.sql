@@ -57,7 +57,6 @@ create table Role_ (
     foreign key (id_modele_jdr) references ModeleJDR (id_modele_jdr)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
-
 create table ModeleAction (
     id_modele_action integer not null primary key auto_increment,
     id_modele_jdr integer,
