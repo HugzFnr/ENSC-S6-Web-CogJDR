@@ -17,3 +17,11 @@ li.discussion_message {
 
     border-top: 1px solid #ccc;
 }
+
+.discussion_message.discussion_joueur {
+    background-color: azure;
+}
+
+.discussion_message.discussion_mj {
+    background-color: darkkhaki;
+}

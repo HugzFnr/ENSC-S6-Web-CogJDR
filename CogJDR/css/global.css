@@ -7,7 +7,7 @@ div.cercle {
     height: 4em;
     width: 4em;
     text-align: center;
-    background-color: rgb(142, 142, 142);
+    background-color: rgb(188, 188, 188);
     border-radius: 50%;
     display: table; 
 }

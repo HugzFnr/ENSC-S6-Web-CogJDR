@@ -149,8 +149,10 @@ create table Action_ (
 create table Equipe (
     id_equipe integer not null primary key auto_increment,
     id_modele_equipe integer,
+    id_jdr integer,
 
-    foreign key (id_modele_equipe) references ModeleEquipe (id_modele_equipe)
+    foreign key (id_modele_equipe) references ModeleEquipe (id_modele_equipe),
+    foreign key (id_jdr) references JDR (id_jdr)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 create table EstDans  (

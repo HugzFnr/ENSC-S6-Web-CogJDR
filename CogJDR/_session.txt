@@ -1,0 +1,36 @@
+id:
+    "ID de l'utilisateur"
+email:
+    "e-mail de l'utilisateur"
+img:
+    "image de profil de l'utilisateur"
+
+liste_donnees_jdr:
+    "liste des données concernant les JDR en tant que joueur" (
+        est_mj:
+            "`true` si l'utilisateur est le MJ du JDR, `false` sinon; note : le MJ est dans toute les équipes"
+        id_jdr:
+            "ID du JDR en question"
+        titre_jdr:
+            "titre du JDR par jointure avec `JDR` et `ModeleJDR`"
+
+        id_joueur -> id_dans:
+            "ID de joueur de l'utilisateur dans le JDR, `null` s'il est MJ"
+        nom_joueur -> pseudo_dans:
+            "nom de l'utilisateur dans le JDR"
+
+        liste_equipe:
+            "liste des équipes rejoints dans ce JDR" (
+                id_equipe:
+                    "ID de l'équipe"
+                titre_equipe:
+                    "titre de l'équipe par jointure avec `EstDans`, `Equipe` et `ModeleEquipe`"
+            )
+        indice_equipe_discussion_suivi:
+            "indice dans la liste [liste_donnees_jdr.liste_equipe] de la discussion suivie (affichée)"
+    )
+indice_jdr_suivi:
+    "indice dans la liste [liste_donnees_jdr] du JDR suivi (affiché)"
+
+erreur:
+    "si non vide, message dernier message d'erreur"

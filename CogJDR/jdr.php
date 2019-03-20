@@ -19,6 +19,7 @@
     require_once "./inclus/session.php";
 
     $redirige = isset($_REQUEST['redirection_echec']) ? $_REQUEST['redirection_echec'] : "./#";
+    $_REQUEST['redirection_succes'] = isset($_REQUEST['redirection_succes']) ? $_REQUEST['redirection_succes'] : "./#";
     
     switch (isset($_REQUEST['action']) ? $_REQUEST['action'] : "afficher") {
         

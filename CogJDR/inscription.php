@@ -1,6 +1,6 @@
 <?php require "./inclus/page_debut.php" ?>
 
-<h1>Inscription</h1>
+<h1 class="text-center">Inscription</h1>
 
 <div class="well">
     <form class="form-signin form-horizontal" role="form" action="./compte.php" method="post" enctype="multipart/form-data">
