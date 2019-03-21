@@ -49,79 +49,92 @@
 
         case "rejoindre":
                 $pseudo = htmlentities($_REQUEST['pseudo']);
-                if (!sql_select('Joueur', 'pseudo', array('id_jdr_participe' => $_REQUEST['id_jdr'], 'pseudo' => $pseudo))->fetch()) {
+
+                if (!sql_select('Joueur', 'pseudo', array('id_jdr_participe' => $_REQUEST['id'], 'pseudo' => $pseudo))->fetch()) {
                     sql_insert('Joueur', array(
                         'id_joueur' => null,
                         'id_utilisateur' => $_SESSION['id'],
-                        'id_jdr_participe' => $_REQUEST['id_jdr'],
+                        'id_jdr_participe' => $_REQUEST['id'],
                         'pseudo' => $pseudo
                     ));
 
                     array_push($_SESSION['liste_donnees_jdr'], array(
-                        'id_jdr' => $_REQUEST['id_jdr'],
+                        'est_mj' => false,
+                        'id_jdr' => $_REQUEST['id'],
+                        'titre_jdr' => sql_select(
+                                array('JDR', 'ModeleJDR'),
+                                array('ModeleJDR.titre'),
+                                array(
+                                    'JDR.id_modele_jdr' => 'ModeleJDR.id_modele_jdr',
+                                    'JDR.id_jdr' => $_REQUEST['id'],
+                                )
+                            )->fetch()['titre'],
 
-                        'id_joueur' => sql_select('Joueur', 'id_joueur', array('id_utilisateur' => $_SESSION['id'], 'id_jdr_participe' => $_REQUEST['id_jdr']))->fetch()['id_joueur'],
-                        'nom_joueur' => $pseudo,
+                        'id_dans' => sql_select('Joueur', 'id_joueur', array('id_utilisateur' => $_SESSION['id'], 'id_jdr_participe' => $_REQUEST['id']))->fetch()['id_joueur'],
+                        'pseudo_dans' => $pseudo,
 
                         'liste_equipe' => array(),
-                        'indice_equipe_discussion_suivi' => -1
+                        'indice_equipe_discussion_suivi' => 0
                     ));
 
-                    unset($redirige);
+                    if ($redirige == "./#")
+                        $redirige = "./jdr.php?id=".$_REQUEST['id'];
                 } else
                     $_SESSION['erreur'] = "Erreur pseudal existant";
+            break;
 
         case "afficher":
-                $where = isset($_REQUEST['code']) ? array('code_invite' => $_REQUEST['code']) : array('id_jdr' => $_REQUEST['id_jdr']);
+                $where = isset($_REQUEST['code']) ? array('code_invite' => $_REQUEST['code']) : array('id_jdr' => $_REQUEST['id']);
                 $r = sql_select('JDR', "*", $where);
 
                 $jdr = $r->fetch();
                 if ($jdr && $modele = sql_select('ModeleJDR', "*", array('id_modele_jdr' => $jdr['id_modele_jdr']))->fetch()) {
-                    $sous_titre = $modele['titre']." {".$jdr['code_invite']."}";
+                    $sous_titre = $modele['titre']." | ".$jdr['code_invite'];
+                    $css_necessaires[] = "discussion";
+                    $css_necessaires[] = "jdr";
                     
                     include_once "./inclus/page_debut.php"; ?>
-
-                    <h1>Affichage du JDR <?=$modele['titre']?> (no<?=$jdr['id_jdr']?>)</h1>
-                    description : <?=$modele['desc_jdr']?>, imgeeze...<br><br>
                     
                     <?php
-                        $est_connecte = isset($_SESSION['liste_donnees_jdr']);
+                        $est_connecte = isset($_SESSION['id']);
 
                         $a_rejoint = false;
                         if ($est_connecte)
-                            foreach ($_SESSION['liste_donnees_jdr'] as $value)
-                                $a_rejoint = $value['id_jdr'] == $jdr['id_jdr'];
+                            foreach ($_SESSION['liste_donnees_jdr'] as $v) {
+                                $a_rejoint = $v['id_jdr'] == $jdr['id_jdr'];
+                                if ($a_rejoint)
+                                    break;
+                            }
                         
                         if (!$a_rejoint) {
+                            include "./inclus/jdr/rejoindre.php";
+
                             if ($est_connecte) { ?>
-                                <form action="./jdr.php">
-                                    <input type="hidden" name="action" value="rejoindre">
-                                    <input type="hidden" name="id_jdr" value="<?=$jdr['id_jdr']?>">
-                                    
-                                    <input type="text" name="pseudo" id="rejoindre_pseudo" placeholder="Choisisez un Pseudal">
-                                    <button type="submit">Rejoindre</button>
-                                </form>
-                            <?php } else { ?>
-                                <form action="./compte.php" method="post">
-                                    <input type="hidden" name="action" value="connecter">
-                                    <input type="hidden" name="redirection_echec" value="<?=$_SERVER['REQUEST_URI']?>">
-                                    <input type="hidden" name="redirection_succes" value="<?=$_SERVER['REQUEST_URI']?>">
-
-                                    <input type="text" name="email" id="gestion_compte_email" placeholder="Entrez votre email">
-                                    <input type="password" name="mdp" id="gestion_compte_mdp" placeholder="Entrez un mot de passe">
-                                    <input type="text" name="img" id="gestion_compte_img" value="sdbldb"><!--input type="file" name="img" id="gestion_compte_img"-->
-
-                                    <button type="submit"><?=isset($_SESSION['id']) ? "Modifier les Donn&eacute;es" : "Se Connecter"?></button>
-                                </form>
-                            <?php }
-                        } else { ?>
-                            <form action="./jdr.php">
-                                <input type="hidden" name="action" value="quitter">
-                                <input type="hidden" name="id_jdr" value="<?=$jdr['id_jdr']?>">
+                                <hr>
                                 
-                                <button type="submit">Quitter</button>
-                            </form>
-                        <?php }
+                                <form class="w-100" action="./jdr.php">
+                                    <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
+                                    
+                                    <table class="w-100">
+                                        <tr>
+                                            <td><input class="form-control w-auto float-right" type="text" name="pseudo" id="rejoindre_pseudo" placeholder="Choisisez un Pseudal"></td>
+                                            <td><button class="btn btn-primary btn-block w-auto float-left" type="submit" name="action" value="rejoindre">Rejoindre</button></td>
+                                        </tr>
+                                    </table>
+                                </form><?php
+                            }
+                        } else {
+                            include "./inclus/jdr/consulter.php"; ?>
+
+                            <hr>
+                            <form action="./jdr.php">
+                                <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
+
+                                <div class="text-right">
+                                    <button class="btn btn-danger" type="submit" name="action" value="quitter">Quitter<!--? (retire TOUT, même les msg... -> idée : mettre l'ìd_utilisateur` à `null`) ?--></button>
+                                </div>
+                            </form><?php
+                        }
 
                     include_once "./inclus/page_fin.php";
 

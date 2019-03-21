@@ -136,10 +136,8 @@
         return $conn->prepare("DELETE FROM `$table` WHERE $where_builder")->execute($where);
     }
 
-    function send_image($file, $name) {
+    function send_image($file, $name, $target_dir="./images/") {
         $name = str_replace("%", "_", rawurlencode(str_replace(" ", "-", $name)));
-
-        $target_dir = "./images/";
 
         $image_type = strtolower(pathinfo($target_dir.basename($file["name"]), PATHINFO_EXTENSION));
         $image_size = getimagesize($file["tmp_name"]);
@@ -158,8 +156,8 @@
         }
         
         if (file_exists($target_file)) {
-            $r.= "Sorry, file already exists. ";
-            $upload_success = false;
+            $r.= "File existed. ";
+            unlink($target_file);
         }
         
         if($image_type != "jpg" && $image_type != "png" && $image_type != "jpeg" && $image_type != "gif" ) {

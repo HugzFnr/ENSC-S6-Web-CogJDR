@@ -5,22 +5,30 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>CogJDR<?=isset($sous_titre) ? " - $sous_titre" : " !"?></title>
+	<title>Cog' JDR<?=isset($sous_titre) ? " - $sous_titre" : " !"?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" media="screen" href="./css/global.css">
+	
+	<!--<link rel="stylesheet" type="text/css" media="screen" href="./css/global.css">
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/discussion.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="./css/jdr.css">-->
+	<?php
+		$css_necessaires[] = "global";
+		foreach ($css_necessaires as $v) { ?>
+			<link rel="stylesheet" type="text/css" media="screen" href="./css/<?=$v?>.css"><?php
+		}
+	?>
 
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 
 <body>
-	<div class="container">
+	<div class="">
 
-		<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top sticky-top">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
 			<div class="container">
-				<a class="navbar-brand" href="#">Cog' JDR</a>
+				<a class="navbar-brand" href="./#">Cog' JDR</a>
 
 				<!-- horloge -->
 				<div class="cercle">
@@ -64,7 +72,7 @@
 										if (empty($liste_jouees)) { ?>
 											<a class="dropdown-item" href="#Rejoindre"><em>Pas de parties en cours</em></a><?php
 										} else foreach ($liste_jouees as $v) { ?>
-											<a class="dropdown-item" href="./jdr.php&id=<?=$v['id_jdr']?>"><?=$v['titre_jdr']?></a><?php
+											<a class="dropdown-item" href="./jdr.php?id=<?=$v['id_jdr']?>"><?=$v['titre_jdr']?></a><?php
 										}
 									?>
 									<div class="dropdown-divider"></div>
@@ -81,7 +89,7 @@
 										if (empty($liste_masterisees)) { ?>
 											<a class="dropdown-item" href="#Creer"><em>Pas de parties en cours</em></a><?php
 										} else foreach ($liste_masterisees as $v) { ?>
-											<a class="dropdown-item" href="./jdr.php&id=<?=$v['id_jdr']?>"><?=$v['titre_jdr']?></a><?php
+											<a class="dropdown-item" href="./jdr.php?id=<?=$v['id_jdr']?>"><?=$v['titre_jdr']?></a><?php
 										}
 									?>
 									<div class="dropdown-divider"></div>
@@ -103,14 +111,14 @@
 						<tr>
 							<?php 
 								if (isset($_SESSION['id'])) { ?>
-									<td><p class="text-success text-center">Bienvenue, <a class="nav-link" href="./compte.php&id=<?=$_SESSION['id']?>"><?=$_SESSION['email']?></a></p></td>
+									<td><p class="text-success text-center">Bienvenue, <a class="nav-link" href="./compte.php?id=<?=$_SESSION['id']?>"><?=$_SESSION['email']?></a></p></td>
 									<td>
 										<div class="dropdown">
 											<a class="dropdown-toggle" href="#" id="navbarDropdown_compte" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												<img class="img" src="<?=$_SESSION['img']?>" alt="Oof">
 											</a>
 											<div class="dropdown-menu" aria-labelledby="navbarDropdown_compte">
-												<a class="dropdown-item" href="./compte.php?action=deconnecter">Se Déconnecter</a>
+												<a class="dropdown-item" href="./compte.php?action=deconnecter&redirection_succes=<?=rawurlencode($_SERVER['REQUEST_URI'])?>">Se Déconnecter</a>
 											</div>
 										</div>
 									</td><?php
@@ -122,7 +130,7 @@
 											<table class="w-100">
 												<tr>
 													<td><input type="text" name="email" class="form-control" id="debut_email" placeholder="E-mail"></td>
-													<td><button type="submit" name="action" value="connecter" class="btn btn-primary btn-block">Connection</button></td>
+													<td><button type="submit" name="action" value="connecter" class="btn btn-primary btn-block" autofocus>Connection</button></td>
 												</tr>
 												<tr>
 													<td><input type="password" name="mdp" class="form-control" id="debut_mdp" placeholder="Mot de passe"></td>

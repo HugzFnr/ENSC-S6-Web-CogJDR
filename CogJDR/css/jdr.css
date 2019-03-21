@@ -1,0 +1,94 @@
+/*- sidenav */
+body {
+    overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: -15rem;
+    -webkit-transition: margin .25s ease-out;
+    -moz-transition: margin .25s ease-out;
+    -o-transition: margin .25s ease-out;
+    transition: margin .25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+    width: 15rem;
+}
+
+#page-content-wrapper {
+  min-width: 100vw;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+}
+
+@media (max-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    #page-content-wrapper {
+      min-width: 0;
+      width: 100vw;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -15rem;
+    }
+}
+/*- FIN sidenav */
+
+img.img_banniere {
+    width: 80%;
+    max-height: 150px;
+    object-fit: cover;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+p.desc_jdr {
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table.liste_joueurs {
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+
+    text-align: center;
+}
+
+table.liste_joueurs th {
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+}
+
+table.liste_joueurs td {
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+}

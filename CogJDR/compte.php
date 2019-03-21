@@ -47,12 +47,12 @@
                     $_SESSION['erreur'] = "Erreur compte existant";
                     break;
                 } else {
-                    $envoi = send_image($_FILES['img'], $_REQUEST['email']);
+                    $envoi = send_image($_FILES['img'], $_REQUEST['email'], "./images/compte/");
                     if ($envoi['success'] && sql_insert('Utilisateur', array(
                                 'id' => null,
                                 'mdp' => $_REQUEST['mdp'],
                                 'email' => htmlentities($_REQUEST['email']),
-                                'img' => "images/utilisateurs/".$envoi['fileName']
+                                'img' => "images/compte/".$envoi['fileName']
                             )))
                         $redirige = $_REQUEST['redirection_succes'];
                     else {
@@ -135,7 +135,7 @@
                                 'id_dans' => $mj['id_mj'],
                                 'pseudo_dans' => $mj['pseudo_mj'],
 
-                                // SELECT DISTINCT ... qqch?
+                                // SELECT DISTINCT ... qqch? <-- peut-être simplifiable depuis l'ajout de `Equipe.id_jdr`... à étudier
                                 'liste_equipe' => sql_select(
                                         array(
                                             'Equipe',

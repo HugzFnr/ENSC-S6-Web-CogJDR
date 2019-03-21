@@ -1,3 +1,8 @@
+<?php
+    // temporaire (je crois)
+    $css_necessaires[] = "discussion";
+?>
+
 <?php require "./inclus/page_debut.php" ?>
 
 <h1>Cog' JDR</h1>
@@ -32,7 +37,7 @@
         <hr>
         <div class="card">
             <article class="card-body">
-                <?php include "./inclus/discussion.php" ?>
+                <?php include "./inclus/discussion/discussion.php" ?>
             </article>
         </div><?php
     }

@@ -6,14 +6,14 @@
         }
 
         var elm = $("#discussion");
-        elm.load("./inclus/contenu_discussion.php");
+        elm.load("./inclus/discussion/contenu_discussion.php");
         scrollDown(elm);
 
         setInterval(function() {
             var elm = $("#discussion");
             precedent = elm[0].innerText.length;
             var shouldScroll = elm[0].scrollHeight - 10 < elm.scrollTop() + elm.innerHeight();
-            elm.load("./inclus/contenu_discussion.php", function() {
+            elm.load("./inclus/discussion/contenu_discussion.php", function() {
                 if (shouldScroll)
                     scrollDown(elm);
             })
@@ -22,9 +22,9 @@
     });
 </script>
 
-<ul id="discussion"><?php include "./inclus/contenu_discussion.php" ?></ul>
-<form id="form_envoie_message" action="./inclus/contenu_discussion.php">
+<ul id="discussion"><?php if (include "./inclus/discussion/contenu_discussion.php") { ?></ul>
+<form id="form_envoie_message" action="./inclus/discussion/contenu_discussion.php">
     <input type="text" name="message_text" id="discussion_boite_message" placeholder="Entrez votre message !" autofocus>
     <input type="hidden" name="page_form" value="<?=$_SERVER['REQUEST_URI']?>">
     <input type="submit" value="Envoyer">
-</form>
+</form><?php } ?>
