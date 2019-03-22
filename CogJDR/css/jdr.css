@@ -3,6 +3,10 @@ body {
     overflow-x: hidden;
 }
 
+/*div.page {
+    width: 100%;
+}*/
+
 #sidebar-wrapper {
     min-height: 100vh;
     margin-left: -15rem;
@@ -33,14 +37,14 @@ body {
     margin-left: 0;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 768px) {
     #sidebar-wrapper {
         margin-left: 0;
     }
 
     #page-content-wrapper {
-      min-width: 0;
-      width: 100vw;
+        min-width: 0;
+        width: 100vw;
     }
 
     #wrapper.toggled #sidebar-wrapper {

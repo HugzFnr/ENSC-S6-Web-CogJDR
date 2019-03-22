@@ -1,48 +1,58 @@
-<!-- liste des équipes -->
-<div class="d-flex toggled" id="wrapper">
-	<!-- Sidebar -->
-	<div class="bg-light border-right" id="sidebar-wrapper">
-		<div class="sidebar-heading">Liste des discussions</div>
-		<div class="list-group list-group-flush">
-            <?php
-                if ($_SESSION['indice_jdr_suivi'] < 0)
-                    foreach ($_SESSION['liste_donnees_jdr'] as $k => $v)
-                        if ($v['id_jdr'] == $_REQUEST['id'])
-                            $_SESSION['indice_jdr_suivi'] = $k;
+<h1 class="text-center">JDR : <?=$modele['titre']?></h1>
 
-                if ($_SESSION['indice_jdr_suivi'] < 0)
-                    exit;
+<img class="img_banniere" src="<?=$modele['img_banniere']?>" alt="Oof">
 
-                if ($donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']]) foreach ($donnees_jdr['liste_equipe'] as $v) { ?>
-                    <a href="#TODO" class="list-group-item list-group-item-action bg-light"><?=$v['titre_equipe']?></a><?php
-                }
-            ?>
-		</div>
-	</div>
-	<!-- /#sidebar-wrapper -->
+<hr>
+<p>Joueurs actuellement inscrits à cette partie</p>
 
-	<!-- Page Content -->
-	<div id="page-content-wrapper">
-        <button id="menu-toggle"><span class="navbar-toggler-icon">Oof</span></button>
-        <h1 class="text-center">JDR : <?=$modele['titre']?></h1>
-        
-        <img class="img_banniere" src="<?=$modele['img_banniere']?>" alt="Oof">
+<table class="liste_joueurs">
+    <tr>
+        <th>Adresse e-mail</th><th>Pseudo</th><?php if ($donnees_jdr['est_mj']) foreach ($donnees_jdr['liste_equipe'] as $v) { ?><th><?=$v['titre_equipe']?></th><?php } ?><th></th>
+    </tr>
 
-		<div class="container-fluid">
-			<p>The starting state of the menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens.
-				When toggled using the button below, the menu will change.</p>
-			<p>Make sure to keep all page content within the
-				<code>#page-content-wrapper</code>. The top navbar is optional, and just for demonstration. Just create an element with the
-				<code>#menu-toggle</code> ID which will toggle the menu when clicked.</p>
-		</div>
-	</div>
-	<!-- /#page-content-wrapper -->
+    <?php
+        $r = sql_select('Joueur', array('id_joueur', 'pseudo', 'id_utilisateur'), array('id_jdr_participe' => $jdr['id_jdr']));
+
+        for ($k = 0; $k < $jdr['nb_max_joueurs']; $k++) {
+            $joueur = $r->fetch();
+
+            if ($joueur) {
+                $email = sql_select('Utilisateur', 'email', array('id' => $joueur['id_utilisateur']))->fetch()['email']; ?>
+                <tr>
+                    <td><?=substr($email, 0, strpos($email, "@"))?></td>
+                    <td><?=$joueur['pseudo']?></td>
+                    <?php
+                        if ($donnees_jdr['est_mj']) {
+                            foreach ($donnees_jdr['liste_equipe'] as $equipe) {
+                                if (sql_select(
+                                            array('EstDans'),
+                                            "*",
+                                            array(
+                                                'id_joueur' => $joueur['id_joueur'],
+                                                'id_equipe' => $equipe['id_equipe']
+                                            )
+                                        )->fetch()) { ?>
+                                    <td>x</td><?php
+                                } else { ?>
+                                    <td></td><?php
+                                }
+                            }
+                        }
+                    ?>
+                    <td><a href="#TODO">Envoyer un MP</a></td>
+                </tr><?php
+            } else { ?>
+                <tr>
+                    <td>-</td><td>-</td><?php if ($donnees_jdr['est_mj']) foreach ($donnees_jdr['liste_equipe'] as $v) { ?><td>-</td><?php } ?><td>-</td>
+                </tr><?php
+            }
+        }
+    ?>
+</table>
+
+<hr>
+<div class="card">
+    <article class="card-body">
+        <?php include "./inclus/discussion/discussion.php" ?>
+    </article>
 </div>
-
-<script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-</script>
-<!-- FIN liste des équipes -->

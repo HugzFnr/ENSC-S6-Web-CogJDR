@@ -81,8 +81,8 @@
                                         array('JDR', 'ModeleJDR'),
                                         array('ModeleJDR.titre'),
                                         array(
-                                            'JDR.id_modele_jdr' => 'ModeleJDR.id_modele_jdr',
-                                            'JDR.id_jdr' => $joueur['id_jdr_participe'],
+                                            'JDR::id_modele_jdr' => 'ModeleJDR::id_modele_jdr',
+                                            'JDR::id_jdr' => $joueur['id_jdr_participe'],
                                         )
                                     )->fetch()['titre'],
 
@@ -105,9 +105,9 @@
                                             'ModeleEquipe.titre_equipe'
                                         ),
                                         array(
-                                            'EstDans.id_equipe' => 'Equipe.id_equipe',
-                                            'Equipe.id_modele_equipe' => 'ModeleEquipe.id_modele_equipe',
-                                            'EstDans.id_joueur' => $joueur['id_joueur']
+                                            'EstDans::id_equipe' => 'Equipe::id_equipe',
+                                            'Equipe::id_modele_equipe' => 'ModeleEquipe::id_modele_equipe',
+                                            'EstDans::id_joueur' => $joueur['id_joueur']
                                         ),
                                         null,
                                         true
@@ -127,8 +127,8 @@
                                         array('JDR', 'ModeleJDR'),
                                         array('ModeleJDR.titre'),
                                         array(
-                                            'JDR.id_modele_jdr' => 'ModeleJDR.id_modele_jdr',
-                                            'JDR.id_jdr' => $mj['id_jdr_dirige'],
+                                            'JDR::id_modele_jdr' => 'ModeleJDR::id_modele_jdr',
+                                            'JDR::id_jdr' => $mj['id_jdr_dirige'],
                                         )
                                     )->fetch()['titre'],
 
@@ -148,10 +148,10 @@
                                             'ModeleEquipe.titre_equipe'
                                         ),
                                         array(
-                                            'Equipe.id_modele_equipe' => 'ModeleEquipe.id_modele_equipe',
-                                            'ModeleEquipe.id_modele_jdr' => 'ModeleJDR.id_modele_jdr',
-                                            'ModeleJDR.id_modele_jdr' => 'JDR.id_modele_jdr',
-                                            'JDR.id_jdr' => $mj['id_jdr_dirige']
+                                            'Equipe::id_modele_equipe' => 'ModeleEquipe::id_modele_equipe',
+                                            'ModeleEquipe::id_modele_jdr' => 'ModeleJDR::id_modele_jdr',
+                                            'ModeleJDR::id_modele_jdr' => 'JDR::id_modele_jdr',
+                                            'JDR::id_jdr' => $mj['id_jdr_dirige']
                                         ),
                                         null,
                                         true
@@ -183,7 +183,7 @@
                 $r = sql_select('Utilisateur', array('id', 'email', 'img'), array('id' => $_REQUEST['id']));
                 
                 if ($utilisateur = $r->fetch()) {
-                    $sous_titre = $utilisateur['email'];
+                    $__sous_titre = $utilisateur['email'];
 
                     include_once "./inclus/page_debut.php"; ?>
 

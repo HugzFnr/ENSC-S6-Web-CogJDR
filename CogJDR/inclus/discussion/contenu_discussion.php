@@ -1,6 +1,6 @@
 <?php
     require_once __DIR__."/../session.php";
-    require_once __DIR__."/../connexion.php";
+    require_once __DIR__."/../connection.php";
 
     if (-1 < $_SESSION['indice_jdr_suivi'])
         $donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']];
@@ -9,6 +9,11 @@
         if (isset($_REQUEST['page_form']))
             header("Location: ".$_REQUEST['page_form']);
         return false;
+    }
+
+    if (isset($_REQUEST['change_id_equipe'])) {
+        $donnees_jdr['indice_equipe_discussion_suivi'] = $_REQUEST['change_id_equipe'];
+        $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']]['indice_equipe_discussion_suivi'] = $_REQUEST['change_id_equipe'];
     }
 
     $id_equipe_discussion_suivi = $donnees_jdr['liste_equipe'][$donnees_jdr['indice_equipe_discussion_suivi']]['id_equipe'];
@@ -26,7 +31,9 @@
 
         while($message = $r->fetch()) {
             $utilisateur = $message['id_joueur'] == null ? $utilisateur_mj : sql_select('Joueur', array('pseudo', 'id_utilisateur'), array('id_joueur' => $message['id_joueur']))->fetch(); ?>
-            <li class="discussion_message discussion_<?=$message['id_joueur'] == null ? "mj" : "joueur"?>"><b class="discussion_debut">[<?=$message['horaire_publi']?>] <a href="./compte.php?id=<?=$utilisateur['id_utilisateur']?>"><?=$utilisateur['pseudo']?></a> : </b><i class="discussion_texte"><?=$message['texte']?></i></li><?php
+            <li class="discussion_message discussion_<?=$message['id_joueur'] == null ? "mj" : "joueur"?>">
+                <b class="discussion_debut">[<?=$message['horaire_publi']?>]&nbsp;<a href="./compte.php?id=<?=$utilisateur['id_utilisateur']?>"><?=$utilisateur['pseudo']?></a>&nbsp;:&nbsp;</b><i class="discussion_texte"><?=$message['texte']?></i>
+            </li><?php
         }
     } else { // sinon, c'est que la pages est solicitée pour evoyer un message
         if (isset($_REQUEST['message_text']) && $_REQUEST['message_text'] !== "")

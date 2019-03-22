@@ -1,6 +1,6 @@
 <?php
     // temporaire (je crois)
-    $css_necessaires[] = "discussion";
+    $__css_necessaires[] = "discussion";
 ?>
 
 <?php require "./inclus/page_debut.php" ?>
@@ -31,16 +31,5 @@
 <p>
     Vel et sit quo repudiandae. Nesciunt asperiores iure qui in quis et. Aut dolorum dolore molestiae ad.
 </p>
-
-<?php
-    if (isset($_SESSION['liste_donnees_jdr'])) { ?>
-        <hr>
-        <div class="card">
-            <article class="card-body">
-                <?php include "./inclus/discussion/discussion.php" ?>
-            </article>
-        </div><?php
-    }
-?>
 
 <?php require "./inclus/page_fin.php" ?>

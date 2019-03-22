@@ -42,21 +42,32 @@
         $where_builder = empty($where) ? "" : "WHERE ";
         $sep = "";
         foreach ($where as $k => $v) {
-            $where_builder.= "$sep$k";
+            if (is_string($k) && strpos($k, "::") !== false)
+                $where_builder.= "$sep".str_replace("::", ".", $k);
+            else
+                $where_builder.= "$sep$k";
 
             if (is_array($v)) {
                 $where_builder.= " IN (";
                 $sep_ = "";
                 foreach ($v as $v_) {
-                    $where_builder.= "$sep_:$execute_index";
-                    $execute_array[$execute_index++] = $v_;
+                    if (strpos($v, "::") !== false)
+                        $where_builder.= "$sep_".str_replace("::", ".", $v);
+                    else {
+                        $where_builder.= "$sep_:$execute_index";
+                        $execute_array[$execute_index++] = $v_;
+                    }
 
                     $sep_ = ", ";
                 }
                 $where_builder.= ")";
             } else {
-                $where_builder.= " = :$execute_index";
-                $execute_array[$execute_index++] = $v;
+                if (strpos($v, "::") !== false)
+                    $where_builder.= " = ".str_replace("::", ".", $v);
+                else {
+                    $where_builder.= " = :$execute_index";
+                    $execute_array[$execute_index++] = $v;
+                }
             }
             
             $sep = " AND ";
