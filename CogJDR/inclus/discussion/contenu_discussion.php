@@ -1,6 +1,6 @@
 <?php
     require_once __DIR__."/../session.php";
-    require_once __DIR__."/../connection.php";
+    require_once __DIR__."/../connexion.php";
 
     if (-1 < $_SESSION['indice_jdr_suivi'])
         $donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']];

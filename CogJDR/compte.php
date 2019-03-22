@@ -17,7 +17,7 @@
      *  * en cas d'échec, redirige vers `redirection_echec`
      *  * en cas de succès, redirige vers `redirection_succes`
      */
-    require_once "./inclus/connection.php";
+    require_once "./inclus/connexion.php";
     require_once "./inclus/session.php";
 
     $redirige = isset($_REQUEST['redirection_echec']) ? $_REQUEST['redirection_echec'] : "./#";
@@ -29,7 +29,7 @@
                 $is = sql_update('Utilisateur', array(
                     'mdp' => $_REQUEST['mdp'],
                     'email' => htmlentities($_REQUEST['email']),
-                    'img' => htmlentities($_REQUEST['img']) // TODO: gestion d'images (voir `./inclus/connection.php`)
+                    'img' => htmlentities($_REQUEST['img']) // TODO: gestion d'images (voir `./inclus/connexion.php`)
                 ), array('id' => $_SESSION['id']));
                     
                 if ($is)

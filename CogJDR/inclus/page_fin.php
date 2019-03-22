@@ -1,10 +1,8 @@
-
-        </div><!-- container -->
-
+s
         <footer class="footer">
-            <div class="container text-right">
+            <div class="container text-center">
                 <hr>
-                <p>Cog' JDR<em> &mdash; par moi et (un peut) l'autre.</em></p>
+                <p>Cog' JDR<em> &mdash; un projet de longue haleine par Célestin Grenier et Hugo Fournier.</em></p>
             </div>
         </footer>
 

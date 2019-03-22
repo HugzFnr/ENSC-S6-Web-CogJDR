@@ -93,7 +93,7 @@
 										}
 									?>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="#Creer">Créer une partie</a>
+									<a class="dropdown-item" href="./creer.php"> Créer une partie</a>
 								</div>
 							</li>
 						</ul>
@@ -130,7 +130,7 @@
 											<table class="w-100">
 												<tr>
 													<td><input type="text" name="email" class="form-control" id="debut_email" placeholder="E-mail"></td>
-													<td><button type="submit" name="action" value="connecter" class="btn btn-primary btn-block" autofocus>Connection</button></td>
+													<td><button type="submit" name="action" value="connecter" class="btn btn-primary btn-block" autofocus>Connexion</button></td>
 												</tr>
 												<tr>
 													<td><input type="password" name="mdp" class="form-control" id="debut_mdp" placeholder="Mot de passe"></td>

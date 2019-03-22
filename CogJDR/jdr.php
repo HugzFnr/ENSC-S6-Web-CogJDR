@@ -15,7 +15,7 @@
      *  * en cas d'échec, redirige vers `redirection_echec`
      *  * en cas de succès, redirige vers `redirection_succes`
      */
-    require_once "./inclus/connection.php";
+    require_once "./inclus/connexion.php";
     require_once "./inclus/session.php";
 
     $redirige = isset($_REQUEST['redirection_echec']) ? $_REQUEST['redirection_echec'] : "./#";
