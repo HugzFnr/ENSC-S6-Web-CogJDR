@@ -7,7 +7,7 @@
         return $conn->query($c);
     }
 
-    function parms($string, $data) {
+    function prepared($string, $data) {
         $indexed = $data == array_values($data);
         foreach ($data as $k=>$v) {
             if (is_string($v))
@@ -20,7 +20,7 @@
         return $string;
     }
 
-    function sql_select($table, $value, $where, $order=null, $distinct=false) {
+    function sql_select($table, $value, $where=array(), $order=null, $distinct=false) {
         global $conn;
 
         $execute_array = array();
@@ -87,7 +87,7 @@
             }
 
         /*-*/
-        /*-echo "<code>".parms("$value_builder $table_builder $where_builder $order_builder", $execute_array)."</code><br>";*/
+        /*-echo "<code>".prepared("$value_builder $table_builder $where_builder $order_builder", $execute_array)."</code><br>";*/
         /*-*/
 
         $r = $conn->prepare("$value_builder $table_builder $where_builder $order_builder");
@@ -95,20 +95,46 @@
         return $r;
     }
 
-    function sql_insert($table, $data) {
+    function sql_insert($table, $data, $multiple=null) {
         global $conn;
 
         $keywords_builder = "";
         $tuple_builder = "";
         $sep = "";
+        $execute_array = array();
 
-        foreach ($data as $k => $v) {
-            $keywords_builder.= "$sep$k";
-            $tuple_builder.= "$sep:$k";
-            $sep = ", ";
+        if (!$multiple) {
+            foreach ($data as $k => $v) {
+                $keywords_builder.= "$sep$k";
+                $tuple_builder.= "$sep:$k";
+                $sep = ", ";
+            }
+
+            $execute_array = $data;
+        } else {
+            $tuple_builder = array();
+
+            foreach ($data as $key => $key_name) {
+                $keywords_builder.= "$sep$key_name";
+
+                foreach ($multiple as $index => $tuple) {
+                    if (empty($tuple_builder[$index]))
+                        $tuple_builder[$index] = "$sep:$key_name$index";
+                    else
+                        $tuple_builder[$index].= "$sep:$key_name$index";
+
+                    if (empty($execute_array[$key_name.$index]))
+                        $execute_array[$key_name.$index] = $tuple[$key];
+                    else
+                        $execute_array[$key_name.$index].= $tuple[$key];
+                }
+                $sep = ", ";
+            }
+
+            $tuple_builder = join("), (", $tuple_builder);
         }
 
-        return $conn->prepare("INSERT INTO `$table` ($keywords_builder) VALUES ($tuple_builder)")->execute($data);
+        return $conn->prepare("INSERT INTO `$table` ($keywords_builder) VALUES ($tuple_builder)")->execute($execute_array);
     }
 
     function sql_update($table, $data, $where) {

@@ -39,7 +39,7 @@
                             }
                         }
                     ?>
-                    <td><a href="#TODO">Envoyer un MP</a></td>
+                    <td><?php if ($joueur['id_utilisateur'] != $_SESSION['id']) { ?><a href="#" onclick="creerMP(<?=$joueur['id_joueur']?>, <?=$donnees_jdr['id_dans']?>)">Envoyer un MP</a><?php } ?></td>
                 </tr><?php
             } else { ?>
                 <tr>
@@ -49,6 +49,19 @@
         }
     ?>
 </table>
+
+<script>
+    creerMP = function(idA, idB) {
+        event.preventDefault();
+        $.post("./equipe.php", {
+            action: "creer",
+            id_modele_equipe: 0,
+            liste_id_joueur: [idA, idB],
+            redirection_succes: "./jdr.php?id=<?=$donnees_jdr['id_jdr']?>"
+        });
+        location.reload();
+    }
+</script>
 
 <hr>
 <div class="card">

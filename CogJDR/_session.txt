@@ -14,9 +14,9 @@ liste_donnees_jdr:
         titre_jdr:
             "titre du JDR par jointure avec `JDR` et `ModeleJDR`"
 
-        id_joueur -> id_dans:
+        id_dans:
             "ID de joueur de l'utilisateur dans le JDR, `null` s'il est MJ"
-        nom_joueur -> pseudo_dans:
+        pseudo_dans:
             "nom de l'utilisateur dans le JDR"
 
         liste_equipe:

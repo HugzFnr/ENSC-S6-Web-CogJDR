@@ -1,8 +1,10 @@
-<?php require "./inclus/page_debut.php" ?>
+<?php include "./inclus/page_debut.php" ?>
 
 <h1 class="text-center"> Créer un modèle de JDR </h1>
+
+<!-- partie 'Paramètres généraux' -->
 <div class="container" id="menu1">
-    <form class="form-signin form-horizontal" role="form" action="./creer.php" method="post" enctype="multipart/form-data">
+    <form id="form1" class="form-signin form-horizontal" role="form" action="./creer.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="redirection_echec" value="./#">
         <input type="hidden" name="redirection_succes" value="./#">
 
@@ -30,7 +32,7 @@
 
         <div class="form-group">
             <div class="col-sm-6 offset-sm-3">
-            <p>Nombre d'actions différentes</p>
+                <p>Nombre d'actions différentes</p>
                 <input type="number" name="nb_actions" class="form-control" id="nb_actions"     required>
             </div>
         </div>
@@ -39,14 +41,15 @@
             <div class="col-sm-6 offset-sm-3">
                 <button type="submit" name="action" value="creer" class="btn btn-primary btn-block">Etape suivante</button>
             </div>
+        </div>
     </form>
 </div>
+<!-- FIN partie 'Paramètres généraux' -->
 
 
-<h2 class="invisible" id="menu3"> JE SUIS CACHE </h2>
-
-<div class="container invisible" id="menu2">
-    <form class="form-signin form-horizontal" role="form" action="./creer.php" method="post" enctype="multipart/form-data">
+<!-- partie 'Paramètres PAS GENERAUX AAH' -->
+<div class="container invisible" style="margin-top: -29.42rem;" id="menu2">
+    <form id="form2" class="form-signin form-horizontal" role="form" action="./creer.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="redirection_echec" value="./#">
         <input type="hidden" name="redirection_succes" value="./#">
 
@@ -74,7 +77,7 @@
 
         <div class="form-group">
             <div class="col-sm-6 offset-sm-3">
-            <p>Nombre d'actions différentes</p>
+                <p>Nombre d'actions différentes</p>
                 <input type="number" name="nb_actions" class="form-control" id="nb_actions"     required>
             </div>
         </div>
@@ -83,17 +86,40 @@
             <div class="col-sm-6 offset-sm-3">
                 <button type="submit" name="action" value="creer" class="btn btn-primary btn-block">Etape suivante</button>
             </div>
+        </div>
     </form>
 </div>
+<!-- FIN partie 'Paramètres PAS GENERAUX AAH' -->
+
 
 <script>
-    $("#fleche1").click(function(e) {
-        //e.preventDefault();
-        $("#menu1").toggleClass("invisible");
-        $("#menu3").toggleClass("visible"); //bon ça marche paaas là
+    var etape = 1;
 
+    $("#fleche1").click(function(e) {
+        e.preventDefault();
+
+        switch (etape) {
+            case 1:
+                    if ($("#form1")[0].checkValidity()) {
+                        $("#menu1").toggleClass("invisible");
+                        $("#menu2").toggleClass("invisible");
+                        etape++;
+                    } else {
+                        alert("Veuillez renseigner les champs.");
+                    }
+                break;
+
+            case 2:
+                    if ($("#form2")[0].checkValidity()) {
+                        /* ... */
+                        etape++;
+                    } else {
+                        alert("Veuillez renseigner les champs.");
+                    }
+                break;
+        }
     });
 </script>
 
-<?php require "./inclus/page_fin.php" ?>
 
+<?php include "./inclus/page_fin.php" ?>

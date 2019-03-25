@@ -28,17 +28,21 @@ insert into Joueur (`id_joueur`, `id_utilisateur`, `id_jdr_participe`, `pseudo`)
     (1, 1, 0, 'Sel');
 
 insert into ModeleEquipe (`id_modele_equipe`, `id_modele_jdr`, `titre_equipe`, `taille_equipe_max`, `discussion_autorisee`) values
-    (0, 0, 'L&apos;&eacute;quipe des Vivants', 10, 1),
-    (1, 0, 'L&apos;&eacute;quipe Sac', 11, 1);
+    (0, 0, 'MP', 2, 1),
+    (1, 0, 'L&apos;&eacute;quipe des Vivants', 10, 1),
+    (2, 0, 'L&apos;&eacute;quipe Sac', 11, 1);
 
-insert into Equipe (`id_equipe`, `id_modele_equipe`) values
-    (0, 0),
-    (1, 1);
+insert into Equipe (`id_equipe`, `id_modele_equipe`, `id_jdr`) values
+    (0, 1, 0),
+    (1, 2, 0),
+    (2, 0, 0);
 
 insert into EstDans (`id_joueur`, `id_equipe`) values
     (0, 0),
     (1, 0),
-    (1, 1);
+    (1, 1)/*,
+    (0, 2),
+    (1, 2)*/;
 
 insert into Message_ (`id_message`, `id_joueur`, `id_equipe`, `horaire_publi`, `texte`) values
     (0, 0, 0, NOW(), "Hey, salut !"),
