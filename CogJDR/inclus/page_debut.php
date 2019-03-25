@@ -56,7 +56,11 @@
 				<script>
 					$(".id_discussion").click( function(e) {
 						e.preventDefault();
-						$("#discussion").load("./inclus/discussion/contenu_discussion.php", { change_id_equipe: e.target.getAttribute("href") });
+						$("#discussion").load(
+							"./inclus/discussion/contenu_discussion.php",
+							{ change_id_equipe: e.target.getAttribute("href") },
+							() => scrollDown($("#discussion"))
+						);
 						document.getElementById("form_envoie_message").reset();
 
 						$(".id_discussion").addClass("bg-light");
@@ -142,13 +146,13 @@
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown_masterisees">
 								<?php
 									if (empty($liste_masterisees)) { ?>
-										<a class="dropdown-item" href="#Creer"><em>Pas de parties en cours</em></a><?php
+										<a class="dropdown-item" href="./creer.php"><em>Pas de parties en cours</em></a><?php
 									} else foreach ($liste_masterisees as $v) { ?>
 										<a class="dropdown-item" href="./jdr.php?id=<?=$v['id_jdr']?>"><?=$v['titre_jdr']?></a><?php
 									}
 								?>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#Creer">Créer une partie</a>
+								<a class="dropdown-item" href="./creer.php">Créer une partie</a>
 							</div>
 						</li>
 					</ul>

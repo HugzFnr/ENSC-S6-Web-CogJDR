@@ -113,7 +113,7 @@
                                     if (empty($donnees_jdr['liste_equipe']))
                                         $__liste_equipes[] = array('href' => "#TODO", 'text' => "Rejoinier une équipe !", 'activ' => false);
                                     else foreach ($donnees_jdr['liste_equipe'] as $k => $v)
-                                        $__liste_equipes[] = array('href' => $v['id_equipe'], 'text' => $v['titre_equipe'], 'activ' => $k == $donnees_jdr['indice_equipe_discussion_suivi']);
+                                        $__liste_equipes[] = array('href' => $k, 'text' => $v['titre_equipe'], 'activ' => $k == $donnees_jdr['indice_equipe_discussion_suivi']);
                                 }
 
                                 break;
