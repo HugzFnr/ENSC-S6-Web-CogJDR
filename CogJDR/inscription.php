@@ -1,5 +1,7 @@
 <?php require "./inclus/page_debut.php" ?>
 
+<div class="container">
+
 <h1 class="text-center">Inscription</h1>
 
 <div class="well">
@@ -46,6 +48,8 @@
             return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
         }
     </script>
+</div>
+
 </div>
 
 <?php require "./inclus/page_fin.php" ?>

@@ -4,6 +4,24 @@ div.page {
     margin-right: auto;
 }
 
+body
+{
+    background-image:  url("../images/jdr/waterfall.gif");
+    background-repeat : no-repeat;
+    background-position : center;
+    background-size : cover;
+    color : darkblue;
+}
+
+h1
+{
+    text-align : center;
+}
+.container{
+    background-color: lightgray;
+    border-radius : 15px;
+}
+
 img.img {
     height: 4em;
     width: 4em;
