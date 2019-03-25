@@ -6,7 +6,7 @@
      *
      *  1. `creer` : créer un compte
      *  0. `modifier` : modifier un compte
-     *  0. `connecter` : connection à un compte
+     *  0. `connecter` : connexion à un compte
      *  0. `supprimer` : suppression du compte
      *  0. `deconnecter` : finire la session
      *  0. `afficher` : affiche les informations publiques du compte (ne redirige pas en cas de succès)
