@@ -51,8 +51,8 @@
                 $where_builder.= " IN (";
                 $sep_ = "";
                 foreach ($v as $v_) {
-                    if (strpos($v, "::") !== false)
-                        $where_builder.= "$sep_".str_replace("::", ".", $v);
+                    if (strpos($v_, "::") !== false)
+                        $where_builder.= "$sep_".str_replace("::", ".", $v_);
                     else {
                         $where_builder.= "$sep_:$execute_index";
                         $execute_array[$execute_index++] = $v_;

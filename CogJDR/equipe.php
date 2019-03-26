@@ -28,6 +28,8 @@
                     exit;
                 $donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']];
 
+                $liste_id_joueur = $_REQUEST['liste_id_joueur'];
+
                 if (sql_select(
                             array('EstDans', 'Equipe'),
                             'COUNT(*)',
@@ -40,8 +42,7 @@
                         )->fetch()['COUNT(*)'] == count($liste_id_joueur))
                     exit;
 
-                $id_modele_equipe = $_REQUEST['id_modele_equipe'];
-                $liste_id_joueur = $_REQUEST['liste_id_joueur'];
+                $id_modele_equipe = isset($_REQUEST['id_modele_equipe']) ? $_REQUEST['id_modele_equipe'] : 0;
                 $id_jdr = $donnees_jdr['id_jdr'];
 
                 sql_insert('Equipe', array('id_equipe' => null, 'id_modele_equipe' => $id_modele_equipe, 'id_jdr' => $donnees_jdr['id_jdr']));

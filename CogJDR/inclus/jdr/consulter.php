@@ -48,7 +48,22 @@
                             }
                         }
                     ?>
-                    <td><?php if ($joueur['id_utilisateur'] != $_SESSION['id'] && !sql_select('Equipe', "*", array('id_modele_equipe' => 0 /* AND EstDans... */))) { ?><a href="#" onclick="creerMP(<?=$joueur['id_joueur']?>, <?=$donnees_jdr['id_dans']?>)">Envoyer un MP</a><?php } ?></td>
+                    <td><?php
+                        if ($joueur['id_utilisateur'] != $_SESSION['id']) {
+                            $tmp = sql_select(
+                                array('Equipe', 'EstDans'),
+                                "COUNT(*)",
+                                array(
+                                    'Equipe::id_modele_equipe' => 0,
+                                    'EstDans::id_equipe' => 'Equipe::id_equipe',
+                                    'EstDans::id_joueur' => array($joueur['id_joueur'], $donnees_jdr['est_mj'] ? -1 : $donnees_jdr['id_dans'])
+                                )
+                            )->fetch();
+                            if ($tmp['COUNT(*)'] != ($donnees_jdr['est_mj'] ? 1 : 2)) { ?>
+                                <a href="#" onclick="creerMP(<?=$joueur['id_joueur']?>, <?=$donnees_jdr['id_dans']?>)">Envoyer un MP</a><?php
+                            }
+                        }
+                    ?></td>
                 </tr><?php
             } else { ?>
                 <tr>
@@ -67,8 +82,10 @@
             id_modele_equipe: 0,
             liste_id_joueur: [idA, idB],
             redirection_succes: "./jdr.php?id=<?=$donnees_jdr['id_jdr']?>"
+        }).done(function(data) {
+            location.reload();
+            console.log(data);
         });
-        location.reload();
     }
 </script>
 

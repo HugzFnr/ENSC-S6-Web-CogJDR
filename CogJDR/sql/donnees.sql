@@ -1,7 +1,7 @@
 delete from Message_ where 1;
 delete from EstDans where 1;
 delete from Equipe where 1;
-delete from ModeleEquipe where 1;
+delete from ModeleEquipe where id_modele_equipe != 0;
 delete from Joueur where 1;
 delete from MJ where 1;
 delete from JDR where 1;
@@ -27,21 +27,18 @@ insert into Joueur (`id_joueur`, `id_utilisateur`, `id_jdr_participe`, `pseudo`)
     (0, 0, 0, 'Jsp'),
     (1, 1, 0, 'Sel');
 
-insert into ModeleEquipe (`id_modele_equipe`, `id_modele_jdr`, `titre_equipe`, `taille_equipe_max`, `discussion_autorisee`) values
-    (1, 0, 'Les Vivants', 10, 1),
-    (2, 0, 'Sac', 11, 1);
+insert into ModeleEquipe (`id_modele_equipe`, `titre_equipe`, `taille_equipe_max`, `discussion_autorisee`) values
+    (1, 'Les Vivants', 10, 1),
+    (2, 'Sac', 11, 1);
 
 insert into Equipe (`id_equipe`, `id_modele_equipe`, `id_jdr`) values
     (0, 1, 0),
-    (1, 2, 0),
-    (2, 0, 0);
+    (1, 2, 0);
 
 insert into EstDans (`id_joueur`, `id_equipe`) values
     (0, 0),
     (1, 0),
-    (1, 1)/*,
-    (0, 2),
-    (1, 2)*/;
+    (1, 1);
 
 insert into Message_ (`id_message`, `id_joueur`, `id_equipe`, `horaire_publi`, `texte`) values
     (0, 0, 0, NOW(), "Hey, salut !"),

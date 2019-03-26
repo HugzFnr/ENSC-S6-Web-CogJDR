@@ -38,13 +38,13 @@ create table ModeleJDR (
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 create table ModeleEquipe (
-    id_modele_equipe integer not null primary key auto_increment,
-    id_modele_jdr integer,
+    id_modele_equipe integer not null primary key auto_increment/*,
+    id_modele_jdr integer*/,
     titre_equipe varchar(32) not null,
     taille_equipe_max integer not null,
-    discussion_autorisee boolean not null,
+    discussion_autorisee boolean not null/*,
 
-    foreign key (id_modele_jdr) references ModeleJDR (id_modele_jdr)
+    foreign key (id_modele_jdr) references ModeleJDR (id_modele_jdr)*/
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 create table Role_ (
@@ -177,5 +177,4 @@ create table Message_ (
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 
-/*-*/
-insert into ModeleEquipe (`id_modele_equipe`, `id_modele_jdr`, `titre_equipe`, `taille_equipe_max`, `discussion_autorisee`) values (0, 0, 'MP', 2, 1);
+insert into ModeleEquipe (`id_modele_equipe`, `titre_equipe`, `taille_equipe_max`, `discussion_autorisee`) values (0, 'MP', 2, 1);

@@ -44,8 +44,6 @@
                 'horaire_publi' => null,
                 'texte' => str_replace("&amp;", "&", htmlentities($_REQUEST['message_text']))
             ));
-
-        header("Location: ".$_REQUEST['page_form']);
     }
 
     return true;

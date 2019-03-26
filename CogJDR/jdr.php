@@ -122,19 +122,20 @@
                                         if (empty($donnees_jdr['liste_equipe']))
                                             $__liste_equipes[] = array('href' => "#TODO", 'text' => "Rejoinier une équipe !", 'activ' => false);
                                         else foreach ($donnees_jdr['liste_equipe'] as $k_ => $v_) {
-                                            if ($v_['titre_equipe'] == "MP")
-                                                $titre = "MP - ".sql_select(
-                                                        array('Joueur', 'EstDans', 'Equipe'),
-                                                        'Joueur.pseudo',
-                                                        array(
-                                                            'Joueur::id_joueur' => 'EstDans::id_joueur',
-                                                            'EstDans::id_equipe' => 'Equipe::id_equipe',
-                                                            'Joueur::id_joueur !' => $donnees_jdr['id_dans'],
-                                                            'Equipe::id_equipe' => $v_['id_equipe']/*,
-                                                            'Equipe::id_jdr' => $donnees_jdr['id_jdr']*/ // redondant ?
-                                                        )
-                                                    )->fetch()['pseudo'];
-                                            else
+                                            if ($v_['titre_equipe'] == "MP") {
+                                                $tmp = sql_select(
+                                                    array('Joueur', 'EstDans', 'Equipe'),
+                                                    'Joueur.pseudo',
+                                                    array(
+                                                        'Joueur::id_joueur' => 'EstDans::id_joueur',
+                                                        'EstDans::id_equipe' => 'Equipe::id_equipe',
+                                                        'Joueur::id_joueur !' => $donnees_jdr['est_mj'] ? -1 : $donnees_jdr['id_dans'],
+                                                        'Equipe::id_equipe' => $v_['id_equipe']/*,
+                                                        'Equipe::id_jdr' => $donnees_jdr['id_jdr']*/ // redondant ?
+                                                    )
+                                                );
+                                                $titre = "MP - ".$tmp->fetch()['pseudo'].($donnees_jdr['est_mj'] ? " et ".$tmp->fetch()['pseudo'] : "");
+                                            } else
                                                 $titre = $v_['titre_equipe'];
 
                                             $__liste_equipes[] = array('href' => $k_, 'text' => $titre, 'activ' => $k_ == $donnees_jdr['indice_equipe_discussion_suivi']);
