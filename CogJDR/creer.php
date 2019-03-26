@@ -112,41 +112,43 @@
 
     //console.log(document.getElementById("titre_modele").value); ça servira ça
 
-    for(iter=1;iter<=2;iter++) //à la fin yen aura 8 et 5 types de panneaux distincts
-    {
-        if (iter%2==1) //les flèches impaires sont des flèches d'avancement au panneau suivant
-        {
-            $("#fleche"+iter).click(function(e) {
-            e.preventDefault();
-                stock = iter;
-                if ($("#form1")[0].checkValidity()) {
-                    DesactiverPanneau(Math.floor(stock/2)+1);//désactive le panneau associé au bouton flèche
-                    AfficherMasquerPanneau(Math.floor(stock/2)+2); //et affiche le panneau suivant
-                    console.log(iter); //ah bah oui ça prend iter au moment du click eh, donc =3
+    $("#fleche1").click(function(e) { ClicFlecheImpair(1,e); });
+    $("#fleche3").click(function(e) { ClicFlecheImpair(3,e); });
+    $("#fleche5").click(function(e) { ClicFlecheImpair(5,e); });
+    $("#fleche7").click(function(e) { ClicFlecheImpair(7,e); });
 
+    $("#fleche2").click(function(e) { ClicFlechePair(2,e); });
+    $("#fleche4").click(function(e) { ClicFlechePair(4,e); });
+    $("#fleche6").click(function(e) { ClicFlechePair(6,e); }); 
+    $("#fleche8").click(function(e) { ClicFlechePair(8,e); });     
+
+
+    function ClicFlecheImpair (numeroFleche,e)
+     {
+            e.preventDefault();
+                if ($("#form1")[0].checkValidity()) {
+                    DesactiverPanneau(Math.floor(numeroFleche/2)+1);//désactive le panneau associé au bouton flèche
+                    AfficherMasquerPanneau(Math.floor(numeroFleche/2)+2); //et affiche le panneau suivant
                     //https://stackoverflow.com/questions/5338716/get-multiple-elements-by-id faut plutot récupérer toutes les flèches en leur donnant une classe puis utiliser leur chiffre comme iter
 
                 } else {
                     alert("Veuillez renseigner les champs.");
                 }
-            });      
-        }
+            }
 
-        else //les flèches paires sont des flèches de retour au panneau précédent
-        {
-            $("#fleche"+iter).click(function(e) {
+    function ClicFlechePair (numeroFleche,e)
+    {
             e.preventDefault();
                         if ($("#form1")[0].checkValidity()) {
 
-                            DesactiverPanneau(Math.floor(iter/2)+1);
-                            ActiverPanneau(Math.floor(iter/2));     
+                            DesactiverPanneau(Math.floor(numeroFleche/2)+1);
+                            ActiverPanneau(1);     
 
                         } else {
                             alert("Veuillez renseigner les champs.");
                         }
-            });              
-        }
-    }
+            }
+
 
     function DesactiverPanneau(numero)
     {
