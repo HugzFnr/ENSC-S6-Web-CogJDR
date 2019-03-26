@@ -37,7 +37,7 @@
                             ),
                             null,
                             true
-                        )->fetchAll(PDO::FETCH_ASSOC) == count($liste_id_joueur))
+                        )->fetch()['COUNT(*)'] == count($liste_id_joueur))
                     exit;
 
                 $id_modele_equipe = $_REQUEST['id_modele_equipe'];

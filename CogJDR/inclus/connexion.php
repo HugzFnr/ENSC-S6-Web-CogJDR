@@ -39,7 +39,7 @@
         $table_builder = "FROM `".(is_array($table) ? join("` JOIN `", $table) : $table)."`";
 
         // WHERE ..
-        $where_builder = empty($where) ? "" : "WHERE ";
+        $where_builder = empty($where) ? "WHERE 1" : "WHERE ";
         $sep = "";
         foreach ($where as $k => $v) {
             if (is_string($k) && strpos($k, "::") !== false)
@@ -63,9 +63,9 @@
                 $where_builder.= ")";
             } else {
                 if (strpos($v, "::") !== false)
-                    $where_builder.= " = ".str_replace("::", ".", $v);
+                    $where_builder.= "= ".str_replace("::", ".", $v);
                 else {
-                    $where_builder.= " = :$execute_index";
+                    $where_builder.= "= :$execute_index";
                     $execute_array[$execute_index++] = $v;
                 }
             }

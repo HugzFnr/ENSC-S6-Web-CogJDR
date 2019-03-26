@@ -129,13 +129,13 @@
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown_jouees">
 								<?php
 									if (empty($liste_jouees)) { ?>
-										<a class="dropdown-item" href="#Rejoindre"><em>Pas de parties en cours</em></a><?php
+										<a class="dropdown-item" href="./jdr.php"><em>Pas de parties en cours</em></a><?php
 									} else foreach ($liste_jouees as $v) { ?>
 										<a class="dropdown-item" href="./jdr.php?id=<?=$v['id_jdr']?>"><?=$v['titre_jdr']?></a><?php
 									}
 								?>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#">Rejoindre une partie</a>
+								<a class="dropdown-item" href="./jdr.php">Rejoindre une partie</a>
 							</div>
 						</li>
 						<!-- liste des masterisées -->

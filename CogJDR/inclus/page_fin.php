@@ -2,7 +2,7 @@
             <footer class="footer sticky-bottom">
                 <div class="container text-center">
                     <hr>
-                    <p>Cog' JDR<em> &mdash; un projet de longue haleine par Célestin Grenier et Hugo Fournier (enfin j'arrive hein wallah).</em></p>
+                    <p>Cog' JDR<em> &mdash; un projet de langue à laine par Célestin Grenier et Hugo Fournier.</em></p>
                 </div>
             </footer>
 

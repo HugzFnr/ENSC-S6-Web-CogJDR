@@ -9,7 +9,7 @@
 <hr>
 <p>Joueurs actuellement inscrits à cette partie</p>
 
-<table class="liste_joueurs">
+<table class="liste_joueurs container">
     <tr>
         <th>Adresse e-mail</th><th>Pseudo</th>
     </tr>

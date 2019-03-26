@@ -175,3 +175,7 @@ create table Message_ (
     foreign key (id_joueur) references Joueur (id_joueur),
     foreign key (id_equipe) references Equipe (id_equipe)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
+
+
+/*-*/
+insert into ModeleEquipe (`id_modele_equipe`, `id_modele_jdr`, `titre_equipe`, `taille_equipe_max`, `discussion_autorisee`) values (0, 0, 'MP', 2, 1);

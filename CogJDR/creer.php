@@ -106,9 +106,8 @@
 
     var etape = 1;
 
-
     $("#fleche1").click(function(e) {
-        e.preventDefault();  
+        e.preventDefault();
 
         switch (etape) {
             case 1:
@@ -118,8 +117,6 @@
                         $("#nb_equipes").attr('disabled','');
                         $("#nb_roles").attr('disabled','');
                         $("#nb_actions").attr('disabled',''); //désactive plutôt que masque
-
-
 
                         $("#menu2").toggleClass("invisible");
                         

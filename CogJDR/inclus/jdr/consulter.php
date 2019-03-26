@@ -5,12 +5,18 @@
 <hr>
 <p>Joueurs actuellement inscrits à cette partie</p>
 
-<table class="liste_joueurs">
+<table class="container liste_joueurs">
     <tr>
-        <th>Adresse e-mail</th><th>Pseudo</th><?php if ($donnees_jdr['est_mj']) foreach ($donnees_jdr['liste_equipe'] as $v) { ?><th><?=$v['titre_equipe']?></th><?php } ?><th></th>
+        <th>Adresse e-mail</th><th>Pseudo</th><?php if ($donnees_jdr['est_mj']) foreach ($donnees_jdr['liste_equipe'] as $v) if ($v['titre_equipe'] != "MP") { ?><th><?=$v['titre_equipe']?></th><?php } ?><th></th>
     </tr>
 
     <?php
+        /**
+         * TTT  OO    DD   OO    !!
+         *  T  O  O   D D O  O   !!
+         *  T   OO    DD   OO    !!
+         */
+        // TODO: optimiser cette partie en réduisant le nb d'appels à la base de données (j'en suis sur que c'est possible, lol)
         $r = sql_select('Joueur', array('id_joueur', 'pseudo', 'id_utilisateur'), array('id_jdr_participe' => $jdr['id_jdr']));
 
         for ($k = 0; $k < $jdr['nb_max_joueurs']; $k++) {
@@ -19,11 +25,14 @@
             if ($joueur) {
                 $email = sql_select('Utilisateur', 'email', array('id' => $joueur['id_utilisateur']))->fetch()['email']; ?>
                 <tr>
-                    <td><?=substr($email, 0, strpos($email, "@"))?></td>
+                    <td><?php
+                        $i = strpos($email, "@");
+                        echo 0 < $i ? substr($email, 0, $i) : $email;
+                    ?></td>
                     <td><?=$joueur['pseudo']?></td>
                     <?php
                         if ($donnees_jdr['est_mj']) {
-                            foreach ($donnees_jdr['liste_equipe'] as $equipe) {
+                            foreach ($donnees_jdr['liste_equipe'] as $equipe) if ($equipe['titre_equipe'] != "MP") {
                                 if (sql_select(
                                             array('EstDans'),
                                             "*",
@@ -39,11 +48,11 @@
                             }
                         }
                     ?>
-                    <td><?php if ($joueur['id_utilisateur'] != $_SESSION['id']) { ?><a href="#" onclick="creerMP(<?=$joueur['id_joueur']?>, <?=$donnees_jdr['id_dans']?>)">Envoyer un MP</a><?php } ?></td>
+                    <td><?php if ($joueur['id_utilisateur'] != $_SESSION['id'] && !sql_select('Equipe', "*", array('id_modele_equipe' => 0 /* AND EstDans... */))) { ?><a href="#" onclick="creerMP(<?=$joueur['id_joueur']?>, <?=$donnees_jdr['id_dans']?>)">Envoyer un MP</a><?php } ?></td>
                 </tr><?php
             } else { ?>
                 <tr>
-                    <td>-</td><td>-</td><?php if ($donnees_jdr['est_mj']) foreach ($donnees_jdr['liste_equipe'] as $v) { ?><td>-</td><?php } ?><td>-</td>
+                    <td>-</td><td>-</td><?php if ($donnees_jdr['est_mj']) foreach ($donnees_jdr['liste_equipe'] as $v) if ($v['titre_equipe'] != "MP") { ?><td>-</td><?php } ?><td>-</td>
                 </tr><?php
             }
         }
