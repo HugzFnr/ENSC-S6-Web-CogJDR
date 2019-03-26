@@ -1,5 +1,5 @@
 div.page {
-    width: 80%;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -12,16 +12,16 @@ body {
     color : darkblue;
 }
 
-h1 {
+h1,h3
+{
     text-align : center;
 }
 
 h3 {
     color: blue;
 }
-
-.container {
-    background-color: lightgray;
+.container,.container-fluid{
+    background-color: rgba(211, 211, 211, 0.733);
     border-radius : 15px;
 }
 

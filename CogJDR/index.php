@@ -5,7 +5,6 @@
 
 <?php require "./inclus/page_debut.php" ?>
 
-<div class="container">
 
 <h1>Cog' JDR</h1>
 
@@ -34,6 +33,5 @@
     Vel et sit quo repudiandae. Nesciunt asperiores iure qui in quis et. Aut dolorum dolore molestiae ad.
 </p>
 
-</div>
 
 <?php require "./inclus/page_fin.php" ?>
