@@ -51,16 +51,16 @@
                     <td><?php
                         if ($joueur['id_utilisateur'] != $_SESSION['id']) {
                             $tmp = sql_select(
-                                array('Equipe', 'EstDans'),
-                                "COUNT(*)",
-                                array(
-                                    'Equipe::id_modele_equipe' => 0,
-                                    'EstDans::id_equipe' => 'Equipe::id_equipe',
-                                    'EstDans::id_joueur' => array($joueur['id_joueur'], $donnees_jdr['est_mj'] ? -1 : $donnees_jdr['id_dans'])
-                                )
-                            )->fetch();
-                            if ($tmp['COUNT(*)'] != ($donnees_jdr['est_mj'] ? 1 : 2)) { ?>
-                                <a href="#" onclick="creerMP(<?=$joueur['id_joueur']?>, <?=$donnees_jdr['id_dans']?>)">Envoyer un MP</a><?php
+                                    array('Equipe', 'EstDans'),
+                                    "COUNT(*)",
+                                    array(
+                                        'Equipe::id_modele_equipe' => 0,
+                                        'EstDans::id_equipe' => 'Equipe::id_equipe',
+                                        'EstDans::id_joueur' => array($joueur['id_joueur'], $donnees_jdr['est_mj'] ? null : $donnees_jdr['id_dans'])
+                                    )
+                                )->fetch();
+                            if ($tmp[0] != ($donnees_jdr['est_mj'] ? 1 : 2)) { ?>
+                                <a href="#" onclick="creerMP(event, <?=$joueur['id_joueur']?>, <?=$donnees_jdr['est_mj'] ? "null" : $donnees_jdr['id_dans']?>)">Envoyer un MP</a><?php
                             }
                         }
                     ?></td>
@@ -75,7 +75,7 @@
 </table>
 
 <script>
-    creerMP = function(idA, idB) {
+    creerMP = function(event, idA, idB) {
         event.preventDefault();
         $.post("./equipe.php", {
             action: "creer",
@@ -84,13 +84,14 @@
             redirection_succes: "./jdr.php?id=<?=$donnees_jdr['id_jdr']?>"
         }).done(function(data) {
             location.reload();
-            console.log(data);
+            console.log(data); // TODO: c'est du debug, lol
+            alert("coucou");
         });
     }
 </script>
 
 <hr>
-<div class="card">
+<div class="fixed-bottom discussion-flottant card">
     <article class="card-body">
         <?php include "./inclus/discussion/discussion.php" ?>
     </article>

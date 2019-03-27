@@ -25,3 +25,17 @@ li.discussion_message {
 .discussion_message.discussion_mj {
     background-color: darkkhaki;
 }
+
+div.discussion-flottant {
+    width: 42%;
+}
+
+@media (max-width: 994px) {
+    div.discussion-flottant {
+        width: 100%;
+    }
+}
+
+body {
+    margin-bottom: 149px;
+}

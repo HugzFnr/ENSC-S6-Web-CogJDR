@@ -22,7 +22,7 @@
 	<meta charset="utf-8">
 	<title>Cog' JDR<?=isset($__sous_titre) ? " &mdash; $__sous_titre" : " !"?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
+	
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/global.css">
@@ -43,8 +43,8 @@
 			<!-- liste des équipes -->
 			<div class="d-flex" id="wrapper">
 				<!-- Sidebar -->
-				<div class="bg-light border-right" id="sidebar-wrapper">
-					<div class="sidebar-heading">Liste des discussions</div>
+				<div class="bg-light" id="sidebar-wrapper">
+					<div class="sidebar-heading">Liste des équipes</div>
 					<div class="list-group list-group-flush">
 						<?php
 							foreach ($__liste_equipes as $v) { ?>
@@ -55,18 +55,20 @@
 				</div>
 				<script>
 					$(".id_discussion").click( function(e) {
-						e.preventDefault();
-						$("#discussion").load(
-							"./inclus/discussion/contenu_discussion.php",
-							{ change_id_equipe: e.target.getAttribute("href") },
-							() => scrollDown($("#discussion"))
-						);
-						document.getElementById("form_envoie_message").reset();
+						if (e.target.getAttribute("href") != "./equipe.php") {
+							e.preventDefault();
+							$("#discussion").load(
+								"./inclus/discussion/contenu_discussion.php",
+								{ change_id_equipe: e.target.getAttribute("href") },
+								() => scrollDown($("#discussion"))
+							);
+							document.getElementById("form_envoie_message").reset();
 
-						$(".id_discussion").addClass("bg-light");
-						$(".id_discussion").removeClass("active");
-						e.target.classList.add("active");
-						e.target.classList.remove("bg-light");
+							$(".id_discussion").addClass("bg-light");
+							$(".id_discussion").removeClass("active");
+							e.target.classList.add("active");
+							e.target.classList.remove("bg-light");
+						}
 					});
 				</script>
 				<!-- /#sidebar-wrapper -->
@@ -174,7 +176,7 @@
 								<td>
 									<div class="dropdown">
 										<a class="dropdown-toggle" href="#" id="navbarDropdown_compte" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-											<img class="img" src="<?=$_SESSION['img']?>" alt="Oof">
+											<img class="img" src="./images/compte/<?=$_SESSION['img']?>" alt="Oof">
 										</a>
 										<div class="dropdown-menu" aria-labelledby="navbarDropdown_compte">
 											<a class="dropdown-item" href="./compte.php?action=deconnecter&redirection_succes=<?=rawurlencode($_SERVER['REQUEST_URI'])?>">Se Déconnecter</a>
@@ -193,7 +195,7 @@
 											</tr>
 											<tr>
 												<td><input type="password" name="mdp" class="form-control" id="debut_mdp" placeholder="Mot de passe"></td>
-												<td><button type="submit" name="action" value="creer" formaction="./inscription.php" class="btn btn-primary btn-block">Créer le compte</button></td>
+												<td><button type="submit" name="action" value="creer" formaction="./" class="btn btn-primary btn-block">Créer le compte</button></td>
 											</tr>
 										</table>
 									</form>

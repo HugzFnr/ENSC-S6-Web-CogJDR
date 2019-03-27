@@ -119,9 +119,11 @@
                                     maj_donnees_jdr();
             
                                     if ($donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']]) {
-                                        if (empty($donnees_jdr['liste_equipe']))
-                                            $__liste_equipes[] = array('href' => "#TODO", 'text' => "Rejoinier une équipe !", 'activ' => false);
-                                        else foreach ($donnees_jdr['liste_equipe'] as $k_ => $v_) {
+                                        $compteur = 0;
+
+                                        foreach ($donnees_jdr['liste_equipe'] as $k_ => $v_) if ($v_['discussion_autorisee']) {
+                                            $compteur++;
+                                            
                                             if ($v_['titre_equipe'] == "MP") {
                                                 $tmp = sql_select(
                                                     array('Joueur', 'EstDans', 'Equipe'),
@@ -130,16 +132,24 @@
                                                         'Joueur::id_joueur' => 'EstDans::id_joueur',
                                                         'EstDans::id_equipe' => 'Equipe::id_equipe',
                                                         'Joueur::id_joueur !' => $donnees_jdr['est_mj'] ? -1 : $donnees_jdr['id_dans'],
-                                                        'Equipe::id_equipe' => $v_['id_equipe']/*,
-                                                        'Equipe::id_jdr' => $donnees_jdr['id_jdr']*/ // redondant ?
+                                                        'Equipe::id_equipe' => $v_['id_equipe']
                                                     )
                                                 );
-                                                $titre = "MP - ".$tmp->fetch()['pseudo'].($donnees_jdr['est_mj'] ? " et ".$tmp->fetch()['pseudo'] : "");
+                                                $pseudoA = $tmp->fetch()['pseudo'];
+                                                $pseudoB = $tmp->fetch()['pseudo'];
+
+                                                if ((empty($pseudoA) || empty($pseudoB)) && empty($pseudoMJ))
+                                                    $pseudoMJ = sql_select('MJ', 'pseudo_mj', array('id_jdr_dirige' => $donnees_jdr['id_jdr']))->fetch()['pseudo_mj'];
+
+                                                $titre = "MP - ".(empty($pseudoA) ? $pseudoMJ : $pseudoA).($donnees_jdr['est_mj'] ? " et ".(empty($pseudoB) ? $pseudoMJ : $pseudoB) : "");
                                             } else
                                                 $titre = $v_['titre_equipe'];
 
                                             $__liste_equipes[] = array('href' => $k_, 'text' => $titre, 'activ' => $k_ == $donnees_jdr['indice_equipe_discussion_suivi']);
                                         }
+
+                                        if ($compteur == 0)
+                                            $__liste_equipes[] = array('href' => "./equipe.php", 'text' => "Rejoiniez une équipe !", 'activ' => false);
                                     }
 
                                     break;

@@ -22,17 +22,16 @@
     });
 </script>
 
-<ul id="discussion"><?php if (include "./inclus/discussion/contenu_discussion.php") { ?></ul>
-<!--form id="form_envoie_message" action="./inclus/discussion/contenu_discussion.php"-->
-<form id="form_envoie_message"> 
+<ul id="discussion"><?php include "./inclus/discussion/contenu_discussion.php" ?></ul>
+<form id="form_envoie_message">
     <table class="w-100">
         <tr>
-            <td><input type="text" class="form-control w-100" name="message_text" id="discussion_boite_message" placeholder="Entrez votre message !">
+            <td><input type="text" class="form-control w-100" name="message_text" id="discussion_boite_message" placeholder="Entrez votre message !" autocomplete="off">
             <input type="hidden" name="page_form" value="<?=$_SERVER['REQUEST_URI']?>"></td>
             <td><input class="btn btn-primary w-100" type="submit" value="Envoyer"></td>
         </tr>
     </table>
-</form><?php } ?>
+</form>
 
 <script>
     $("#form_envoie_message").submit(function (e) {

@@ -87,7 +87,7 @@
             }
 
         /*-*/
-        /*-echo "<code>".prepared("$value_builder $table_builder $where_builder $order_builder", $execute_array)."</code><br>";*/
+        /*-echo "<code>".prepared("$value_builder $table_builder $where_builder $order_builder", $execute_array)."</code><br>\n";*/
         /*-*/
 
         $r = $conn->prepare("$value_builder $table_builder $where_builder $order_builder");

@@ -33,7 +33,8 @@
                         ),
                         array(
                             'Equipe.id_equipe',
-                            'ModeleEquipe.titre_equipe'
+                            'ModeleEquipe.titre_equipe',
+                            'ModeleEquipe.discussion_autorisee'
                         ),
                         array(
                             'EstDans::id_equipe' => 'Equipe::id_equipe',
@@ -73,7 +74,8 @@
                         ),
                         array(
                             'Equipe.id_equipe',
-                            'ModeleEquipe.titre_equipe'
+                            'ModeleEquipe.titre_equipe',
+                            'ModeleEquipe.discussion_autorisee'
                         ),
                         array(
                             'Equipe::id_modele_equipe' => 'ModeleEquipe::id_modele_equipe',

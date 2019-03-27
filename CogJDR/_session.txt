@@ -25,6 +25,8 @@ liste_donnees_jdr:
                     "ID de l'équipe"
                 titre_equipe:
                     "titre de l'équipe par jointure avec `EstDans`, `Equipe` et `ModeleEquipe`"
+                discussion_autorisee:
+                    "indique si les discussion sont autorisé pour cette équipe"
             )
         indice_equipe_discussion_suivi:
             "indice dans la liste [liste_donnees_jdr.liste_equipe] de la discussion suivie (affichée)"

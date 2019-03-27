@@ -3,13 +3,12 @@ body {
     overflow-x: hidden;
 }
 
-/*div.page {
-    width: 100%;
-}*/
-
 #sidebar-wrapper {
+    width: 13rem;
+    margin-left: -13rem;
+
     min-height: 100vh;
-    margin-left: -15rem;
+
     -webkit-transition: margin .25s ease-out;
     -moz-transition: margin .25s ease-out;
     -o-transition: margin .25s ease-out;
@@ -22,11 +21,11 @@ body {
 }
 
 #sidebar-wrapper .list-group {
-    width: 15rem;
+    width: 13rem;
 }
 
 #page-content-wrapper {
-  min-width: 100vw;
+    min-width: 100vw;
 
     display: block;
     margin-left: auto;

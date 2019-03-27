@@ -41,18 +41,22 @@
             break;
 
         case "creer":
-                var_dump($_FILES['img']);
-                $r = sql_select('Utilisateur', "email", array('email' => $_REQUEST['email']));
-                if ($r->fetch()) {
+                if (sql_select('Utilisateur', "email", array('email' => $_REQUEST['email']))->fetch()) {
                     $_SESSION['erreur'] = "Erreur compte existant";
                     break;
                 } else {
-                    $envoi = send_image($_FILES['img'], $_REQUEST['email'], "./images/compte/");
+                    if (0 < $_FILES['img']['size'])
+                        $envoi = send_image($_FILES['img'], $_REQUEST['email'], "images/compte/");
+                    else {
+                        $nom_fichier = str_replace("%", "_", rawurlencode(str_replace(" ", "-", $_REQUEST['email'])));
+                        $envoi = array('success' => copy("images/defaut/utilisateur.png", "images/compte/$nom_fichier.png"), 'fileName' => "$nom_fichier.png");
+                    }
+
                     if ($envoi['success'] && sql_insert('Utilisateur', array(
                                 'id' => null,
                                 'mdp' => $_REQUEST['mdp'],
                                 'email' => htmlentities($_REQUEST['email']),
-                                'img' => "images/compte/".$envoi['fileName']
+                                'img' => $envoi['fileName']
                             )))
                         $redirige = $_REQUEST['redirection_succes'];
                     else {
@@ -95,7 +99,7 @@
                     include_once "./inclus/page_debut.php"; ?>
 
                     <h1>Affichage du compte de <?=$utilisateur['email']?> (no<?=$utilisateur['id']?>)</h1>
-                    image : <?=$utilisateur['img']?>, <a>mp[?]</a>...<?php
+                    image : <code>./images/compte/<?=$utilisateur['img']?></code>, <a>mp[?]</a>...<?php
 
                     include_once "./inclus/page_fin.php";
 
