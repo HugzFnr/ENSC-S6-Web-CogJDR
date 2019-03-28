@@ -3,13 +3,13 @@
 
 	/**
 	 * Variables qui peuvent être précisées avant l'inclusion de ce fichier :
-	 * 
+	 *
 	 * 	- $__sous_titre
 	 * 		est ajouter à la suite du titre de l'onglet
-	 * 
+	 *
 	 * 	- $__css_necessaires
 	 * 		liste de nom de fichier css (sans l'extension) à inclure dans la page
-	 * 
+	 *
 	 * 	- $__liste_equipes
 	 * 		affiche, si précisée, la liste des équipes dans la sidenav en `<a $v['href']>$v['text']</a>`
 	 */
@@ -22,9 +22,9 @@
 	<meta charset="utf-8">
 	<title>Cog' JDR<?=isset($__sous_titre) ? " &mdash; $__sous_titre" : " !"?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
+
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	
+
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/global.css">
 	<!--<link rel="stylesheet" type="text/css" media="screen" href="./css/discussion.css">
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/jdr.css">-->
@@ -170,7 +170,7 @@
 				<!-- gestion compte -->
 				<table class="float-right">
 					<tr>
-						<?php 
+						<?php
 							if (isset($_SESSION['id'])) { ?>
 								<td><p class="text-success text-center">Bienvenue, <a class="nav-link" href="./compte.php?id=<?=$_SESSION['id']?>"><?=$_SESSION['email']?></a></p></td>
 								<td>
@@ -209,7 +209,7 @@
 			<!-- FIN ens des élm qui collapse -->
 		</div>
 	</nav>
-	
+
 	<div class="container-fluid page">
 		<?php
 			if (isset($_SESSION['erreur'])) { ?>

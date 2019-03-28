@@ -30,7 +30,7 @@ div.discussion-flottant {
     width: 42%;
 }
 
-@media (max-width: 994px) {
+@media (max-width: 768px) {
     div.discussion-flottant {
         width: 100%;
     }

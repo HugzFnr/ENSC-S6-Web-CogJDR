@@ -1,3 +1,6 @@
+delete from Cible where 1;
+delete from Autorise where 1;
+delete from ModeleAction where 1;
 delete from Message_ where 1;
 delete from EstDans where 1;
 delete from Equipe where 1;
@@ -50,3 +53,12 @@ insert into Message_ (`id_message`, `id_joueur`, `id_equipe`, `horaire_publi`, `
     (null, null, 2, NOW(), "oui lol"),
     (null, 2, 2, NOW(), "ha slt"),
     (null, null, 1, NOW(), "TAISEZ VOUS!");
+
+insert into ModeleAction (`id_modele_action`, `id_modele_jdr`, `titre_action`, `desc_action`, `message_action`, `horaire_activ`, `action_effet`, `action_fct`) values
+    (null, 1, "Vote des villageois", "Les villageois votent pour la personne qu'ils veulent bruler.", "Qui pensez-vous &ecirc;tre un loup ?", NOW(), "tuer", "voteMajoritaire");
+
+insert into Cible (`id_modele_equipe_cible`, `id_modele_action`) values
+    (1, 1);
+
+insert into Autorise (`id_modele_equipe_autorise`, `id_modele_action`) values
+    (1, 1);

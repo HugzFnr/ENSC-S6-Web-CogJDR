@@ -69,7 +69,7 @@
                     $execute_array[$execute_index++] = $v;
                 }
             }
-            
+
             $sep = " AND ";
         }
 
@@ -180,7 +180,7 @@
         $image_size = getimagesize($file["tmp_name"]);
 
         $target_file = "$target_dir$name.$image_type";
-        
+
         $upload_success = true;
         $r = "";
 
@@ -191,12 +191,12 @@
             $r.= "File is not an image. ";
             $upload_success = false;
         }
-        
+
         if (file_exists($target_file)) {
             $r.= "File existed. ";
             unlink($target_file);
         }
-        
+
         if($image_type != "jpg" && $image_type != "png" && $image_type != "jpeg" && $image_type != "gif" ) {
             $r.= "Sorry, only JPG, JPEG, PNG & GIF files are allowed. ";
             $upload_success = false;
@@ -205,7 +205,7 @@
         if ($upload_success) {
             if (move_uploaded_file($file["tmp_name"], $target_file))
                 $r.= "The file ".basename($file["name"])." has been uploaded. ";
-            
+
             else
                 $r.= "Sorry, there was an error uploading your file. ";
         }
