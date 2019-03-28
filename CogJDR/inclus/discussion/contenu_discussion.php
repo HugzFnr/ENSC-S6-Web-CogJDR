@@ -37,7 +37,7 @@
 
             $utilisateur = $liste_gents[$message['id_joueur']]; ?>
             <li class="discussion_message discussion_<?=$message['id_joueur'] == null ? "mj" : "joueur"?>">
-                <b class="discussion_debut">[<?=$message['horaire_publi']?>]&nbsp;<a href="./compte.php?id=<?=$utilisateur['id_utilisateur']?>"><?=$utilisateur['pseudo']?></a>&nbsp;:&nbsp;</b><i class="discussion_texte"><?=$message['texte']?></i>
+                <b class="discussion_debut">[<?=$message['horaire_publi']?>] <a href="./compte.php?id=<?=$utilisateur['id_utilisateur']?>"><?=$utilisateur['pseudo']?></a>&nbsp;: </b><i class="discussion_texte"><?=$message['texte']?></i>
             </li><?php
         }
     } else { // sinon, c'est que la pages est solicitée pour evoyer un message

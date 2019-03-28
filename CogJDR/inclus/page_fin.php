@@ -20,6 +20,11 @@
                         e.preventDefault();
                         $("#wrapper").toggleClass("toggled");
                     });
+
+                    
+                    $(window).scroll(function() {
+                        $("#sidebar-wrapper").css("padding-top", "" + $(window).scrollTop() + "px");
+                    });
                 </script><?php
             }
         ?>

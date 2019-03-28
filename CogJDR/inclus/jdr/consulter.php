@@ -84,15 +84,10 @@
             redirection_succes: "./jdr.php?id=<?=$donnees_jdr['id_jdr']?>"
         }).done(function(data) {
             location.reload();
-            console.log(data); // TODO: c'est du debug, lol
-            alert("coucou");
+            /*console.log(data);
+            alert("coucou");*/
         });
     }
 </script>
 
-<hr>
-<div class="fixed-bottom discussion-flottant card">
-    <article class="card-body">
-        <?php include "./inclus/discussion/discussion.php" ?>
-    </article>
-</div>
+<?php include "./inclus/discussion/discussion.php" ?>
