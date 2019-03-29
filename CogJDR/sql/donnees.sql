@@ -55,7 +55,8 @@ insert into Message_ (`id_message`, `id_joueur`, `id_equipe`, `horaire_publi`, `
     (null, null, 1, NOW(), "TAISEZ VOUS!");
 
 insert into ModeleAction (`id_modele_action`, `id_modele_jdr`, `titre_action`, `desc_action`, `message_action`, `horaire_activ`, `action_effet`, `action_fct`) values
-    (null, 1, "Vote des villageois", "Les villageois votent pour la personne qu'ils veulent bruler.", "Qui pensez-vous &ecirc;tre un loup ?", NOW(), "tuer", "voteMajoritaire");
+    (null, 1, "Vote des villageois", "Les villageois votent pour la personne qu'ils veulent bruler.", "Qui pensez-vous &ecirc;tre un loup ?", "15:16:17", "tuer", "voteMajoritaire"),
+    (null, 1, "Modele d'action test no 2", "Titre de l'action", "Description de l'action", "19:20:21", "tuer", "voteMajoritaire");
 
 insert into Cible (`id_modele_equipe_cible`, `id_modele_action`) values
     (1, 1);

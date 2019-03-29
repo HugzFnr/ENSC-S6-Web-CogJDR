@@ -78,11 +78,7 @@
         $sep = "";
         if (is_array($order))
             foreach ($order as $k => $v) {
-                $order_builder.= "$sep:$execute_index ";
-                $execute_array[$execute_index++] = $k;
-
-                $order_builder.= "$v";
-
+                $order_builder.= "$sep$k $v";
                 $sep = ", ";
             }
 

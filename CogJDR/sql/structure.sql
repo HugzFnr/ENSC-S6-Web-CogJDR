@@ -140,10 +140,12 @@ create table Action_ (
     id_modele_action integer,
     id_jdr integer,
     id_joueur_cible integer,
+    id_joueur_effecteur integer,
 
     foreign key (id_modele_action) references ModeleAction (id_modele_action),
     foreign key (id_jdr) references JDR (id_jdr),
-    foreign key (id_joueur_cible) references Joueur (id_joueur)
+    foreign key (id_joueur_cible) references Joueur (id_joueur),
+    foreign key (id_joueur_effecteur) references Joueur (id_joueur)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 create table Equipe (
