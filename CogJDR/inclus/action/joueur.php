@@ -65,8 +65,8 @@
                     ?>
                 </ol>
                 <input type="hidden" name="id" value="<?=$_REQUEST['id']?>">
-                <button class="btn btn-primary" type="submit" name="action" value="go">Envoyer</button><?php
-            } else {
+                <button class="btn btn-primary" type="submit" name="action" value="vote">Envoyer</button><?php
+            } elseif ($_REQUEST['action'] == "vote") {
                 sql_insert('Action_', array(
                     'id_action' => null,
                     'id_modele_action' => $_REQUEST['id'],

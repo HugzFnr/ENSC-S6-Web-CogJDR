@@ -10,7 +10,7 @@ body {
     background-repeat : no-repeat;
     background-position : center;
     background-size : cover;
-    color : darkblue;
+    color : black;
 }
 
 h1, h3 {
@@ -18,7 +18,11 @@ h1, h3 {
 }
 
 h3 {
-    color: blue;
+    color: darkblue;
+}
+
+a {
+    color: darkblue;
 }
 
 .container, .container-fluid {

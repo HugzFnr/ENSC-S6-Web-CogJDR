@@ -1,4 +1,7 @@
-<?php include_once "./inclus/page_debut.php" ?>
+<?php
+    $__css_necessaires[] = "jdr";
+    include_once "./inclus/page_debut.php";
+?>
 
 <?php
     require_once "./inclus/connexion.php";
