@@ -8,28 +8,29 @@
 
             <div class="form-group">
                 <div class="col-sm-6 offset-sm-3">
-                    <p>Adresse e-mail (sera visible)</p>
-                    <input type="text" name="email" class="form-control" id="email" placeholder="E-mail"<?=empty($_REQUEST['email']) ? "" : " value=\"".$_REQUEST['email']."\""?> required<?=empty($_REQUEST['email']) ? " autofocus" : ""?>>
+                    <label for="email"> <p>Adresse e-mail (sera visible)</p> </label>
+                    <input type="email" name="email" pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}" class="form-control" id="email" placeholder="E-mail"<?=empty($_REQUEST['email']) ? "" : " value=\"".$_REQUEST['email']."\""?> required<?=empty($_REQUEST['email']) ? " autofocus" : ""?>>
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-sm-6 offset-sm-3">
-                    <p>Mot de passe</p>
+                    <label for="mdp"> <p>Mot de passe</p> </label>
                     <input type="password" name="mdp" class="form-control" id="mdp" placeholder="Mot de passe"<?=empty($_REQUEST['mdp']) ? "" : " value=\"".$_REQUEST['mdp']."\""?> required>
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-sm-6 offset-sm-3">
-                    <p>Confirmer mot de passe</p>
+                    <label for="mdp_confirm"> <p>Confirmer mot de passe</p> </label>
                     <input type="password" name="mdp_confirm" class="form-control" id="mdp_confirm" placeholder="tmtc." required<?=empty($_REQUEST['email']) ? "" : " autofocus"?>><!--  oninput="form.confirm.pattern = escapeRegExp(this.value)" -->
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-sm-6 offset-sm-3">
-                    <input type="file" name="img" id="gestion_compte_img">
+                    <label for="gestion_compte_img"> Image de profil </label>
+                    <input type="file" name="img" accept=".jpg,.png,.jpeg" id="gestion_compte_img">
                 </div>
             </div>
 

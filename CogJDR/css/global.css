@@ -48,3 +48,11 @@ div.cercle #heure {
     display: table-cell;
     vertical-align: middle;
 }
+
+.actif {
+    background-color : rgba(236, 173, 120);
+}
+
+:disabled {
+    caret-color: red;
+}
