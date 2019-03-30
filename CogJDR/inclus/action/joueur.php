@@ -1,15 +1,22 @@
 <form action="./action.php" method="post">
     <?php
-        // abandone si le joueur à déjà crée une `Action_` sur ce `ModeleAction`
-        if (sql_select(
+        // si le joueur à déjà crée une `Action_` sur ce `ModeleAction`
+        if ($id_action = sql_select(
                     array('ModeleAction', 'Action_'),
-                    'COUNT(*)',
+                    'Action_.id_action',
                     array('ModeleAction::id_modele_action' => 'Action_::id_modele_action', 'Action_::id_joueur_effecteur' => $donnees_jdr['id_dans'])
-                )->fetch()[0] != 0) { ?>
-            <h1>Non, tu n'as pas le droit !</h1>
-            <p>(#YouHaveNoPawerHere)</p><?php
-            include_once "./inclus/page_fin.php";
-            exit;
+                )->fetch()['id_action']) {
+            if (empty($_REQUEST['action']) || $_REQUEST['action'] != "retirer") { // abandone ?>
+                <h1>Tu a déjà voté !</h1>
+                <a href="./action.php?action=retirer&id=<?=$_REQUEST['id']?>">oui, mais je veut changer mon vote x/</a><?php
+                include_once "./inclus/page_fin.php";
+                exit;
+            } elseif ($_REQUEST['action'] == "retirer") { // change son vote : commence par le supprimer
+                sql_delete(
+                        'Action_',
+                        array('id_action' => $id_action)
+                    );
+            }
         }
 
         // récupère le modèle visé

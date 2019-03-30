@@ -85,11 +85,15 @@
 
                 // détermine les indices (également ID de joueurs) des majo et mino
                 foreach ($a_vote_contre as $cible => $votes) {
-                    if (!isset($indice_majo) || count($a_vote_contre[$indice_majo]) < count($votes))
-                        $indice_majo = $cible;
+                    if (!isset($indices_majo) || count($a_vote_contre[$indices_majo[0]]) < count($votes)) // on a trouver un nouveau majo strict
+                        $indices_majo = array($cible);
+                    elseif (count($a_vote_contre[$indices_majo[0]]) == count($votes)) // on a trouver une égalité
+                        $indices_majo[] = $cible;
                     
-                    if (!isset($indice_mino) || count($votes) < count($a_vote_contre[$indice_mino]))
-                        $indice_mino = $cible;
+                    if (!isset($indices_mino) || count($votes) < count($a_vote_contre[$indices_mino])) // on a trouver un nouveau mino strict
+                        $indices_mino = array($cible);
+                    elseif (count($votes) < count($a_vote_contre[$indices_mino])) // on a trouver une égalité
+                        $indices_majo[] = $cible;
                 }
             }
 
@@ -111,7 +115,7 @@
                     <td>Total : <?=$compteur_vote?> votes</td>
                     <?php
                         foreach ($a_vote_contre as $cible => $votants) { ?>
-                            <td><?=$cible == $indice_majo ? "Majoritaire" : ($cible == $indice_mino ? "Minoritaire" : "")?></td><?php
+                            <td><?=in_array($cible, $indices_majo) ? "Majoritaire" : (in_array($cible, $indices_mino) ? "Minoritaire" : "")?></td><?php
                         }
                     ?>
                 </tr><?php
@@ -124,26 +128,29 @@
                 // context de l'action : /!\\ surveiller son contenu pour des raisons de sécurité (ie. pas de mdp dedant lol)
                 $context = array(
                         'action' => $modele,
-                        'vote' => array(
-                                'nb_majoritaire' => count($a_vote_contre[$indice_majo]),
-                                'nb_minoritaire' => count($a_vote_contre[$indice_mino]),
+                        'vote' => array( // todo
+                                'nb_majoritaire' => count($a_vote_contre[$indices_majo[0]]),
+                                'nb_minoritaire' => count($a_vote_contre[$indices_mino[0]]),
                                 'nb_total' => $compteur_vote
-                            )
+                            ),
+                        'jdr' => array('id_jdr' => $donnees_jdr['id_jdr'])
                     );
 
                 switch ($modele['action_fct']) {
 
                     case 'voteMajoritaire':
-                            echo effectuer_action($indice_majo, $context);
+                            $message = effectuer_action($indice_majo, $context);
                         break;
 
                     case 'voteMinoritaire':
-                            echo effectuer_action($indice_mino, $context);
+                            $message = effectuer_action($indice_mino, $context);
                         break;
 
                     case 'pouvoir':
                         break;
                 }
+
+                echo "LeMessage: $message //<br><br>\n";
             }
         }
     ?>
@@ -156,7 +163,7 @@
 
         <div class="text-right">
             <form action="./action.php" method="get">
-                <input type="hidden" name="id" value="<?=$modele['id']?>">
+                <input type="hidden" name="id" value="<?=$_REQUEST['id']?>">
                 <button type="submit" name="action" value="effectuer" class="btn btn-danger"><?=strtotime($modele['horaire_activ']) < time() ? "Effectuer" : "Forcer"?> l'action</button>
             </form>
         </div><?php
