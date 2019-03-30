@@ -11,9 +11,15 @@
         exit;
     }
 
-    if (empty($donnees_jdr) || empty($donnees_jdr['liste_equipe']) || !$donnees_jdr['liste_equipe'][$donnees_jdr['indice_equipe_discussion_suivi']]['discussion_autorisee']) {
-        echo "Rejoiniez une équipe pour entamer une discussion !";
+    if (empty($donnees_jdr) || empty($donnees_jdr['liste_equipe'])) { ?>
+        <p class="text-center">Rejoiniez une équipe pour entamer une discussion !</p><?php
         return false;
+    }
+
+    if (!$donnees_jdr['liste_equipe'][$donnees_jdr['indice_equipe_discussion_suivi']]['discussion_autorisee']) { ?>
+        <p class="text-center">Seul le MJ peut publier des messages ici !</p><?php
+        if (!$donnees_jdr['est_mj'])
+            return false;
     }
 
     $id_equipe_discussion_suivi = $donnees_jdr['liste_equipe'][$donnees_jdr['indice_equipe_discussion_suivi']]['id_equipe'];
@@ -37,10 +43,10 @@
 
             $utilisateur = $liste_gents[$message['id_joueur']]; ?>
             <li class="discussion_message discussion_<?=$message['id_joueur'] == null ? "mj" : "joueur"?>">
-                <b class="discussion_debut">[<?=$message['horaire_publi']?>] <a href="./compte.php?id=<?=$utilisateur['id_utilisateur']?>"><?=$utilisateur['pseudo']?></a>&nbsp;: </b><i class="discussion_texte"><?=$message['texte']?></i>
+                <b class="discussion_debut">[<?=date("m/d G:i", strtotime($message['horaire_publi']))?>] <a href="./compte.php?id=<?=$utilisateur['id_utilisateur']?>"><?=$utilisateur['pseudo']?></a>&nbsp;: </b><i class="discussion_texte"><?=$message['texte']?></i>
             </li><?php
         }
-    } else { // sinon, c'est que la pages est solicitée pour evoyer un message
+    } elseif ($donnees_jdr['liste_equipe'][$donnees_jdr['indice_equipe_discussion_suivi']]['discussion_autorisee'] || $donnees_jdr['est_mj']) { // sinon, c'est que la pages est solicitée pour evoyer un message
         if ($_REQUEST['message_text'] !== "")
             sql_insert('Message_', array(
                 'id_message' => null,

@@ -82,6 +82,7 @@
 <h3>Liste des actions</h3>
 <ol class="liste-actions">
     <?php
+        $compteur_action_ol1 = 0;
         $action_finies = array();
 
         if ($donnees_jdr['est_mj'])
@@ -92,7 +93,6 @@
                     'titre_action',
                     'desc_action',
                     'horaire_activ',
-                    'action_effet',
                     'action_fct'
                 ),
                 array(
@@ -125,13 +125,18 @@
                 $action_finies[] = $modele_action;
                 continue;
             }
-            $a_repondu = !$donnees_jdr['est_mj'] && sql_select(
-                                array('Action_'),
-                                'COUNT(*)',
-                                array('Action_::id_modele_action' => $modele_action['id_modele_action'], 'Action_::id_joueur_effecteur' => $donnees_jdr['id_dans'])
-                            )->fetch()[0]; ?>
+            $compteur_action_ol1++;
+
+            if ($donnees_jdr['est_mj'])
+                $a_repondu = sql_select('Action_', 'COUNT(*)', array('Action_::id_modele_action' => $modele_action['id_modele_action']))->fetch()[0];
+            else
+                $a_repondu = !$donnees_jdr['est_mj'] && sql_select(
+                        array('Action_'),
+                        'COUNT(*)',
+                        array('Action_::id_modele_action' => $modele_action['id_modele_action'], 'Action_::id_joueur_effecteur' => $donnees_jdr['id_dans'])
+                    )->fetch()[0]; ?>
             <li>
-            <h4><span class="badge badge-<?=$a_repondu ? "secondary" : "primary" ?>"><?=$a_repondu ? "&check;" : "&nbsp;!&nbsp;" ?></span> <?php if (!$a_repondu) { ?><a href="./action.php?id=<?=$modele_action['id_modele_action']?>"><?php } ?><?=$modele_action['titre_action']?><?php if (!$a_repondu) { ?></a><?php } ?></h4>
+            <h4><?php if ($donnees_jdr['est_mj']) { ?><span class="badge badge-primary"><?=$a_repondu?></span> <?php } else { ?><span class="badge badge-<?=$a_repondu ? "secondary" : "primary"?>"><?=$a_repondu ? "&check;" : "&nbsp;!&nbsp;"?></span> <?php } if (!$a_repondu || $donnees_jdr['est_mj']) { ?><a href="./action.php?id=<?=$modele_action['id_modele_action']?>"><?php } ?><?=$modele_action['titre_action']?><?php if (!$a_repondu || $donnees_jdr['est_mj']) { ?></a><?php } ?></h4>
                 <table><tr>
                     <td class="w-100"><p><?=$modele_action['desc_action']?></p></td>
                     <td><p class="text-right">horaire&nbsp;limite&nbsp;:&nbsp;<?=$modele_action['horaire_activ']?></p></td>
@@ -142,19 +147,30 @@
 </ol>
 
 <?php
+    if ($compteur_action_ol1 == 0) { ?>
+        <h4>Pas d'actions restantes pour aujourd'hui !</h4><?php
+    }
+
     if (!empty($action_finies)) { ?>
         <h4>Action finies</h4>
         <ol class="liste-actions">
             <?php
                 foreach ($action_finies as $modele_action) { ?>
+
                     <li>
                         <?php
-                            if ($donnees_jdr['est_mj']) { ?>
+                            if ($donnees_jdr['est_mj']) {
+                                $a_repondu = sql_select('Action_', 'COUNT(*)', array('Action_::id_modele_action' => $modele_action['id_modele_action']))->fetch()[0];
+                                $a_action = 0 < sql_select('Action_', 'COUNT(*)', array('id_modele_action' => $modele_action['id_modele_action']))->fetch()[0]; ?>
                                 <h4>
                                     <form action="./action.php" method="get">
-                                        <a href="./action.php?id=<?=$modele_action['id_modele_action']?>"><?=$modele_action['titre_action']?></a>
-                                        <input type="hidden" name="id" value="<?=$modele_action['id']?>">
-                                        <button type="submit" name="action" value="effectuer" class="btn btn-secondary float-right">Effectuer l'action</button>
+                                        <span class="badge badge-primary"><?=$a_repondu?></span> <a href="./action.php?id=<?=$modele_action['id_modele_action']?>"><?=$modele_action['titre_action']?></a>
+                                        <input type="hidden" name="id" value="<?=$modele_action['id']?>"><?php
+                                        if ($a_action) { ?>
+                                            <button type="submit" name="action" value="effectuer" class="btn btn-secondary float-right">Effectuer l'action</button><?php
+                                        } else { ?>
+                                            <span class="btn btn-secondary float-right" btn>Pas d'action&hellip;</span><?php
+                                        } ?>
                                     </form>
                                 </h4><?php
                             } else { ?>

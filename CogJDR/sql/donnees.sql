@@ -24,7 +24,7 @@ insert into JDR (`id_jdr`, `id_modele_jdr`, `code_invite`, `nb_max_joueurs`, `nb
     (null, 1, "12da0fde", 12, 0, '7 jours');
 
 insert into MJ (`id_mj`, `id_utilisateur`, `id_jdr_dirige`, `pseudo_mj`) values
-    (null, 2, 1, "xGAAMU_MASUTOREx");
+    (null, 2, 1, "xXMeuJeuXx");
 
 insert into Joueur (`id_joueur`, `id_utilisateur`, `id_jdr_participe`, `pseudo`) values
     (null, 1, 1, 'Joueur'),
@@ -32,11 +32,13 @@ insert into Joueur (`id_joueur`, `id_utilisateur`, `id_jdr_participe`, `pseudo`)
 
 insert into ModeleEquipe (`id_modele_equipe`, `id_modele_jdr`, `titre_equipe`, `taille_equipe_max`, `discussion_autorisee`) values
     (null, 1, 'Les Vivants', 10, 1),
-    (null, 1, 'Sac', 11, 1);
+    (null, 1, 'Sac', 11, 1),
+    (null, 1, 'Les Morts', 9, 0);
 
 insert into Equipe (`id_equipe`, `id_modele_equipe`, `id_jdr`) values
     (null, 1, 1),
-    (null, 2, 1);
+    (null, 2, 1),
+    (null, 3, 1);
 
 insert into EstDans (`id_joueur`, `id_equipe`) values
     (1, 1),
@@ -54,9 +56,9 @@ insert into Message_ (`id_message`, `id_joueur`, `id_equipe`, `horaire_publi`, `
     (null, 2, 2, NOW(), "ha slt"),
     (null, null, 1, NOW(), "TAISEZ VOUS!");
 
-insert into ModeleAction (`id_modele_action`, `id_modele_jdr`, `titre_action`, `desc_action`, `message_action`, `horaire_activ`, `action_effet`, `action_fct`) values
-    (null, 1, "Vote des villageois", "Les villageois votent pour la personne qu'ils veulent br&ucirc;ler. Qui pensez-vous &ecirc;tre un loup ?", "$cible.pseudo; ($cible.email;) a &eacute;t&eacute; choisis &agrave; la majorit&eacute;e ($vote.majoritaire; sur $vote.total;) pour &ecirc;tre br&ucirc;l&eacute;(e) ce soir...", "18:19:20", "tuer", "voteMajoritaire"),
-    (null, 1, "Modele d'action test no 2", "Titre de l'action", "Description de l'action", "15:16:17", "tuer", "voteMajoritaire");
+insert into ModeleAction (`id_modele_action`, `id_modele_jdr`, `titre_action`, `desc_action`, `message_action`, `horaire_activ`, `action_effet_id_modele_equipe_depart`, `action_effet_id_modele_equipe_arrive`, `action_fct`) values
+    (null, 1, "Vote des villageois", "Les villageois votent pour la personne qu'ils veulent br&ucirc;ler. Qui pensez-vous &ecirc;tre un loup ?", "$cible.pseudo; ($cible.email;) a &eacute;t&eacute; choisis &agrave; la majorit&eacute;e ($vote.majoritaire; sur $vote.total;) pour &ecirc;tre br&ucirc;l&eacute;(e) ce soir...", "18:19:20", 1, 3, "voteMajoritaire"),
+    (null, 1, "Modele d'action test no 2", "Titre de l'action", "Description de l'action", "10:11:12", null, 2, "voteMajoritaire");
 
 insert into Cible (`id_modele_equipe_cible`, `id_modele_action`) values
     (1, 1),

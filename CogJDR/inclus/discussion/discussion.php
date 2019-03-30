@@ -30,6 +30,7 @@
         <form id="form_envoie_message">
             <table class="w-100">
                 <tr>
+                    <button type="submit" class="invisible position-absolute"></button>
                     <td><button class="btn btn-primary w-100" id="cacher_discussion_dans">Cacher</button></td>
                     <td><input type="text" class="form-control w-100" name="message_text" id="discussion_boite_message" placeholder="Entrez votre message !" autocomplete="off">
                     <input type="hidden" name="page_form" value="<?=$_SERVER['REQUEST_URI']?>"></td>
@@ -43,12 +44,13 @@
 <script>
     $("#form_envoie_message").submit(function(e) {
         e.preventDefault();
-        $("#discussion").load("./inclus/discussion/contenu_discussion.php", $("#form_envoie_message").serializeArray(), function() {
-            $("#menu-toggle").click(function(e_) {
-                e_.preventDefault();
-                $("#wrapper").toggleClass("toggled");
-            });
-        });
+        if ($("#discussion_boite_message").val() != "")
+            $("#discussion").load("./inclus/discussion/contenu_discussion.php", $("#form_envoie_message").serializeArray(), function() {
+                    $("#menu-toggle").click(function(e_) {
+                        e_.preventDefault();
+                        $("#wrapper").toggleClass("toggled");
+                    });
+                });
         document.getElementById("form_envoie_message").reset();
     });
     

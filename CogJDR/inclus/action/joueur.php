@@ -1,5 +1,6 @@
 <form action="./action.php" method="post">
     <?php
+        // abandone si le joueur à déjà crée une `Action_` sur ce `ModeleAction`
         if (sql_select(
                     array('ModeleAction', 'Action_'),
                     'COUNT(*)',
@@ -65,14 +66,15 @@
                     ?>
                 </ol>
                 <input type="hidden" name="id" value="<?=$_REQUEST['id']?>">
-                <button class="btn btn-primary" type="submit" name="action" value="vote">Envoyer</button><?php
-            } elseif ($_REQUEST['action'] == "vote") {
+                <button class="btn btn-primary" type="submit" name="action" value="voter">Envoyer</button><?php
+            } elseif ($_REQUEST['action'] == "voter") {
                 sql_insert('Action_', array(
                     'id_action' => null,
                     'id_modele_action' => $_REQUEST['id'],
                     'id_jdr' => $donnees_jdr['id_jdr'],
                     'id_joueur_cible' => $_REQUEST['id_joueur_choix'],
-                    'id_joueur_effecteur' => $donnees_jdr['id_dans']
+                    'id_joueur_effecteur' => $donnees_jdr['id_dans'],
+                    'horaire_envoi' => null
                 )); ?>
                 <p>Vous avez voté pour : <?=sql_select('Joueur', 'pseudo', array('id_joueur' => $_REQUEST['id_joueur_choix']))->fetch()['pseudo']?></p>
                 <a href="./jdr.php?id=<?=$donnees_jdr['id_jdr']?>">Retourner au JDR</a><?php

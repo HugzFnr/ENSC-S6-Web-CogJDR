@@ -7,7 +7,8 @@
                     'desc_action',
                     'horaire_activ',
                     'message_action',
-                    'action_effet',
+                    'action_effet_id_modele_equipe_depart',
+                    'action_effet_id_modele_equipe_arrive',
                     'action_fct'
                 ),
                 array(
@@ -63,6 +64,7 @@
             <th>Votants</th><?php
             
             // récupère la liste des cibles
+            // (a_vote_contre[cible][votant] = horaire, avec cible et votant des IDs de joueur)
             $a_vote_contre = array();
             $compteur_vote = 0;
             while ($cible = $cibles->fetch()) { ?>
@@ -70,12 +72,13 @@
 
                 $a_vote_contre[$cible['id_joueur']] = array();
 
-                $r = sql_select('Action_', 'id_joueur_effecteur', array('id_joueur_cible' => $cible['id_joueur']));
+                $r = sql_select('Action_', array('id_joueur_effecteur', 'horaire_envoi'), array('id_joueur_cible' => $cible['id_joueur']));
                 while ($vote = $r->fetch()) {
-                    $a_vote_contre[$cible['id_joueur']][] = $vote['id_joueur_effecteur'];
-                    $compteur_vote+= count($vote['id_joueur_effecteur']);
+                    $a_vote_contre[$cible['id_joueur']][$vote['id_joueur_effecteur']] = $vote['horaire_envoi'];
+                    $compteur_vote++;
                 }
                 
+                // détermine les indices (également ID de joueurs) des majo et mino
                 foreach ($a_vote_contre as $cible => $votants) {
                     if (!isset($indice_majo) || count($a_vote_contre[$indice_majo]) < count($votants))
                         $indice_majo = $cible;
@@ -85,13 +88,13 @@
                 }
             }
 
-            // affiche la liste des votants avec les croix en correspondances
+            // affiche la liste des votants avec les horaires en correspondances
             while ($autorise = $autorises->fetch()) { ?>
                 <tr>
                     <td><?=$autorise['pseudo']?> (<?=$autorise['pseudo']?>)</td>
                     <?php
                         foreach ($a_vote_contre as $cible => $votants) { ?>
-                            <td><?=in_array($autorise['id_joueur'], $votants) ? "&cross;" : ""?></td><?php
+                            <td><?=array_key_exists($autorise['id_joueur'], $votants) ? explode(" ", $votants[$autorise['id_joueur']])[1] : ""?></td><?php
                         }
                     ?>
                 </tr><?php
@@ -116,9 +119,9 @@
                 $context = array(
                         'action' => $modele,
                         'vote' => array(
-                                'majoritaire' => count($a_vote_contre[$indice_majo]),
-                                'minoritaire' => count($a_vote_contre[$indice_mino]),
-                                'total' => $compteur_vote
+                                'nb_majoritaire' => count($a_vote_contre[$indice_majo]),
+                                'nb_minoritaire' => count($a_vote_contre[$indice_mino]),
+                                'nb_total' => $compteur_vote
                             )
                     );
 
@@ -127,11 +130,11 @@
                     case 'voteMajoritaire':
                             echo effectuer_action($indice_majo, $context);
                         break;
-                    
+
                     case 'voteMinoritaire':
                             echo effectuer_action($indice_mino, $context);
                         break;
-                
+
                     case 'pouvoir':
                         break;
                 }
@@ -139,3 +142,16 @@
         }
     ?>
 </table>
+
+<?php
+    if (0 < sql_select('Action_', 'COUNT(*)', array('id_modele_action' => $_REQUEST['id']))->fetch()[0]) { ?>
+        <hr>
+
+        <div class="text-right">
+            <form action="./action.php" method="get">
+                <input type="hidden" name="id" value="<?=$modele['id']?>">
+                <button type="submit" name="action" value="effectuer" class="btn btn-danger"><?=strtotime($modele['horaire_activ']) < time() ? "Effectuer" : "Forcer"?> l'action</button>
+            </form>
+        </div><?php
+    }
+?>
