@@ -2,7 +2,7 @@
             <footer class="footer sticky-bottom">
                 <div class="container text-center">
                     <hr>
-                    <p class="text-center"><b>Cog' JDR</b><em> &mdash; un projet de longue haleine par Célestin Grenier et Hugo Fournier.</em></p>
+                    <p class="text-center"><b>Cog' JDR</b><em> &mdash; un projet initié par Célestin Grenier et Hugo Fournier dans le cadre du projet web S6 à l'ENSC.</em></p>
                 </div>
             </footer>
 

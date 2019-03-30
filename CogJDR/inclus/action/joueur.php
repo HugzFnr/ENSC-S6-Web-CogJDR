@@ -1,6 +1,6 @@
 <form action="./action.php" method="post">
     <?php
-        // abandone si le joueur à déjà crée une `Action_` sur ce `ModeleAction`
+        // abandonne si le joueur à déjà crée une `Action_` sur ce `ModeleAction`
         if (sql_select(
                     array('ModeleAction', 'Action_'),
                     'COUNT(*)',

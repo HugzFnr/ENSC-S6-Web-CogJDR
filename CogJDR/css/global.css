@@ -18,8 +18,14 @@ h1, h3 {
     text-align : center;
 }
 
+h1 {
+    padding-bottom : 30px;
+}
+
 h3 {
     color: darkblue;
+    padding-bottom : 10px;
+
 }
 
 a {
@@ -53,6 +59,9 @@ div.cercle #heure {
     background-color : rgba(236, 173, 120);
 }
 
-:disabled {
-    caret-color: red;
+.rouge {
+    color : rgb(196, 27, 27);
 }
+
+
+
