@@ -16,32 +16,29 @@
                             <label for="titre_modele"> <p>Titre du modèle</p> </label>
                             <input type="text" name="titre_modele" class="form-control" id="titre_modele" placeholder="Un nom sympa!"  required autofocus>
                         </div>
-                    </div>
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="nb_equipes"> <p>Nombre d'équipes différentes max.</p> </label>
                             <input type="number" min="1" max="99" name="nb_equipes" class="form-control" id="nb_equipes" required>
                         </div>
-                    </div>
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="nb_roles"> <p>Nombre de rôles différents</p> </label>
                             <input type="number" min="1" max="99" name="nb_roles" class="form-control disabled" id="nb_roles" required>
                         </div>
-                    </div>
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="nb_actions"> <p>Nombre d'actions différentes</p> </label>
                             <input type="number" min="1" max="99" name="nb_actions" class="form-control" id="nb_actions" required>
                         </div>
-                    </div>
 
-                    <div class="form-group" id="fleche1">
-                        <div class="col-sm-10 offset-sm-1">
-                            <button name="action" value="creer" id="bouton1" class="btn btn-primary btn-block">Etape suivante</button>
+                        <div class="form-group" id="fleche1">
+                            <div class="col-sm-10 offset-sm-1">
+                                <button name="action" value="creer" id="bouton1" class="btn btn-primary btn-block">Etape suivante</button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -367,7 +364,6 @@
     $("#fleche6").click(function(e) { ClicFlechePair(6,e); }); 
     $("#fleche8").click(function(e) { ClicFlechePair(8,e); });     
 
-    //ce tableau de 5 lignes contient les éléments de chaque menu, pour pouvoir les désactiver ou activer facilement
 
     var elts_menu = [ [$("#titre_modele"),$("#nb_equipes"),$("#nb_roles"),$("#nb_actions"),$("#bouton1")],
     [$("#nom_equipe"),$("#taille_equipe"),$("#discussion"),$("#bouton21"),$("#bouton22")],
@@ -387,8 +383,6 @@
 
     var cpt_action=1;
     var nb_actions=1;
-
-    //tableaux permettant de temporairement stockés les valeurs des formulaires de création d'équipe, actions et roles
 
     var equipes = [];
     var roles = [];
@@ -473,7 +467,6 @@
 
     function ClicFlechePair (numeroFleche,e) //les fleches paires sont les boutons d'étape précédente
     {
-        e.preventDefault();
         if ((Math.floor(numeroFleche/2)+1)==2 && cpt_equipe>1)
         {                
             cpt_equipe--;
@@ -491,17 +484,6 @@
             {
                 elts_menu[2][i].val(roles[cpt_role-1][i]);
             }
-            $("#role_actuel").text(cpt_equipe);
-            $("#menu3").effect("highlight", {color:"#6b00a8"}, 1300);
-        }
-        else if ((Math.floor(numeroFleche/2)+1)==4 && cpt_action>1)
-        {
-            cpt_action--;
-            for (i=0; i<=7;i++) //on remet chaque champ aux valeurs précédémment validées par l'utilisateur
-            {
-                elts_menu[3][i].val(actions[cpt_action-1][i]);
-            }
-            $("#action_actuel").text(cpt_action); //enfin, on notifie l'utilisateur qu'il passe à l'étape précédente par un flash violet
             $("#menu4").effect("highlight", {color:"#6b00a8"}, 1300);
         }
         else {
@@ -514,27 +496,50 @@
 
     function DesactiverPanneau(numero)
     {
-        $("#menu" + numero).removeClass("actif"); //pratique
-            elts_menu[numero-1].forEach(function(element)
-            {
-                element.attr('disabled','');
-            })    
+        if (numero==1)
+        {
+            $("#titre_modele").attr('disabled','');
+            $("#nb_equipes").attr('disabled','');
+            $("#nb_roles").attr('disabled','');
+            $("#nb_actions").attr('disabled','');
+            $("#bouton1").attr('disabled','');   
+        }
+        else if (numero==2)
+        {
+            $("#nom_equipe").attr('disabled','');
+            $("#taille_equipe").attr('disabled','');
+            $("#discussion").attr('disabled','');
+            $("#bouton21").attr('disabled','');
+            $("#bouton22").attr('disabled','');
+        }     
     }
 
     function ActiverPanneau(numero)
-    //active le menu associé au numéro demandé
     {
-        $("#menu" + numero).addClass("actif"); //pratique
-        elts_menu[numero-1].forEach(function(element)
-            {
-                element.removeAttr('disabled','');
-            })               
+        if (numero==1)
+        {
+            $("#titre_modele").attr('enabled','');
+            $("#nb_equipes").attr('enabled','');
+            $("#nb_roles").attr('enabled','');
+            $("#nb_actions").attr('enabled','');
+            $("#bouton1").attr('enabled','');
+        }
+        else if (numero==2)
+        {
+            $("#nom_equipe").attr('enabled','');
+            $("#taille_equipe").attr('enabled','');
+            $("#discussion").attr('enabled','');
+            $("#bouton21").attr('enabled','');
+            $("#bouton22").attr('enabled','');
+        }        
     }
 
-    function AfficherPanneau(numero)
+    function AfficherMasquerPanneau(numero)
     {
-        $("#menu" + numero).removeClass("invisible"); //pratique
+        $("#menu" + numero).toggleClass("invisible"); //pratique
     }
+
+
 
 
 </script>
