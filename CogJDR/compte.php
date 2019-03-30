@@ -25,54 +25,109 @@
 
     switch (isset($_REQUEST['action']) ? $_REQUEST['action'] : "afficher") {
 
-        case "modifier": // pas à jour
-                $is = sql_update('Utilisateur', array(
-                    'mdp' => $_REQUEST['mdp'],
-                    'email' => htmlentities($_REQUEST['email']),
-                    'img' => htmlentities($_REQUEST['img']) // TODO: gestion d'images (voir `./inclus/connexion.php`)
-                ), array('id' => $_SESSION['id']));
-                    
-                if ($is)
-                    $redirige = $_REQUEST['redirection_succes'];
-                else {
-                    $_SESSION['erreur'] = "Erreur /*-*/";
-                    //$redirige = $_REQUEST['redirection_echec'];
-                }
-            break;
-
-        case "creer":
-                if (sql_select('Utilisateur', "email", array('email' => $_REQUEST['email']))->fetch()) {
-                    $_SESSION['erreur'] = "Erreur compte existant";
-                    break;
-                } else {
-                    if (0 < $_FILES['img']['size'])
-                        $envoi = send_image($_FILES['img'], $_REQUEST['email'], "images/compte/");
-                    else {
-                        $nom_fichier = str_replace("%", "_", rawurlencode(str_replace(" ", "-", $_REQUEST['email'])));
-                        $envoi = array('success' => copy("images/defaut/utilisateur.png", "images/compte/$nom_fichier.png"), 'fileName' => "$nom_fichier.png");
+        /**
+         * Modifie les données de l'utilisateur :
+         * 
+         * _REQUEST :
+         *  - mdp
+         *  - email
+         *  - img
+         * 
+         * _SESSION :
+         *  - id
+         */
+        case "modifier":
+                // s'il a changer d'e-mail..
+                if ($_REQUEST['email'] != $_SESSION['email']) {
+                    // vérifie qu'il s'agit bien d'une adresse e-mail valide
+                    if (!filter_var($_REQUEST['email'], FILTER_VALIDATE_EMAIL)) {
+                        $_SESSION['erreur'] = "Erreur &ccedil;a ne ressemble pas a une adresse e-mail...";
+                        break;
                     }
-
-                    if ($envoi['success'] && sql_insert('Utilisateur', array(
-                                'id' => null,
-                                'mdp' => $_REQUEST['mdp'],
-                                'email' => htmlentities($_REQUEST['email']),
-                                'img' => $envoi['fileName']
-                            )))
-                        $redirige = $_REQUEST['redirection_succes'];
-                    else {
-                        $_ESSION['erreur'] = "Erreur /*-*/ : ".$envoi['msg'];
+                    // vérifie qu'un utilisateur n'a pas déjà utiliser cette adresse e-mail
+                    if (sql_select('Utilisateur', "email", array('email' => $_REQUEST['email']))->fetch()) {
+                        $_SESSION['erreur'] = "Erreur e-mail d&eacute;j&agrave; utilis&eacute;e";
                         break;
                     }
                 }
+
+                // s'il a changer d'image, envoi la nouvelle image
+                if ($_REQUEST['img'] != $_SESSION['img'])
+                    $envoi = send_image($_FILES['img'], $_REQUEST['email'], "images/compte/");
+
+                // si l'envoi à réussi, MAJ la BDD
+                $is = $envoi['success'] && sql_update('Utilisateur', array(
+                        'mdp' => $_REQUEST['mdp'],
+                        'email' => htmlentities($_REQUEST['email']),
+                        'img' => $envoi['fileName']
+                    ), array('id' => $_SESSION['id']));
+
+                    
+                if ($is)
+                    $redirige = $_REQUEST['redirection_succes'];
+                else
+                    $_SESSION['erreur'] = "Erreur /*-*/ : ".$envoi['msg'];
+            break;
+
+        /**
+         * Créer un nouveau compte :
+         * 
+         * _REQUEST :
+         *  - mdp
+         *  - email
+         *  - img
+         */
+        case "creer":
+                // vérifie qu'il s'agit bien d'une adresse e-mail valide
+                if (!filter_var($_REQUEST['email'], FILTER_VALIDATE_EMAIL)) {
+                    $_SESSION['erreur'] = "Erreur &ccedil;a ne ressemble pas a une adresse e-mail...";
+                    break;
+                }
+
+                // vérifie qu'un utilisateur n'a pas déjà utiliser cette adresse e-mail
+                if (sql_select('Utilisateur', "email", array('email' => $_REQUEST['email']))->fetch()) {
+                    $_SESSION['erreur'] = "Erreur compte existant";
+                    break;
+                }
+
+                if (0 < $_FILES['img']['size']) // si l'utilisateur a précisé une image, l'envoi
+                    $envoi = send_image($_FILES['img'], $_REQUEST['email'], "images/compte/");
+                else { // sinon duplique l'image par défaut
+                    $nom_fichier = str_replace("%", "_", rawurlencode(str_replace(" ", "-", $_REQUEST['email'])));
+                    $envoi = array('success' => copy("images/defaut/utilisateur.png", "images/compte/$nom_fichier.png"), 'fileName' => "$nom_fichier.png");
+                }
+
+                // si la création de compte à réussie, continue sur la case suivant
+                if ($envoi['success'] && sql_insert('Utilisateur', array(
+                            'id' => null,
+                            'mdp' => $_REQUEST['mdp'],
+                            'email' => htmlentities($_REQUEST['email']),
+                            'img' => $envoi['fileName']
+                        )))
+                    $redirige = $_REQUEST['redirection_succes'];
+                else {
+                    $_SESSION['erreur'] = "Erreur /*-*/ : ".$envoi['msg'];
+                    break;
+                }
         
+        /**
+         * Récupère toutes les données de connection de l'utilisateur :
+         * 
+         * _REQUEST :
+         *  - email
+         *  - mdp
+         */
         case "connecter":
+                // vérifie d'abord que l'utilisateur existe
                 $r = sql_select('Utilisateur', "*", array('email' => $_REQUEST['email']));
                 if ($utilisateur = $r->fetch()) {
+                    // puis que le mot de passe est le bon
                     if ($_REQUEST['mdp'] == $utilisateur['mdp']) {
                         $_SESSION['id'] = $utilisateur['id'];
                         $_SESSION['email'] = $utilisateur['email'];
                         $_SESSION['img'] = $utilisateur['img'];
                         
+                        // charge toute les données des JDRs auquel l'utilisateur est connecté
                         maj_donnees_jdr();
 
                         $redirige = $_REQUEST['redirection_succes'];
@@ -82,14 +137,30 @@
                     $_SESSION['erreur'] = "Erreur d'authentification - compte innexistant";
             break;
 
+        /**
+         * @Depreciated
+         * Supprime un compte (mais je pense pas que ça fonctionne -> erreur MySQL 1451 justifiée) :
+         * 
+         * _SESSION :
+         *  - id
+         */
         case "supprimer":
                 sql_delete('Utilisateur', array('id' => $_SESSION['id']));
 
+        /**
+         * Déconnecte l'utilisateur
+         */
         case "deconnecter":
                 session_unset();
                 session_destroy();
             break;
-        
+
+        /**
+         * Affiche des informations sur un utilisateur :
+         * 
+         * _REQUEST :
+         *  - id
+         */
         case "afficher":
                 $r = sql_select('Utilisateur', array('id', 'email', 'img'), array('id' => $_REQUEST['id']));
                 

@@ -48,7 +48,7 @@
 					<div class="list-group list-group-flush">
 						<?php
 							foreach ($__liste_equipes as $v) { ?>
-								<a href="<?=$v['href']?>" class="id_discussion list-group-item list-group-item-action <?=$v['activ'] ? "active" : "bg-light"?>"><?=$v['text']?></a><?php
+								<a href="<?=$v['href']?>" class="id_discussion list-group-item list-group-item-action <?=$v['active'] ? "active" : "bg-light"?>"><?=$v['text']?></a><?php
 							}
 						?>
 					</div>

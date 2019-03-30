@@ -6,9 +6,9 @@
 <?php require "./inclus/page_debut.php" ?>
 
 <?php
-    if (isset($_REQUEST['action']) && $_REQUEST['action'] == "creer") {
+    if (isset($_REQUEST['action']) && $_REQUEST['action'] == "creer") { // affiche le formulaire de création de compte
         include "./inclus/inscription.php";
-    } elseif (isset($_SESSION['id'])) {
+    } elseif (isset($_SESSION['id'])) { // affiche les liste des JDR disponibles, rejoints et dirigés
         require_once "./inclus/connexion.php";
         require_once "./inclus/session.php";
         
@@ -16,7 +16,7 @@
             $id_utilisateur = $_SESSION['id'];
 
         include "./inclus/jdr/liste.php";
-    } else { ?>
+    } else { // description à l'adresse de nouveaux utilisateur et visiteurs ?>
         <h1>Cog' JDR</h1>
 
         <p>Ce site vous permet de jouer à des parties de jeux de rôle type boîte mail avec vos camarades de promo que vous aimez tant; mais aussi de créer vos propres JDR et les inviter ! ...</p>

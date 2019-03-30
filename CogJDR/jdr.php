@@ -26,6 +26,14 @@
 
     switch (isset($_REQUEST['action']) ? $_REQUEST['action'] : "afficher") {
         
+        /**
+         * Créer un nouveau JDR :
+         * 
+         * _REQUEST :
+         *  - id_modele_jdr
+         *  - nb_max_joueurs (si empty alors 0)
+         *  - nb_min_joueurs (si empty alors 0)
+         */
         case "creer":
                 $code = substr(bin2hex(random_bytes(ceil(8 / 2))), 0, 8);
                 sql_insert('JDR', array(
@@ -39,8 +47,19 @@
                 echo "code d'invitation: <a href=\"./jdr.php?code=$code\">$code";
             break;
 
+        /**
+         * @Depreciated
+         * Retire un joueur d'un JDR (déprécié, probablement mauvait) :
+         * 
+         * _SESSION :
+         *  - liste_donnees_jdr
+         *      - id_dans
+         *  - indice_jdr_suivi
+         */
         case "quitter":
-                $id_joueur = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']]['id_joueur'];
+                if ($_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']]['est_mj'])
+                    exit;
+                $id_joueur = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']]['id_dans'];
                 sql_delete('Message_', array('id_joueur' => $id_joueur));
                 sql_delete('EstUn', array('id_joueur' => $id_joueur));
                 sql_delete('EstDans', array('id_joueur' => $id_joueur));
@@ -50,10 +69,22 @@
                 $_SESSION['indice_jdr_suivi'] = sizeof($_SESSION['liste_donnees_jdr']) - 1;
             break;
 
+        /**
+         * Ajout un joueur, attaché à l'utilisateur actuel, à la partie :
+         * 
+         * _REQUEST :
+         *  - id : id_jdr_participe / id_jdr
+         * 
+         * _SESSION :
+         *  - id
+         *  - liste_donnees_jdr
+         */
         case "rejoindre":
                 $pseudo = htmlentities($_REQUEST['pseudo']);
 
+                // vérifie qu'un utilisateur n'a pas déjà utiliser ce pseudo pour son joueur dans ce JDR
                 if (!sql_select('Joueur', 'pseudo', array('id_jdr_participe' => $_REQUEST['id'], 'pseudo' => $pseudo))->fetch()) {
+                    // créée le nouveau joueur
                     sql_insert('Joueur', array(
                         'id_joueur' => null,
                         'id_utilisateur' => $_SESSION['id'],
@@ -61,6 +92,7 @@
                         'pseudo' => $pseudo
                     ));
 
+                    // ajoute toutes les données de ce nouveau joueur concernant ce JDR dans la _SESSION
                     array_push($_SESSION['liste_donnees_jdr'], array(
                         'est_mj' => false,
                         'id_jdr' => $_REQUEST['id'],
@@ -80,14 +112,25 @@
                         'indice_equipe_discussion_suivi' => 0
                     ));
 
+                    // redirige vers la page du JDR
                     if ($redirige == "./#")
                         $redirige = "./jdr.php?id=".$_REQUEST['id'];
                 } else
                     $_SESSION['erreur'] = "Erreur pseudal existant";
             break;
 
+        /**
+         * Affiche des données pertinantes (selon l'utilisateur) sur un JDR :
+         * 
+         * _REQUEST :
+         *  - code ou id : id_jdr
+         * 
+         * _SESSION : *
+         * 
+         * Fait appel à `inclus/jdr/rejoint.php` ou `inclus/jdr/consulter.php` selon l'utilisateur.
+         */
         case "afficher":
-                if (!isset($_REQUEST['id']) && !isset($_REQUEST['code'])) {
+                if (!isset($_REQUEST['id']) && !isset($_REQUEST['code'])) { // s'il n'y a pas de JDR dans la requette (ni id ni code) affiche la `inclus/jdr/liste.php`
                     include_once "./inclus/page_debut.php";
 
                     include "./inclus/jdr/liste.php";
@@ -99,6 +142,7 @@
                     $where = isset($_REQUEST['code']) ? array('code_invite' => $_REQUEST['code']) : array('id_jdr' => $_REQUEST['id']);
                     $r = sql_select('JDR', "*", $where);
 
+                    // cherche le JDR correspondand
                     $jdr = $r->fetch();
                     if ($jdr && $modele = sql_select('ModeleJDR', "*", array('id_modele_jdr' => $jdr['id_modele_jdr']))->fetch()) {
                         $__sous_titre = $modele['titre']." | ".$jdr['code_invite'];
@@ -107,6 +151,9 @@
 
                         $est_connecte = isset($_SESSION['id']);
 
+                        // détermine :
+                        //  - si l'utilisateur a un joueur dans cette partie (a_rejoint)
+                        //  - la liste des équipes à afficher dans la barre latérale (__liste_equipe)
                         $a_rejoint = false;
                         if ($est_connecte)
                             foreach ($_SESSION['liste_donnees_jdr'] as $v) {
@@ -121,23 +168,24 @@
                                     if ($donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']]) {
                                         $compteur = 0;
 
-                                        foreach ($donnees_jdr['liste_equipe'] as $k_ => $v_) if ($v_['discussion_autorisee']) {
+                                        foreach ($donnees_jdr['liste_equipe'] as $k_ => $v_) if ($v_['discussion_autorisee'] || $donnees_jdr['est_mj']) {
                                             $compteur++;
                                             
-                                            if ($v_['titre_equipe'] == "MP") {
+                                            if ($v_['titre_equipe'] == "MP") { // cas où la conv est un MP : ajout le nom des participant dans le titre
                                                 $tmp = sql_select(
-                                                    array('Joueur', 'EstDans', 'Equipe'),
-                                                    'Joueur.pseudo',
-                                                    array(
-                                                        'Joueur::id_joueur' => 'EstDans::id_joueur',
-                                                        'EstDans::id_equipe' => 'Equipe::id_equipe',
-                                                        'Joueur::id_joueur !' => $donnees_jdr['est_mj'] ? -1 : $donnees_jdr['id_dans'],
-                                                        'Equipe::id_equipe' => $v_['id_equipe']
-                                                    )
-                                                );
+                                                        array('Joueur', 'EstDans', 'Equipe'),
+                                                        'Joueur.pseudo',
+                                                        array(
+                                                            'Joueur::id_joueur' => 'EstDans::id_joueur',
+                                                            'EstDans::id_equipe' => 'Equipe::id_equipe',
+                                                            'Joueur::id_joueur !' => $donnees_jdr['est_mj'] ? -1 : $donnees_jdr['id_dans'],
+                                                            'Equipe::id_equipe' => $v_['id_equipe']
+                                                        )
+                                                    );
                                                 $pseudoA = $tmp->fetch()['pseudo'];
                                                 $pseudoB = $tmp->fetch()['pseudo'];
 
+                                                // si c'est le MJ qui a créer cet MP, pseudoB est vide : on récupère pseudoMJ uniquement s'il n'a pas deja été utilisé pour un autre MP
                                                 if ((empty($pseudoA) || empty($pseudoB)) && empty($pseudoMJ))
                                                     $pseudoMJ = sql_select('MJ', 'pseudo_mj', array('id_jdr_dirige' => $donnees_jdr['id_jdr']))->fetch()['pseudo_mj'];
 
@@ -145,11 +193,12 @@
                                             } else
                                                 $titre = $v_['titre_equipe'];
 
-                                            $__liste_equipes[] = array('href' => $k_, 'text' => $titre, 'activ' => $k_ == $donnees_jdr['indice_equipe_discussion_suivi']);
+                                            $__liste_equipes[] = array('href' => $k_, 'text' => $titre, 'active' => $k_ == $donnees_jdr['indice_equipe_discussion_suivi']);
                                         }
 
+                                        // s'il n'ya à aucune équipe autorisant la discussion (ou aucune tout cours)
                                         if ($compteur == 0)
-                                            $__liste_equipes[] = array('href' => "./equipe.php", 'text' => "Rejoiniez une équipe !", 'activ' => false);
+                                            $__liste_equipes[] = array('href' => "./equipe.php", 'text' => "Rejoiniez une équipe !", 'active' => false);
                                     }
 
                                     break;
@@ -158,7 +207,7 @@
 
                         include_once "./inclus/page_debut.php";
                         
-                        if (!$a_rejoint) {
+                        if (!$a_rejoint) { // s'il n'a pas encore rejoint, ajout d'un form pour renter un pseudo
                             include "./inclus/jdr/rejoindre.php";
 
                             if ($est_connecte) { ?>
@@ -175,7 +224,7 @@
                                     </table>
                                 </form><?php
                             }
-                        } else {
+                        } else { // sinon ajoute un form pour quitter @Depreciated
                             include "./inclus/jdr/consulter.php"; ?>
 
                             <hr>

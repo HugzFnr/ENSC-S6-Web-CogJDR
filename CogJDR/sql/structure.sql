@@ -64,9 +64,12 @@ create table ModeleAction (
     desc_action varchar(256) not null,
     message_action varchar(256) not null,
     horaire_activ time not null,
-    action_effet enum('ressusciter', 'tuer') not null,
+    action_effet_id_modele_equipe_depart integer,
+    action_effet_id_modele_equipe_arrive integer,
     action_fct enum('voteMajoritaire', 'voteMinoritaire', 'pouvoir') not null,
 
+    foreign key (action_effet_id_modele_equipe_depart) references ModeleEquipe (id_modele_equipe),
+    foreign key (action_effet_id_modele_equipe_arrive) references ModeleEquipe (id_modele_equipe),
     foreign key (id_modele_jdr) references ModeleJDR (id_modele_jdr)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
@@ -141,6 +144,7 @@ create table Action_ (
     id_jdr integer,
     id_joueur_cible integer,
     id_joueur_effecteur integer,
+    horaire_envoi timestamp not null default CURRENT_TIMESTAMP,
 
     foreign key (id_modele_action) references ModeleAction (id_modele_action),
     foreign key (id_jdr) references JDR (id_jdr),
@@ -157,7 +161,7 @@ create table Equipe (
     foreign key (id_jdr) references JDR (id_jdr)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
-create table EstDans  (
+create table EstDans (
     id_joueur integer,
     id_equipe integer,
 
@@ -171,7 +175,7 @@ create table Message_ (
     id_message integer not null primary key auto_increment,
     id_joueur integer,
     id_equipe integer,
-    horaire_publi timestamp not null,
+    horaire_publi timestamp not null default CURRENT_TIMESTAMP,
     texte varchar(256) not null,
 
     foreign key (id_joueur) references Joueur (id_joueur),
