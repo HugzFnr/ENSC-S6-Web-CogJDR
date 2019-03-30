@@ -52,3 +52,7 @@ div.cercle #heure {
 .actif {
     background-color : rgba(236, 173, 120);
 }
+
+:disabled {
+    caret-color: red;
+}
