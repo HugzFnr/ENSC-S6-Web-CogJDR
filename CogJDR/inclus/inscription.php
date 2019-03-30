@@ -9,7 +9,7 @@
             <div class="form-group">
                 <div class="col-sm-6 offset-sm-3">
                     <p>Adresse e-mail (sera visible)</p>
-                    <input type="text" name="email" class="form-control" id="email" placeholder="E-mail"<?=empty($_REQUEST['email']) ? "" : " value=\"".$_REQUEST['email']."\""?> required<?=empty($_REQUEST['email']) ? " autofocus" : ""?>>
+                    <input type="email" name="email" pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}" class="form-control" id="email" placeholder="E-mail"<?=empty($_REQUEST['email']) ? "" : " value=\"".$_REQUEST['email']."\""?> required<?=empty($_REQUEST['email']) ? " autofocus" : ""?>>
                 </div>
             </div>
 
@@ -29,7 +29,7 @@
 
             <div class="form-group">
                 <div class="col-sm-6 offset-sm-3">
-                    <input type="file" name="img" id="gestion_compte_img">
+                    <input type="file" name="img" accept=".jpg,.png,.jpeg" id="gestion_compte_img">
                 </div>
             </div>
 

@@ -74,7 +74,7 @@
                     'id_joueur_cible' => $_REQUEST['id_joueur_choix'],
                     'id_joueur_effecteur' => $donnees_jdr['id_dans']
                 )); ?>
-                <p>Vous avez voter pour : <?=sql_select('Joueur', 'pseudo', array('id_joueur' => $_REQUEST['id_joueur_choix']))->fetch()['pseudo']?></p>
+                <p>Vous avez voté pour : <?=sql_select('Joueur', 'pseudo', array('id_joueur' => $_REQUEST['id_joueur_choix']))->fetch()['pseudo']?></p>
                 <a href="./jdr.php?id=<?=$donnees_jdr['id_jdr']?>">Retourner au JDR</a><?php
             }
         } else { ?>

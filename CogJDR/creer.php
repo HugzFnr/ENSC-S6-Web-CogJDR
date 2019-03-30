@@ -125,7 +125,7 @@
                         <div class="form-group">
                             <div class="col-sm-10 offset-sm-1">
                                 <p>Image du rôle</p>
-                                <input type="file" name="img_role"  class="form-control" id="img_role">
+                                <input type="file" name="img_role" accept=".jpg,.png,.jpeg" class="form-control" id="img_role">
                             </div>
                         </div>
 
@@ -289,28 +289,28 @@
                         <div class="form-group">
                             <div class="col-sm-10 offset-sm-1">
                                 <p>Fichier de règles</p>
-                                <input type="file" name="fichier_regles"  class="form-control" id="fichier_regles" required>
+                                <input type="file" name="fichier_regles" accept=".pdf,.docx,.doc,.odt"  class="form-control" id="fichier_regles" required>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-sm-10 offset-sm-1">
                                 <p>Image de bannière</p>
-                                <input type="file" name="img_banniere"  class="form-control" id="img_banniere">
+                                <input type="file" name="img_banniere" accept=".jpg,.png,.jpeg" class="form-control" id="img_banniere">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-sm-10 offset-sm-1">
                                 <p>Image de fond</p>
-                                <input type="file" name="img_fond"  class="form-control" id="img_fond">
+                                <input type="file" name="img_fond" accept=".jpg,.png,.jpeg" class="form-control" id="img_fond">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-sm-10 offset-sm-1">
                                 <p>Logo du modèle</p>
-                                <input type="file" name="img_logo"  class="form-control" id="img_logo" required>
+                                <input type="file" name="img_logo" accept=".jpg,.png,.jpeg" class="form-control" id="img_logo" required>
                             </div>
                         </div>
 
