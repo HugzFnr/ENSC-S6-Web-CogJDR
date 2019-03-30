@@ -12,26 +12,26 @@
     </tr>
 
     <?php
-        /**
-         * TTT  OO    DD   OO    !!
-         *  T  O  O   D D O  O   !!
-         *  T   OO    DD   OO    !!
-         */
-        // TODO: optimiser cette partie en réduisant le nb d'appels à la base de données (j'en suis sur que c'est possible, lol)
+        // TODO: optimiser cette partie en réduisant le nb d'appels à la base de données (possible ?) notament dans le foreach
+
+        // récupère la liste des joueurs participant au JDR
         $r = sql_select('Joueur', array('id_joueur', 'pseudo', 'id_utilisateur'), array('id_jdr_participe' => $jdr['id_jdr']));
 
+        // assure que le tableau contient exactement `nb_max_joueurs` entrées
         for ($k = 0; $k < $jdr['nb_max_joueurs']; $k++) {
             $joueur = $r->fetch();
 
-            if ($joueur) {
+            if ($joueur) { // si on a pas encore atteint le dernier joueurs inscrit
                 $email = sql_select('Utilisateur', 'email', array('id' => $joueur['id_utilisateur']))->fetch()['email']; ?>
                 <tr>
                     <td><?php
+                        // n'affiche que la première partie de l'adresse e-mail (jusqu'avant le '@')
                         $i = strpos($email, "@");
                         echo 0 < $i ? substr($email, 0, $i) : $email;
                     ?></td>
                     <td><?=$joueur['pseudo']?></td>
                     <?php
+                        // si l'utilisateur est MJ dans ce JDR, ajout les colonnes indiquant les équipes de chaque joueur
                         if ($donnees_jdr['est_mj']) {
                             foreach ($donnees_jdr['liste_equipe'] as $equipe) if ($equipe['titre_equipe'] != "MP") {
                                 if (sql_select(
@@ -42,7 +42,7 @@
                                                 'id_equipe' => $equipe['id_equipe']
                                             )
                                         )->fetch()) { ?>
-                                    <td>x</td><?php
+                                    <td>&cross;</td><?php
                                 } else { ?>
                                     <td></td><?php
                                 }
@@ -50,7 +50,8 @@
                         }
                     ?>
                     <td><?php
-                        if ($joueur['id_utilisateur'] != $_SESSION['id']) {
+                        // ajout des liens de MP..
+                        if ($joueur['id_utilisateur'] != $_SESSION['id']) { // .. s'il s'agit du joueur d'un autre utilisateur..
                             $tmp = sql_select(
                                     array('Equipe', 'EstDans'),
                                     "COUNT(*)",
@@ -60,13 +61,13 @@
                                         'EstDans::id_joueur' => array($joueur['id_joueur'], $donnees_jdr['est_mj'] ? null : $donnees_jdr['id_dans'])
                                     )
                                 )->fetch();
-                            if ($tmp[0] != ($donnees_jdr['est_mj'] ? 1 : 2)) { ?>
+                            if ($tmp[0] != ($donnees_jdr['est_mj'] ? 1 : 2)) { // .. s'il n'existe pas déjà une discussion MJ entre ces deux joueurs ?>
                                 <a href="#" onclick="creerMP(event, <?=$joueur['id_joueur']?>, <?=$donnees_jdr['est_mj'] ? "null" : $donnees_jdr['id_dans']?>)">Envoyer un MP</a><?php
                             }
                         }
                     ?></td>
                 </tr><?php
-            } else { ?>
+            } else { // reste des emplacements vide (cas où le JDR n'est pas plein : `$joueur` vaut `false` après le `fetch`)?>
                 <tr>
                     <td>-</td><td>-</td><?php if ($donnees_jdr['est_mj']) foreach ($donnees_jdr['liste_equipe'] as $v) if ($v['titre_equipe'] != "MP") { ?><td>-</td><?php } ?><td>-</td>
                 </tr><?php
@@ -82,25 +83,25 @@
 <h3>Liste des actions</h3>
 <ol class="liste-actions">
     <?php
-        $compteur_action_ol1 = 0;
+        $compteur_action_ol1 = 0; // compte le nombre d'actions affichées dans la première liste (les actions non expirées)
         $action_finies = array();
 
-        if ($donnees_jdr['est_mj'])
+        if ($donnees_jdr['est_mj']) // s'il est MJ, on affichera toutes les actions
             $r = sql_select(
-                array('ModeleAction', 'JDR'),
-                array(
-                    'id_modele_action',
-                    'titre_action',
-                    'desc_action',
-                    'horaire_activ',
-                    'action_fct'
-                ),
-                array(
-                    'ModeleAction::id_modele_jdr' => 'JDR::id_modele_jdr',
-                    'JDR::id_jdr' => $donnees_jdr['id_jdr']
-                )
-            );
-        else
+                    array('ModeleAction', 'JDR'),
+                    array(
+                        'id_modele_action',
+                        'titre_action',
+                        'desc_action',
+                        'horaire_activ',
+                        'action_fct'
+                    ),
+                    array(
+                        'ModeleAction::id_modele_jdr' => 'JDR::id_modele_jdr',
+                        'JDR::id_jdr' => $donnees_jdr['id_jdr']
+                    )
+                );
+        else // sinon (joueur), on ne veut que les action auquelles il est autorisé
             $r = sql_select(
                     array('ModeleAction', 'JDR', 'Autorise', 'Equipe', 'EstDans'),
                     array(
@@ -121,15 +122,16 @@
                 );
         
         while ($modele_action = $r->fetch()) {
-            if (strtotime($modele_action['horaire_activ']) < time()) {
+            if (strtotime($modele_action['horaire_activ']) < time()) { // les actions finies sont affichées après, dans une liste séparée
                 $action_finies[] = $modele_action;
                 continue;
             }
+
             $compteur_action_ol1++;
 
-            if ($donnees_jdr['est_mj'])
+            if ($donnees_jdr['est_mj']) // s'il est MJ on compte le nombre de réponse ce form a eu
                 $a_repondu = sql_select('Action_', 'COUNT(*)', array('Action_::id_modele_action' => $modele_action['id_modele_action']))->fetch()[0];
-            else
+            else // sinon on veut savoir si ce joueur à répondu
                 $a_repondu = !$donnees_jdr['est_mj'] && sql_select(
                         array('Action_'),
                         'COUNT(*)',
@@ -147,10 +149,11 @@
 </ol>
 
 <?php
-    if ($compteur_action_ol1 == 0) { ?>
+    if ($compteur_action_ol1 == 0) { // si la première liste est vide ?>
         <h4>Pas d'actions restantes pour aujourd'hui !</h4><?php
     }
 
+    // deuxième liste : les action expirées
     if (!empty($action_finies)) { ?>
         <h4>Action finies</h4>
         <ol class="liste-actions">
@@ -191,18 +194,20 @@
 <!-- FIN liste des actions -->
 
 <script>
+    // fonction appelée pour créer un MP
     creerMP = function(event, idA, idB) {
         event.preventDefault();
         $.post("./equipe.php", {
-            action: "creer",
-            id_modele_equipe: 0,
-            liste_id_joueur: [idA, idB],
-            redirection_succes: "./jdr.php?id=<?=$donnees_jdr['id_jdr']?>"
-        }).done(function(data) {
-            location.reload();
-            /*console.log(data);
-            alert("coucou");*/
-        });
+                action: "creer",
+                id_modele_equipe: 0,
+                liste_id_joueur: [idA, idB],
+                redirection_succes: "./jdr.php?id=<?=$donnees_jdr['id_jdr']?>"
+            }).done(function(data) {
+                    // recharge la page pour afficher la nouvelle discussion
+                    location.reload();
+                    /*console.log(data);
+                    alert("coucou");*/
+                });
     }
 </script>
 

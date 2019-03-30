@@ -3,7 +3,6 @@ div.page {
     width: 90%;
     margin-left: auto;
     margin-right: auto;
-
 }
 
 body {
@@ -25,6 +24,7 @@ h3 {
 a {
     color: darkblue;
 }
+
 .container, .container-fluid {
     background-color: rgba(211, 211, 211, 0.733);
     border-radius : 15px;
@@ -47,8 +47,4 @@ div.cercle {
 div.cercle #heure {
     display: table-cell;
     vertical-align: middle;
-}
-
-.actif {
-    background-color : rgba(236, 173, 120);
 }

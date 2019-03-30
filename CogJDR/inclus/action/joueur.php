@@ -5,40 +5,29 @@
                     array('ModeleAction', 'Action_'),
                     'COUNT(*)',
                     array('ModeleAction::id_modele_action' => 'Action_::id_modele_action', 'Action_::id_joueur_effecteur' => $donnees_jdr['id_dans'])
-                )->fetch()[0]) {
+                )->fetch()[0] != 0) { ?>
+            <h1>Non, tu n'as pas le droit !</h1>
+            <p>(#YouHaveNoPawerHere)</p><?php
             include_once "./inclus/page_fin.php";
             exit;
         }
 
+        // récupère le modèle visé
         $modele = sql_select(
-                array(
-                    'Equipe', 'ModeleEquipe', 'EstDans',
-                    'ModeleAction', 'Autorise'
-                ),
-                array(
-                    'ModeleAction.titre_action',
-                    'ModeleAction.desc_action',
-                    'ModeleAction.horaire_activ'
-                ),
-                array(
-                    'Equipe::id_equipe' => 'EstDans::id_equipe',
-                    'Equipe::id_modele_equipe' => 'ModeleEquipe::id_modele_equipe',
-                    'ModeleEquipe::id_modele_equipe' => 'Autorise::id_modele_equipe_autorise',
-                    'Autorise::id_modele_action' => 'ModeleAction::id_modele_action',
-                    'ModeleAction::id_modele_action' => $_REQUEST['id'],
-                    'EstDans::id_joueur' => $donnees_jdr['id_dans']
-                ),
-                null,
-                true
+                'ModeleAction',
+                array( 'titre_action', 'desc_action', 'horaire_activ'),
+                array('id_modele_action' => $_REQUEST['id'])
             )->fetch();
 
+        // si l'action n'a pas encore expirer pour aujourd'hui
         if ($modele && time() < strtotime($modele['horaire_activ'])) { ?>
             <h1 class="text-center"><?=$modele['titre_action']?></h1>
             <p class="desc_action"><?=$modele['desc_action']?></p><?php
 
-            if (empty($_REQUEST['action'])) { ?>
+            if (empty($_REQUEST['action'])) { // cas par défaut : affiche la liste des joueurs ciblés dans un form ?>
                 <ol>
                     <?php
+                        // récupère la liste des joueus ciblés par les action de ce modèle (en passant par le modèle d'équipe ciblé)
                         $cibles = sql_select(
                                 array(
                                     'Utilisateur', 'Joueur',
@@ -59,27 +48,30 @@
                                 true
                             );
 
+                        // affiche toutes les entrées en une liste d'input type=radio (ie. choix unique)
                         $compteur = 0;
                         while ($joueur = $cibles->fetch()) { ?>
                             <li><input type="radio" name="id_joueur_choix" id="choix<?=$compteur++?>" value="<?=$joueur['id_joueur']?>"><?=$joueur['pseudo']?> (<?=$joueur['email']?>)</li><?php
                         }
                     ?>
                 </ol>
+
                 <input type="hidden" name="id" value="<?=$_REQUEST['id']?>">
                 <button class="btn btn-primary" type="submit" name="action" value="voter">Envoyer</button><?php
-            } elseif ($_REQUEST['action'] == "voter") {
+            } elseif ($_REQUEST['action'] == "voter") { // cas où le joueur à fait son choix et à cliquer sur "Envoyer" (ligne d'au dessus)
+                // créer une nouvelle `Action_`
                 sql_insert('Action_', array(
-                    'id_action' => null,
-                    'id_modele_action' => $_REQUEST['id'],
-                    'id_jdr' => $donnees_jdr['id_jdr'],
-                    'id_joueur_cible' => $_REQUEST['id_joueur_choix'],
-                    'id_joueur_effecteur' => $donnees_jdr['id_dans'],
-                    'horaire_envoi' => null
-                )); ?>
+                        'id_action' => null,
+                        'id_modele_action' => $_REQUEST['id'],
+                        'id_jdr' => $donnees_jdr['id_jdr'],
+                        'id_joueur_cible' => $_REQUEST['id_joueur_choix'],
+                        'id_joueur_effecteur' => $donnees_jdr['id_dans'],
+                        'horaire_envoi' => null
+                    )); ?>
                 <p>Vous avez voter pour : <?=sql_select('Joueur', 'pseudo', array('id_joueur' => $_REQUEST['id_joueur_choix']))->fetch()['pseudo']?></p>
                 <a href="./jdr.php?id=<?=$donnees_jdr['id_jdr']?>">Retourner au JDR</a><?php
             }
-        } else { ?>
+        } else { // le joueur n'était pas sensé être là... ?>
             <h1>Non, tu n'as pas le droit !</h1>
             <p>(#YouHaveNoPawerHere)</p><?php
         }

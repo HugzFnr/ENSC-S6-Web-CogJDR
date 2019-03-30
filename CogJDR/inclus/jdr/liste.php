@@ -1,9 +1,9 @@
 <!-- liste joueur -->
 <ul>
     <?php
-        if (!isset($id_utilisateur))
+        if (!isset($id_utilisateur)) // si `id_utilisateur` n'est pas précisé, c'est qu'on veut afficher toutes les parties
             $r = sql_select(array('JDR', 'ModeleJDR'), "*", array('JDR::id_modele_jdr' => 'ModeleJDR::id_modele_jdr'), array('id_jdr' => 'DESC'), true);
-        else
+        else // sinon on ne veut que celles auquel l'utilisateur participe
             $r = sql_select(
                     array('JDR', 'ModeleJDR', 'Joueur'),
                     "*",
@@ -16,6 +16,7 @@
                     true
                 );
 
+        // pour chaque JDR affiche une entrée; si `id_utilisateur` n'est pas précisé on propose de rejoindre
         while ($jdr = $r->fetch()) { ?>
             <li>
                 <a href="./jdr.php?id=<?=$jdr['id_jdr']?>">
@@ -33,7 +34,7 @@
 
 <!-- liste MJ -->
 <?php
-    if (isset($id_utilisateur)) {
+    if (isset($id_utilisateur)) { // récupère toutes les parties que l'utilisateur dirige
         $r = sql_select(
                 array('JDR', 'ModeleJDR', 'MJ'),
                 "*",
@@ -45,6 +46,8 @@
                 array('id_jdr' => 'DESC'),
                 true
             );
+
+        // seulement si on a effectivement touver des JDR
         if (0 < $r->rowCount()) { ?>
             <h2>Vos JDR en tant que MJ</h2>
             <ul>

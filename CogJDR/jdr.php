@@ -22,7 +22,7 @@
     $_REQUEST['redirection_succes'] = isset($_REQUEST['redirection_succes']) ? $_REQUEST['redirection_succes'] : "./#";
     
     if (isset($_SESSION['indice_jdr_suivi']))
-        maj_jdr_suivi();
+        maj_jdr_suivi($_REQUEST['id']);
 
     switch (isset($_REQUEST['action']) ? $_REQUEST['action'] : "afficher") {
         
@@ -207,24 +207,9 @@
 
                         include_once "./inclus/page_debut.php";
                         
-                        if (!$a_rejoint) { // s'il n'a pas encore rejoint, ajout d'un form pour renter un pseudo
+                        if (!$a_rejoint) // s'il n'a pas encore rejoint
                             include "./inclus/jdr/rejoindre.php";
-
-                            if ($est_connecte) { ?>
-                                <hr>
-                                
-                                <form class="w-100" action="./jdr.php">
-                                    <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
-                                    
-                                    <table class="w-100">
-                                        <tr>
-                                            <td><input class="form-control w-auto float-right" type="text" name="pseudo" id="rejoindre_pseudo" placeholder="Choisisez un Pseudal"></td>
-                                            <td><button class="btn btn-primary btn-block w-auto float-left" type="submit" name="action" value="rejoindre">Rejoindre</button></td>
-                                        </tr>
-                                    </table>
-                                </form><?php
-                            }
-                        } else { // sinon ajoute un form pour quitter @Depreciated
+                        else { // sinon ajoute un form pour quitter @Depreciated
                             include "./inclus/jdr/consulter.php"; ?>
 
                             <hr>

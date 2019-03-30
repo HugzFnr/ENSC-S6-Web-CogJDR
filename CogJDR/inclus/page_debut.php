@@ -26,8 +26,6 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/global.css">
-	<!--<link rel="stylesheet" type="text/css" media="screen" href="./css/discussion.css">
-	<link rel="stylesheet" type="text/css" media="screen" href="./css/jdr.css">-->
 	<?php
 		if (!empty($__css_necessaires)) foreach ($__css_necessaires as $v) { ?>
 			<link rel="stylesheet" type="text/css" media="screen" href="./css/<?=$v?>.css"><?php
@@ -76,7 +74,7 @@
 						}
 					});
 				</script>
-				<!-- /#sidebar-wrapper -->
+				<!-- FIN sidebar-wrapper -->
 
 				<!-- Page Content -->
 				<div id="page-content-wrapper"><?php
