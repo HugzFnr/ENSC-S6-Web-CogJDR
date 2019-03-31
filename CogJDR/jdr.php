@@ -29,7 +29,7 @@
         if (isset($_SESSION['indice_jdr_suivi']))
             maj_jdr_suivi($_REQUEST['id']);
 
-        if (-1 < $_SESSION['indice_jdr_suivi'])
+        if (-1 < @$_SESSION['indice_jdr_suivi'])
             $donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']];
     }
 

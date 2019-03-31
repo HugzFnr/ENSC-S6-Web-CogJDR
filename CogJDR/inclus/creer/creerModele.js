@@ -304,6 +304,7 @@ function TableauxVersObjet() {
         })
     }
     
+    $.post("./modele.php", donnees, function() {
+            document.location = "./creerPartie.php";
+        });
 }
-
-
