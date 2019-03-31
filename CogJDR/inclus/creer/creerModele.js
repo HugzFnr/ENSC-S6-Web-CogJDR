@@ -200,6 +200,14 @@ function MajChoixActions() //met à jour les options d'effecteurs et de cibles d
     newprop = $("#nom_equipe").val();
     newOptions[newprop] = newprop;
 
+    var select_ori = $("#fct_origine_action"); //seules des équipes peuvent être sélectionnées
+    //comme arrivée ou origine d'un pouvoir
+    var select_arri = $("#fct_arrivee_action"); 
+
+    insererOptions(select_ori,newOptions);
+    insererOptions(select_arri,newOptions);
+
+
     for (i = 0; i < roles.length; i++) {
         newprop = roles[i][0];
         newOptions[newprop] = (roles[i][0]);
@@ -208,30 +216,29 @@ function MajChoixActions() //met à jour les options d'effecteurs et de cibles d
     newprop = $("#nom_role").val();
     newOptions[newprop] = newprop;
 
+
     var select1 = $('#effecteur_action');
-    var select2 = $("#cibles_action")
+    var select2 = $("#cibles_action");
 
-    if (select1.prop) {
-        options = select1.prop('options');
+    insererOptions(select1,newOptions);
+    insererOptions(select2,newOptions);
+
+}
+
+function insererOptions (select,newOptions) //cette fonction nettoie et insere de nouvelles options dans le menu select en argument
+{
+    if (select.prop) {
+        options = select.prop('options');
     }
     else {
-        options = select1.attr('options');
+        options = select.attr('options');
     }
-    $('option', select1).remove();
-
-    if (select2.prop) {
-        options2 = select2.prop('options');
-    }
-    else {
-        options2 = select2.attr('options');
-    }
-    $('option', select2).remove();
+    $('option', select).remove();
 
     $.each(newOptions, function (val, text) {
         options[options.length] = new Option(text, val);
-        options2[options2.length] = new Option(text, val);
     });
-
+    
 }
 
 //ces 3 fonctions, appelées à la fin de la création du modèle, permettent de récupérer les données dans un format pertinent (notamment avec des clés et non des index)

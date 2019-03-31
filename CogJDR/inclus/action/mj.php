@@ -1,3 +1,4 @@
+<div class="container">
 <table class="container liste_joueurs">
     <?php
         // récupère le modèle visé
@@ -169,3 +170,5 @@
         </div><?php
     }
 ?>
+
+</div>
