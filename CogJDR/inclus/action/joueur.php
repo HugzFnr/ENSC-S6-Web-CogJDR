@@ -1,3 +1,4 @@
+<div class="container">
 <form action="./action.php" method="post">
     <?php
         // si le joueur à déjà crée une `Action_` sur ce `ModeleAction`
@@ -84,3 +85,4 @@
         }
     ?>
 </form>
+</div>

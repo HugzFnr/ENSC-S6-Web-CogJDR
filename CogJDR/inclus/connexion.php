@@ -208,4 +208,15 @@
 
         return array('msg' => $r, 'success' => $upload_success, 'fileName' => "$name.$image_type");
     }
+
+    function recup_enum($table,$colonne)
+    {
+        $sql = "SHOW COLUMNS FROM `$table` LIKE '$colonne'";
+        $result = sql_query($sql);
+        $row = $result->fetch();
+        $type = $row['Type'];
+        preg_match('/enum\((.*)\)$/', $type, $matches);
+        $vals = explode(',', $matches[1]);
+        return ($vals);
+    }
 ?>

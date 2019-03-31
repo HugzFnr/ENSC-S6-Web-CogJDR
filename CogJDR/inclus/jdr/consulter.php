@@ -83,10 +83,14 @@
 
     <hr>
 
+    </div>
+
+    <div class="col-sm-12">
+
     <?php
         if ($etat_partie != "fin") { ?>
             <!-- liste des actions -->
-            <h3>Liste des actions</h3>
+            <h2>Liste des actions</h2>
             <ol class="liste-actions">
                 <?php
                     $compteur_action_ol1 = 0; // compte le nombre d'actions affichées dans la première liste (les actions non expirées)
@@ -156,12 +160,12 @@
 
             <?php
                 if ($compteur_action_ol1 == 0) { // si la première liste est vide ?>
-                    <h4>Pas d'actions restantes pour aujourd'hui !</h4><?php
+                    <h4>Pas d'actions restantes pour aujourd'hui, reviens demain !</h4><?php
                 }
 
                 // deuxième liste : les action expirées
                 if (!empty($action_finies)) { ?>
-                    <h4>Action finies</h4>
+                    <h2>Actions finies</h2>
                     <ol class="liste-actions">
                         <?php
                             foreach ($action_finies as $modele_action) { ?>
@@ -201,18 +205,6 @@
         }
     ?>
 
-
-    <?php
-        if (@$donnees_jdr['est_mj'] && $etat_partie != "fin") { // s'il est MJ il peut finir la partie ?>
-            <hr>
-            <form class="w-100" action="./jdr.php">
-                <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
-
-                <button class="btn btn-primary btn-block w-auto" type="submit" name="action" value="etat_finir">Finir la partie</button>
-            </form><?php
-        }
-    ?>
-
     <script>
         // fonction appelée pour créer un MP
         creerMP = function(event, idA, idB) {
@@ -233,17 +225,19 @@
 
     </div>
 
-<?php
-    if (@$donnees_jdr['est_mj'] && $etat_partie != "fin") { // s'il est MJ il peut finir la partie ?>
-        <hr>
-        <form class="w-100" action="./jdr.php">
-            <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
-            <input type="hidden" name="redirection_succes" value="./jdr.php?id=<?=$jdr['id_jdr']?>">
+    <div class="col-sm-6 offset-sm-5">
+    <?php
+        if (@$donnees_jdr['est_mj'] && $etat_partie != "fin") { // s'il est MJ il peut finir la partie ?>
+            <hr>
+            <form action="./jdr.php">
+                <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
+                <input type="hidden" name="redirection_succes" value="./jdr.php?id=<?=$jdr['id_jdr']?>">
 
-            <button class="btn btn-primary btn-block w-auto" type="submit" name="action" value="etat_finir">Finir la partie</button>
-        </form><?php
-    }
-?>
+                <button class="btn btn-primary btn-block w-auto" type="submit" name="action" value="etat_finir">Cloturer la partie</button>
+            </form><?php
+        }
+    ?>
+    </div>
 
 <script>
     // fonction appelée pour créer un MP

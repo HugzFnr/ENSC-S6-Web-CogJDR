@@ -12,7 +12,8 @@
                     <h3 class="text-center"> Paramètres généraux </h3>
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
-                            <label for="titre_modele"> <p>Titre du modèle</p> </label>
+                            <label for="titre_modele"> <p>Titre du modèle 
+                            </p> </label>
                             <input type="text" name="titre_modele" class="form-control" id="titre_modele" placeholder="Un nom qui en jette !"  required autofocus>
                         </div>
                     </div>
@@ -54,7 +55,7 @@
             <div class="container invisible" id="menu2">
                 <form id="form2" class="form sign-in" role="form" action="./creer.php" method="post" enctype="multipart/form-data">
 
-                    <h3 class="text-center"> Créer l'équipe <b class="rouge" id="equipe_actuel"> ?? </b>/<b id="equipe_total"> ?? </b> </h3>
+                    <h3 class="text-center"> Créer l'équipe  <b class="rouge" id="equipe_actuel"> ?? </b>/<b id="equipe_total"> ?? </b> </h3>
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="nom_equipe"> <p>Nom de l'équipe</p> </label>
@@ -185,8 +186,12 @@
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
-                            <label for="fct_action"> <p>Fonctionnement de l'action </p> </label>
-                            <select name="fct_action" class="form-control" id="fct_action" required>
+                            <label for="fct_origine_action"> <p>Equipe d'origine de la cible </p> </label>
+                            <select name="fct_origine_action" class="form-control" id="fct_origine_action" required>
+                                <option> Placeholder
+                            </select>
+                            <label for="fct_arrivee_action"> <p>Equipe d'arrivee de la cible </p> </label>
+                            <select name="fct_arrivee_action" class="form-control" id="fct_arrivee_action" required>
                                 <option> Placeholder
                             </select>
                         </div>
@@ -196,7 +201,8 @@
                         <div class="col-sm-10 offset-sm-1">
                             <label for="effet_action"> <p>Effet de l'action </p> </label>
                             <select name="effet_action" class="form-control" id="effet_action" required>
-                                <option> Placeholder
+                            <?php $tab = recup_enum('modeleaction','action_fct'); foreach ($tab as $i) {
+                             echo("<option value=$i> $i"); } ?>
                             </select>
                         </div>
                     </div>
@@ -210,7 +216,7 @@
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
-                            <label for="msg_action"> <p>Message automatique de l'action (optionnel)</p> </label>
+                            <label for="msg_action"> <p>Message automatique de l'action (optionnel) </p> </label>
                             <textarea name="msg_action" class="form-control" id="msg_action" placeholder="Pour avertir vos joueurs de ce qu'il s'est passé dans le chat général !"></textarea>
                             
                         </div>
@@ -219,8 +225,7 @@
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="desc_action"> <p>Description de l'action</p> </label>
-                            <textarea name="desc_action"  class="form-control" id="desc_action" placeholder="Explique ce que fait l'action!" required></textarea>
-                            
+                            <textarea name="desc_action"  class="form-control" id="desc_action" placeholder="Explique ce que fait l'action!" required></textarea>                            
                         </div>
                     </div>
                     <div class="container">
