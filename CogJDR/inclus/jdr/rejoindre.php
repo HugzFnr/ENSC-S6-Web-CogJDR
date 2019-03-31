@@ -58,7 +58,10 @@
             
             <table class="w-100">
                 <tr>
-                    <td><input class="form-control w-auto float-right" type="text" name="pseudo" id="rejoindre_pseudo" placeholder="Choisisez un Pseudal"></td>
+                    <td>
+                    <label class="float-right" for="rejoindre_pseudo"> Pseudo pour la partie : </label>
+                    <input class="form-control w-auto float-right" type="text" name="pseudo" id="rejoindre_pseudo" placeholder="Choisisez un pseudonyme">
+                    </td>
                     <td><button class="btn btn-primary btn-block w-auto float-left" type="submit" name="action" value="rejoindre">Rejoindre</button></td>
                 </tr>
             </table>
