@@ -57,7 +57,7 @@ insert into Message_ (`id_message`, `id_joueur`, `id_equipe`, `horaire_publi`, `
     (null, null, 1, NOW(), "TAISEZ VOUS!");
 
 insert into ModeleAction (`id_modele_action`, `id_modele_jdr`, `titre_action`, `desc_action`, `message_action`, `horaire_activ`, `action_effet_id_modele_equipe_depart`, `action_effet_id_modele_equipe_arrive`, `action_fct`) values
-    (null, 1, "Vote des villageois", "Les villageois votent pour la personne qu'ils veulent br&ucirc;ler. Qui pensez-vous &ecirc;tre un loup ?", "$cible.pseudo; ($cible.email;) a &eacute;t&eacute; choisis &agrave; la majorit&eacute;e ($vote.nb_majoritaire; sur $vote.nb_total;) pour &ecirc;tre br&ucirc;l&eacute;(e) ce soir...", "23:25:25", 1, 3, "voteMajoritaire"),
+    (null, 1, "Vote des villageois", "Les villageois votent pour la personne qu'ils veulent br&ucirc;ler. Qui pensez-vous &ecirc;tre un loup ?", "$cible.pseudo; ($cible.email;) a &eacute;t&eacute; choisis &agrave; la majorit&eacute;e ($vote.majoritaire; sur $vote.total;) pour &ecirc;tre br&ucirc;l&eacute;(e) ce soir...", "18:19:20", 1, 3, "voteMajoritaire"),
     (null, 1, "Modele d'action test no 2", "Titre de l'action", "Description de l'action", "10:11:12", null, 2, "voteMajoritaire");
 
 insert into Cible (`id_modele_equipe_cible`, `id_modele_action`) values

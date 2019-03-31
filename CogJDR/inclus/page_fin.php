@@ -6,23 +6,22 @@
                 </div>
             </footer>
 
-        </div><!-- FIN page -->
+        </div><!-- page -->
 
         <?php
-            if (!empty($__liste_equipes)) { // si la sidenav à été utilisée ?>
+            if (!empty($__liste_equipes)) { ?>
                     </div>
-                    <!-- FIN page-content-wrapper -->
+                    <!-- /#page-content-wrapper -->
                 </div>
                 <!-- FIN liste des équipes -->
 
                 <script>
-                    // pour afficher / cacher la sidenav
                     $("#menu-toggle").click(function(e) {
                         e.preventDefault();
                         $("#wrapper").toggleClass("toggled");
                     });
 
-                    // pour que la sidenav suive
+                    
                     $(window).scroll(function() {
                         $("#sidebar-wrapper").css("padding-top", "" + $(window).scrollTop() + "px");
                     });

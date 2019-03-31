@@ -15,7 +15,6 @@
     </tr>
 
     <?php
-        // récupère touts les joueurs déjà inscrit
         $r = sql_select('Joueur', array('pseudo', 'id_utilisateur'), array('id_jdr_participe' => $jdr['id_jdr']));
 
         for ($k = 0; $k < $jdr['nb_max_joueurs']; $k++) {
@@ -35,21 +34,3 @@
         }
     ?>
 </table>
-
-<?php
-    // s'il es connecté, ajout d'un form pour renter un pseudo
-    if (isset($_SESSION['id'])) { ?>
-        <hr>
-        
-        <form class="w-100" action="./jdr.php">
-            <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
-            
-            <table class="w-100">
-                <tr>
-                    <td><input class="form-control w-auto float-right" type="text" name="pseudo" id="rejoindre_pseudo" placeholder="Choisisez un Pseudal"></td>
-                    <td><button class="btn btn-primary btn-block w-auto float-left" type="submit" name="action" value="rejoindre">Rejoindre</button></td>
-                </tr>
-            </table>
-        </form><?php
-    }
-?>

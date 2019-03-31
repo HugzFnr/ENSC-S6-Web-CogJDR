@@ -1,6 +1,5 @@
 <script>
     $(document).ready(function () {
-        // fonction utilisée pour défiler la liste des message tout en bas
         scrollDown = function(elm) {
             //elm.animate({ scrollTop: elm.prop("scrollHeight") - elm.prop("clientHeight")}, 1000);
             elm.scrollTop(elm.prop("scrollHeight") - elm.prop("clientHeight"));
@@ -10,16 +9,15 @@
         elm.load("./inclus/discussion/contenu_discussion.php");
         scrollDown(elm);
 
-        // ajout une réactualisation des messages toutes les secondes
         setInterval(function() {
-                var elm = $("#discussion");
-                precedent = elm[0].innerText.length;
-                var shouldScroll = elm[0].scrollHeight - 10 < elm.scrollTop() + elm.innerHeight();
-                elm.load("./inclus/discussion/contenu_discussion.php", function() {
-                    if (shouldScroll)
-                        scrollDown(elm);
-                })
-            }, 1000);
+            var elm = $("#discussion");
+            precedent = elm[0].innerText.length;
+            var shouldScroll = elm[0].scrollHeight - 10 < elm.scrollTop() + elm.innerHeight();
+            elm.load("./inclus/discussion/contenu_discussion.php", function() {
+                if (shouldScroll)
+                    scrollDown(elm);
+            })
+        }, 1000);
         $.ajaxSetup({ cache: false });
     });
 </script>
@@ -44,22 +42,18 @@
 </div>
 
 <script>
-    // attrape l'envoi du message pour ne pas réactualiser la page
     $("#form_envoie_message").submit(function(e) {
         e.preventDefault();
         if ($("#discussion_boite_message").val() != "")
             $("#discussion").load("./inclus/discussion/contenu_discussion.php", $("#form_envoie_message").serializeArray(), function() {
-                    // à cause d'un bug dû au rechargement partiel, cet évenement ce détache à chaque fois...
                     $("#menu-toggle").click(function(e_) {
                         e_.preventDefault();
                         $("#wrapper").toggleClass("toggled");
                     });
                 });
-        // vide la zone de text
         document.getElementById("form_envoie_message").reset();
     });
     
-    // utilisée pour montrer / cacher la discussion
     toggeler = function(e) {
         e.preventDefault();
         $("#discussion_conteneur").toggleClass("invisible");

@@ -14,31 +14,34 @@
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="titre_modele"> <p>Titre du modèle</p> </label>
-                            <input type="text" name="titre_modele" class="form-control" id="titre_modele" placeholder="Un nom sympa!"  required autofocus>
+                            <input type="text" name="titre_modele" class="form-control" id="titre_modele" placeholder="Un nom qui en jette !"  required autofocus>
                         </div>
+                    </div>
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="nb_equipes"> <p>Nombre d'équipes différentes max.</p> </label>
-                            <input type="number" min="1" max="99" name="nb_equipes" class="form-control" id="nb_equipes" required>
+                            <input type="number" value="1" min="1" max="99" name="nb_equipes" class="form-control" id="nb_equipes" required>
                         </div>
+                    </div>
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="nb_roles"> <p>Nombre de rôles différents</p> </label>
-                            <input type="number" min="1" max="99" name="nb_roles" class="form-control disabled" id="nb_roles" required>
+                            <input type="number" value="1" min="1" max="99" name="nb_roles" class="form-control disabled" id="nb_roles" required>
                         </div>
+                    </div>
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="nb_actions"> <p>Nombre d'actions différentes</p> </label>
-                            <input type="number" min="1" max="99" name="nb_actions" class="form-control" id="nb_actions" required>
+                            <input type="number" value="1" min="1" max="99" name="nb_actions" class="form-control" id="nb_actions" required>
                         </div>
+                    </div>
 
-                        <div class="form-group" id="fleche1">
-                            <div class="col-sm-10 offset-sm-1">
-                                <button name="action" value="creer" id="bouton1" class="btn btn-primary btn-block">Etape suivante</button>
-                            </div>
+                    <div class="form-group" id="fleche1">
+                        <div class="col-sm-10 offset-sm-1">
+                            <button name="action" value="creer" id="bouton1" class="btn btn-primary btn-block">Etape suivante</button>
                         </div>
                     </div>
                 </form>
@@ -58,14 +61,14 @@
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="nom_equipe"> <p>Nom de l'équipe</p> </label>
-                            <input type="text" name="nom_equipe" class="form-control" id="nom_equipe" placeholder="Un nom sympa!" required autofocus>
+                            <input type="text" name="nom_equipe" class="form-control" id="nom_equipe" placeholder="Un nom fédérateur !" required autofocus>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="taille_equipe"> <p>Taille maximale de l'équipe</p> </label>
-                            <input type="number" min="1" max="99" name="taille_equipe"  class="form-control" id="taille_equipe" required>
+                            <input type="number" value="1" min="1" max="99" name="taille_equipe"  class="form-control" id="taille_equipe" required>
                         </div>
                     </div>
 
@@ -75,7 +78,6 @@
                             <select name="discussion" class="form-control" id="discussion" required>
                                 <option> Oui
                                 <option> Non
-                                <option> Peut-être
                             </select>
                         </div>
                     </div>
@@ -84,15 +86,12 @@
                         <div class="row">
                             <div class="col">
                             <div class="form-group" id="fleche2">
-
                                     <button name="action" value="creer" id="bouton21" class="btn btn-primary btn-block">Etape précédente</button>
                                 </div>
                             </div>
                             <div class="col">   
                             <div class="form-group" id="fleche3">
-
-                                    <button name="action" value="creer" id="bouton22" class="btn btn-primary btn-block">Etape suivante</button>
-                            
+                                    <button name="action" value="creer" id="bouton22" class="btn btn-primary btn-block">Etape suivante</button>                            
                             </div>
                         </div>
                     </div>
@@ -129,8 +128,7 @@
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="desc_role"> <p>Description du rôle</p> </label>
-                            <textarea name="discussion" class="form-control" id="desc_role" required>
-                            </textarea>
+                            <textarea name="discussion" class="form-control" id="desc_role" placeholder="Décris donc qui est ce personnage !" required></textarea>                            
                         </div>
                     </div>
 
@@ -138,15 +136,12 @@
                         <div class="row">
                             <div class="col">
                             <div class="form-group" id="fleche4">
-
                                     <button name="action" value="creer" id="bouton31" class="btn btn-primary btn-block">Etape précédente</button>
                                 </div>
                             </div>
                             <div class="col">   
                             <div class="form-group" id="fleche5">
-
-                                    <button name="action" value="creer" id="bouton32" class="btn btn-primary btn-block">Etape suivante</button>
-                            
+                                    <button name="action" value="creer" id="bouton32" class="btn btn-primary btn-block">Etape suivante</button>                            
                             </div>
                         </div>
                     </div>
@@ -179,8 +174,7 @@
                             <select name="effecteur_action" class="form-control" id="effecteur_action" required>
                                 <option> Vivants
                                 <option> Morts
-                                <option> Equipe 1
-                                <option> Role pyromane
+                                <option> Tous
                             </select>
                         </div>
                     </div>
@@ -191,8 +185,7 @@
                             <select name="cibles_action" class="form-control" id="cibles_action" required>
                                 <option> Vivants
                                 <option> Morts
-                                <option> Equipe 1
-                                <option> Role pyromane
+                                <option> Tous
                             </select>
                         </div>
                     </div>
@@ -201,10 +194,7 @@
                         <div class="col-sm-10 offset-sm-1">
                             <label for="fct_action"> <p>Fonctionnement de l'action </p> </label>
                             <select name="fct_action" class="form-control" id="fct_action" required>
-                                <option> Vote majoritaire nul
-                                <option> Vote majoritaire double
-                                <option> Vote majoritaire rapide
-                                <option> Vote minoritaire
+                                <option> Placeholder
                             </select>
                         </div>
                     </div>
@@ -213,10 +203,7 @@
                         <div class="col-sm-10 offset-sm-1">
                             <label for="effet_action"> <p>Effet de l'action </p> </label>
                             <select name="effet_action" class="form-control" id="effet_action" required>
-                                <option> Tuer
-                                <option> Ressuciter
-                                <option> Protéger
-                                <option> Révéler
+                                <option> Placeholder
                             </select>
                         </div>
                     </div>
@@ -224,23 +211,23 @@
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="horaire_action"> <p>Horaire limite </p> </label>
-                            <input type="time" name="horaire_action"  class="form-control" id="horaire_action" required>
+                            <input type="time" value="10:10 PM" name="horaire_action"  class="form-control" id="horaire_action" required>
                         </div>
                     </div>                                                                    
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
-                            <label for="msg_action"> <p>Message automatique de l'action</p> </label>
-                            <textarea name="msg_action"  class="form-control" id="msg_action" placeholder="Pour avertir vos joueurs de ce qu'il s'est passé dans le chat général !" required>
-                            </textarea>
+                            <label for="msg_action"> <p>Message automatique de l'action (optionnel)</p> </label>
+                            <textarea name="msg_action" class="form-control" id="msg_action" placeholder="Pour avertir vos joueurs de ce qu'il s'est passé dans le chat général !" required></textarea>
+                            
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="desc_action"> <p>Description de l'action</p> </label>
-                            <textarea name="desc_action"  class="form-control" id="desc_action" placeholder="Explique ce que fait l'action!" required>
-                            </textarea>
+                            <textarea name="desc_action"  class="form-control" id="desc_action" placeholder="Explique ce que fait l'action!" required></textarea>
+                            
                         </div>
                     </div>
                     <div class="container">
@@ -248,14 +235,11 @@
                             <div class="col">
                             <div class="form-group" id="fleche6">
 
-                                    <button name="action" value="creer" id="bouton41" class="btn btn-primary btn-block">Etape précédente</button>
-                                </div>
+                                    <button name="action" value="creer" id="bouton41" class="btn btn-primary btn-block">Etape précédente</button>                                </div>
                             </div>
                             <div class="col">   
                             <div class="form-group" id="fleche7">
-
-                                    <button name="action" value="creer" id="bouton42" class="btn btn-primary btn-block">Etape suivante</button>
-                            
+                                    <button name="action" value="creer" id="bouton42" class="btn btn-primary btn-block">Etape suivante</button>                            
                             </div>
                         </div>
                     </div>
@@ -278,8 +262,8 @@
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="desc_modele"> <p>Description de ce modèle</p> </label>
-                            <textarea name="desc_modele" class="form-control" id="desc_modele" placeholder="Une jolie histoire !" required autofocus>
-                            </textarea>
+                            <textarea name="desc_modele" class="form-control" id="desc_modele" placeholder="Une jolie histoire !" required autofocus></textarea>
+                            
                         </div>
                     </div>
 
@@ -315,15 +299,12 @@
                         <div class="row">
                             <div class="col">
                             <div class="form-group" id="fleche8">
-
                                     <button name="action" value="creer" id="bouton51" class="btn btn-primary btn-block">Etape précédente</button>
                                 </div>
                             </div>
                             <div class="col">   
                             <div class="form-group" id="fleche9">
-
-                                    <button name="action" value="creer" id="bouton52" class="btn btn-primary btn-block">Valider et créer le modèle</button>
-                            
+                                    <button name="action" value="creer" id="bouton52" class="btn btn-primary btn-block">Créer le modèle</button>                            
                             </div>
                         </div>
                     </div>
@@ -337,9 +318,6 @@
 
     </div>
 
-<!-- FIN du form -->
-
-
 <script type = "text/javascript"
          src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
          //framework pour l'effet de flash
@@ -351,8 +329,7 @@
 
 
 <script>
-
-    //console.log(document.getElementById("titre_modele").value); ça servira ça
+    //on associe les bonnes fonctions aux boutons suivant et précédent
 
     $("#fleche1").click(function(e) { ClicFlecheImpair(1,e); });
     $("#fleche3").click(function(e) { ClicFlecheImpair(3,e); });
@@ -362,8 +339,11 @@
     $("#fleche2").click(function(e) { ClicFlechePair(2,e); });
     $("#fleche4").click(function(e) { ClicFlechePair(4,e); });
     $("#fleche6").click(function(e) { ClicFlechePair(6,e); }); 
-    $("#fleche8").click(function(e) { ClicFlechePair(8,e); });     
+    $("#fleche8").click(function(e) { ClicFlechePair(8,e); });
 
+    //$("#effecteur_action").click(function(){ MajChoixActions(); });     
+
+    //ce tableau de 5 lignes contient les éléments de chaque menu, pour pouvoir les désactiver ou activer facilement
 
     var elts_menu = [ [$("#titre_modele"),$("#nb_equipes"),$("#nb_roles"),$("#nb_actions"),$("#bouton1")],
     [$("#nom_equipe"),$("#taille_equipe"),$("#discussion"),$("#bouton21"),$("#bouton22")],
@@ -384,6 +364,8 @@
     var cpt_action=1;
     var nb_actions=1;
 
+    //tableaux permettant de temporairement stockés les valeurs des formulaires de création d'équipe, actions et roles
+
     var equipes = [];
     var roles = [];
     var actions = [];
@@ -393,7 +375,7 @@
         e.preventDefault();
             if ((Math.floor(numeroFleche/2)+1)==2 && cpt_equipe<nb_equipes)
             {
-                if ($("#form2")[0].checkValidity())
+                if ($("#form2")[0].checkValidity()) //si les champs sont correctement remplis, on peut passer à l'étape suivante
                 {
                     if (equipes[cpt_equipe-1]==undefined) 
                     equipes.push([$("#nom_equipe").val(),$("#taille_equipe").val(),$("#discussion").val()]); //on enregistre dans le tableau les valeurs du form
@@ -457,6 +439,11 @@
                     $("#role_actuel").text(cpt_role);
                     $("#action_actuel").text(cpt_action);
                 }
+                 else if (numeroFleche == 5) //le second panneau, dont la fleche "suivante" est la numéro 3 transmet au 4eme des équipes qui vont apparaitre dans ses menus déroulants
+                {
+                    MajChoixActions();
+                } 
+ 
             } 
             else 
             {
@@ -467,6 +454,7 @@
 
     function ClicFlechePair (numeroFleche,e) //les fleches paires sont les boutons d'étape précédente
     {
+        e.preventDefault();
         if ((Math.floor(numeroFleche/2)+1)==2 && cpt_equipe>1)
         {                
             cpt_equipe--;
@@ -484,6 +472,17 @@
             {
                 elts_menu[2][i].val(roles[cpt_role-1][i]);
             }
+            $("#role_actuel").text(cpt_role);
+            $("#menu3").effect("highlight", {color:"#6b00a8"}, 1300);
+        }
+        else if ((Math.floor(numeroFleche/2)+1)==4 && cpt_action>1)
+        {
+            cpt_action--;
+            for (i=0; i<=7;i++) //on remet chaque champ aux valeurs précédémment validées par l'utilisateur
+            {
+                elts_menu[3][i].val(actions[cpt_action-1][i]);
+            }
+            $("#action_actuel").text(cpt_action); //enfin, on notifie l'utilisateur qu'il passe à l'étape précédente par un flash violet
             $("#menu4").effect("highlight", {color:"#6b00a8"}, 1300);
         }
         else {
@@ -496,51 +495,82 @@
 
     function DesactiverPanneau(numero)
     {
-        if (numero==1)
-        {
-            $("#titre_modele").attr('disabled','');
-            $("#nb_equipes").attr('disabled','');
-            $("#nb_roles").attr('disabled','');
-            $("#nb_actions").attr('disabled','');
-            $("#bouton1").attr('disabled','');   
-        }
-        else if (numero==2)
-        {
-            $("#nom_equipe").attr('disabled','');
-            $("#taille_equipe").attr('disabled','');
-            $("#discussion").attr('disabled','');
-            $("#bouton21").attr('disabled','');
-            $("#bouton22").attr('disabled','');
-        }     
+        $("#menu" + numero).removeClass("actif"); //pratique
+            elts_menu[numero-1].forEach(function(element)
+            {
+                element.attr('disabled','');
+            })    
     }
 
     function ActiverPanneau(numero)
+    //active le menu associé au numéro demandé
     {
-        if (numero==1)
+        $("#menu" + numero).addClass("actif"); //pratique
+        elts_menu[numero-1].forEach(function(element)
+            {
+                element.removeAttr('disabled','');
+            })               
+    }
+
+    function AfficherPanneau(numero)
+    {
+        $("#menu" + numero).removeClass("invisible"); //pratique
+    }
+
+    var options;
+    
+    function MajChoixActions() //met à jour les options d'effecteurs et de cibles dans la création des actions pour inclure les nouvelles équipes et roles
+    {
+
+        var newOptions = {
+        'vivants' : 'Vivants',
+        'morts' : 'Morts',
+        'tous' : 'Tous',
+        };
+
+        for (i=0; i<equipes.length;i++)
         {
-            $("#titre_modele").attr('enabled','');
-            $("#nb_equipes").attr('enabled','');
-            $("#nb_roles").attr('enabled','');
-            $("#nb_actions").attr('enabled','');
-            $("#bouton1").attr('enabled','');
+            newprop = equipes[i][0];
+            newOptions[newprop] =(equipes[i][0]);
         }
-        else if (numero==2)
+        
+        newprop = $("#nom_equipe").val();
+        newOptions[newprop] = newprop;
+
+        for (i=0; i<roles.length;i++)
         {
-            $("#nom_equipe").attr('enabled','');
-            $("#taille_equipe").attr('enabled','');
-            $("#discussion").attr('enabled','');
-            $("#bouton21").attr('enabled','');
-            $("#bouton22").attr('enabled','');
-        }        
+            newprop = roles[i][0];
+            newOptions[newprop] =(roles[i][0]);
+        }
+        
+        newprop = $("#nom_role").val();
+        newOptions[newprop] = newprop;
+
+        var select1 = $('#effecteur_action');
+        var select2 = $("#cibles_action")
+        
+        if(select1.prop) {
+        options = select1.prop('options');
+        }
+        else {
+            options = select1.attr('options');
+        }
+        $('option', select1).remove();
+
+        if(select2.prop) {
+        options2 = select2.prop('options');
+        }
+        else {
+            options2 = select2.attr('options');
+        }
+        $('option', select2).remove();
+
+        $.each(newOptions, function(val, text) {
+            options[options.length] = new Option(text, val);
+            options2[options2.length] = new Option(text, val);
+        });
+
     }
-
-    function AfficherMasquerPanneau(numero)
-    {
-        $("#menu" + numero).toggleClass("invisible"); //pratique
-    }
-
-
-
 
 </script>
 
