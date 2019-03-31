@@ -26,6 +26,10 @@ li.discussion_message {
     background-color: darkkhaki;
 }
 
+.discussion_message.discussion_utilisateur {
+    background-color : rgb(0, 238, 255);
+}
+
 div.discussion-flottant {
     width: 42%;
 }
@@ -39,3 +43,5 @@ div.discussion-flottant {
 body {
     margin-bottom: 149px;
 }
+
+

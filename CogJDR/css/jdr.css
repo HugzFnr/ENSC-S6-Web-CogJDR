@@ -63,10 +63,12 @@ img.img_banniere {
 }
 
 p.desc_jdr {
-    border-style: solid;
-    border-color: black;
+    border-style: ridge;
+    border-color: green;
     border-width: 1px;
     
+    padding: 5px;
+
     width: 80%;
     margin-left: auto;
     margin-right: auto;
