@@ -24,11 +24,14 @@
     $redirige = isset($_REQUEST['redirection_echec']) ? $_REQUEST['redirection_echec'] : "./#";
     $_REQUEST['redirection_succes'] = isset($_REQUEST['redirection_succes']) ? $_REQUEST['redirection_succes'] : "./#";
     
-    if (isset($_SESSION['indice_jdr_suivi']))
-        maj_jdr_suivi($_REQUEST['id']);
+    // si un ID est précisé, met à jour les données de session
+    if (isset($_REQUEST['id'])) {
+        if (isset($_SESSION['indice_jdr_suivi']))
+            maj_jdr_suivi($_REQUEST['id']);
 
-    if (-1 < $_SESSION['indice_jdr_suivi'])
-        $donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']];
+        if (-1 < $_SESSION['indice_jdr_suivi'])
+            $donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']];
+    }
 
     switch (isset($_REQUEST['action']) ? $_REQUEST['action'] : "afficher") {
         
@@ -133,10 +136,11 @@
          *  - joueur : id_joueur
          */
         case 'virer':
-                if ($donnees_jdr['est_mj']) {
+                if ($donnees_jdr['est_mj'] || $_REQUEST['joueur'] == $donnees_jdr['id_dans']) {
                     sql_delete('Message_', array('id_joueur' => $_REQUEST['joueur']));
                     sql_delete('EstDans', array('id_joueur' => $_REQUEST['joueur']));
                     sql_delete('Joueur', array('id_joueur' => $_REQUEST['joueur']));
+                    $redirige = $_REQUEST['redirection_succes'];
                 }
             break;
 
@@ -147,8 +151,10 @@
          *  - id : id_jdr
          */
         case 'etat_demarrer':
-                if ($donnees_jdr['est_mj'])
+                if ($donnees_jdr['est_mj']) {
                     sql_update('JDR', array('etat_partie' => "deroulement"), array('id_jdr' => $donnees_jdr['id_jdr']));
+                    $redirige = $_REQUEST['redirection_succes'];
+                }
             break;
 
         /**
@@ -158,8 +164,10 @@
          *  - id : id_jdr
          */
         case 'etat_finir':
-                if ($donnees_jdr['est_mj'])
+                if ($donnees_jdr['est_mj']) {
                     sql_update('JDR', array('etat_partie' => "fin"), array('id_jdr' => $donnees_jdr['id_jdr']));
+                    $redirige = $_REQUEST['redirection_succes'];
+                }
             break;
 
 

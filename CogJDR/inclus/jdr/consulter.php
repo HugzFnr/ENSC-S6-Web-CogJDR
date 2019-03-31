@@ -204,6 +204,7 @@
         <hr>
         <form class="w-100" action="./jdr.php">
             <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
+            <input type="hidden" name="redirection_succes" value="./jdr.php?id=<?=$jdr['id_jdr']?>">
 
             <button class="btn btn-primary btn-block w-auto" type="submit" name="action" value="etat_finir">Finir la partie</button>
         </form><?php
