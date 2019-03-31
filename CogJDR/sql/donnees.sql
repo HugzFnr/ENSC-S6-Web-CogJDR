@@ -18,7 +18,7 @@ insert into Utilisateur (`id`, `mdp`, `email`, `img`) values
     (null, '1234', 'cgrenier003@ensc.fr', 'cgrenier003_40ensc.fr.gif');
 
 insert into ModeleJDR (`id_modele_jdr`, `id_createur`, `titre`, `desc_jdr`, `fichier_regles`, `img_banniere`, `img_fond`, `img_logo`, `nb_equipes_max`) values
-    (null, 1, 'Jeux Rigolo', 'Ceci est la description du Jeux Rigolo :). Du coup je rempli cet espcace avec un texte long et plein de fautes de fran&ccedil;ais en tout genre. Btw, ce jeux, tout aussi rigolo qu&apos;il soit, ne se jout qu&apos;à 12 joueus max... donc bon, voil&agrave;.', 'fichier/regles.pdf', 'images/jdr/banniereRigolo.png', 'images/jdr/fondRigolo.png', 'images/jdr/logoRigolo.png', 12);
+    (null, 1, 'Jeux Rigolo', 'Ceci est la description du Jeux Rigolo :). Du coup je rempliS cet espace avec un texte long et plein de fautes de fran&ccedil;ais en tout genre. D&aposailleurs, ce jeu, tout aussi rigolo qu&apos;il soit, ne se joue qu&apos;à 12 joueurs max... donc bon, voil&agrave;.', 'fichier/regles.pdf', 'images/jdr/banniereRigolo.png', 'images/jdr/fondRigolo.png', 'images/jdr/logoRigolo.png', 12);
 
 insert into JDR (`id_jdr`, `id_modele_jdr`, `code_invite`, `nb_max_joueurs`, `nb_min_joueurs`, `jours_ouvrables`, `etat_partie`) values
     (null, 1, "12da0fde", 12, 0, '7 jours', 'lancement');
