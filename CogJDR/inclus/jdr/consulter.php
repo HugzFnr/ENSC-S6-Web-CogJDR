@@ -233,6 +233,36 @@
 
     </div>
 
+<?php
+    if (@$donnees_jdr['est_mj'] && $etat_partie != "fin") { // s'il est MJ il peut finir la partie ?>
+        <hr>
+        <form class="w-100" action="./jdr.php">
+            <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
+            <input type="hidden" name="redirection_succes" value="./jdr.php?id=<?=$jdr['id_jdr']?>">
+
+            <button class="btn btn-primary btn-block w-auto" type="submit" name="action" value="etat_finir">Finir la partie</button>
+        </form><?php
+    }
+?>
+
+<script>
+    // fonction appelée pour créer un MP
+    creerMP = function(event, idA, idB) {
+            event.preventDefault();
+            $.post("./equipe.php", {
+                    action: "creer",
+                    id_modele_equipe: 0,
+                    liste_id_joueur: [idA, idB],
+                    redirection_succes: "./jdr.php?id=<?=$donnees_jdr['id_jdr']?>"
+                }).done(function(data) {
+                        // recharge la page pour afficher la nouvelle discussion
+                        location.reload();
+                        /*console.log(data);
+                        alert("coucou");*/
+                    });
+        }
+</script>
+
     <?php
         if ($etat_partie != "lancement")
             include "./inclus/discussion/discussion.php"

@@ -28,7 +28,7 @@
                             <td><?=$joueur['pseudo']?></td>
                             <?php
                                 if (@$donnees_jdr['est_mj']) { ?>
-                                    <td><a href="./jdr.php?id=<?=$jdr['id_jdr']?>&action=virer&joueur=<?=$joueur['id_joueur']?>">Virer ce joueur</a></td><?php
+                            <td><a href="./jdr.php?id=<?=$jdr['id_jdr']?>&action=virer&joueur=<?=$joueur['id_joueur']?>&redirection_succes=<?=htmlentities("./jdr.php?id=".$jdr['id_jdr'])?>">Virer ce joueur</a></td><?php
                                 }
                             ?>
                         </tr><?php
@@ -56,16 +56,31 @@
 
                         <button class="btn btn-primary btn-block w-auto" type="submit" name="action" value="etat_demarrer">Démarrer la partie</button>
                     </form><?php
-                } elseif (!$a_rejoint && isset($_SESSION['id']) && $etat_partie == "lancement") { // s'il est connecté et que la partie n'a pas commencer, ajout d'un form pour renter un pseudo ?>
-                    <form action="./jdr.php">
-                        <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
-
-                                <label for="rejoindre_pseudo"> Pseudo pour la partie : </label>
-                                <input class="form-control" type="text" name="pseudo" id="rejoindre_pseudo" placeholder="Choisisez un pseudonyme">
-                                
-                                <button class="btn btn-primary btn-block" type="submit" name="action" value="rejoindre">Rejoindre</button>
+                } elseif ($etat_partie == "lancement"  && isset($_SESSION['id'])) { // si la partie n'a pas commencer
+                    if (!$a_rejoint) { // s'il est connecté, ajout d'un form pour renter un pseudo ?>
+                        <form class="w-100" action="./jdr.php">
+                            <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
+                            <input type="hidden" name="redirection_succes" value="./jdr.php?id=<?=$jdr['id_jdr']?>">
                             
-                    </form><?php
+                            <table class="w-100">
+                                <tr>
+                                    <td>
+                                        <label class="float-right" for="rejoindre_pseudo"> Pseudo pour la partie : </label>
+                                        <input class="form-control w-auto float-right" type="text" name="pseudo" id="rejoindre_pseudo" placeholder="Choisisez un pseudonyme">
+                                    </td>
+                                    <td><button class="btn btn-primary btn-block w-auto float-left" type="submit" name="action" value="rejoindre">Rejoindre</button></td>
+                                </tr>
+                            </table>
+                        </form><?php
+                    } else { // sinon il peut se retirer tant que la partie n'a pas commencée ?>
+                        <form class="w-100" action="./jdr.php">
+                            <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
+                            <input type="hidden" name="joueur" value="<?=$donnees_jdr['id_dans']?>">
+                            <input type="hidden" name="redirection_succes" value="./jdr.php?id=<?=$jdr['id_jdr']?>">
+            
+                            <button class="btn btn-primary btn-block w-auto" type="submit" name="action" value="virer">Se Retirer</button>
+                        </form><?php
+                    }
                 } elseif ($etat_partie == "deroulement") { // si la partie est en cours, on ne peut plus rejoindre ?>
                     <h2>Les inscriptions sont closes !</h2><?php
                 } elseif ($etat_partie == "fin") { // de même si la partie est finie ?>

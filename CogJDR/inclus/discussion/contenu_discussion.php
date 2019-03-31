@@ -49,7 +49,7 @@
                 $liste_gents[$message['id_joueur']] = sql_select('Joueur', array('pseudo', 'id_utilisateur'), array('id_joueur' => $message['id_joueur']))->fetch();
 
             $utilisateur = $liste_gents[$message['id_joueur']]; ?>
-            <li class="discussion_message discussion_<?=$message['id_joueur'] == null ? "mj" : "joueur"?>">
+            <li class="discussion_message discussion_<?=$message['id_joueur'] == null ? "mj" : ($message['id_joueur'] == $donnees_jdr['id_dans'] ? "utilisateur" : "joueur")?>">
                 <b class="discussion_debut">[<?=date("m/d G:i", strtotime($message['horaire_publi']))?>] <a href="./compte.php?id=<?=$utilisateur['id_utilisateur']?>"><?=$utilisateur['pseudo']?></a>&nbsp;: </b><i class="discussion_texte"><?=$message['texte']?></i>
             </li><?php
         }

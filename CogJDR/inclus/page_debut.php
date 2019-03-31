@@ -1,5 +1,6 @@
 <?php
 	require_once "./inclus/session.php";
+	require_once "./inclus/connexion.php";
 
 	/**
 	 * Variables qui peuvent être précisées avant l'inclusion de ce fichier :
@@ -136,7 +137,7 @@
 									if (empty($liste_jouees)) { ?>
 										<a class="dropdown-item" href="./jdr.php"><em>Pas de parties en cours</em></a><?php
 									} else foreach ($liste_jouees as $v) { ?>
-										<a class="dropdown-item" href="./jdr.php?id=<?=$v['id_jdr']?>"><?=$v['titre_jdr']?></a><?php
+										<a class="dropdown-item" href="./jdr.php?id=<?=$v['id_jdr']?>"><?=$v['titre_jdr']?> (<?=sql_select(array('MJ', 'Utilisateur'), 'email', array('Utilisateur::id' => 'MJ::id_utilisateur', 'MJ::id_jdr_dirige' => $v['id_jdr']))->fetch()['email']?>)</a><?php
 									}
 								?>
 								<div class="dropdown-divider"></div>
@@ -153,7 +154,7 @@
 									if (empty($liste_masterisees)) { ?>
 										<a class="dropdown-item" href="./creer.php"><em>Pas de parties en cours</em></a><?php
 									} else foreach ($liste_masterisees as $v) { ?>
-										<a class="dropdown-item" href="./jdr.php?id=<?=$v['id_jdr']?>"><?=$v['titre_jdr']?></a><?php
+										<a class="dropdown-item" href="./jdr.php?id=<?=$v['id_jdr']?>"><?=$v['titre_jdr']?> (<?=sql_select('JDR', 'code_invite', array('id_jdr' => $v['id_jdr']))->fetch()['code_invite']?>)</a><?php
 									}
 								?>
 								<div class="dropdown-divider"></div>
@@ -165,7 +166,7 @@
 				<?php } else { ?>
 					<ul class="navbar-nav mr-auto">
 						<li class="nav-item">
-							<a class="nav-link disabled" href="#">Connectez-vous pour rejoindre des jeux rigolos !</a>
+							<a class="nav-link" href="./?action=creer">Connectez-vous ou créez un compte pour rejoindre des jeux rigolos !</a>
 						</li>
 					</ul>
 				<?php } ?>
