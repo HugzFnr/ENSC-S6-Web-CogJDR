@@ -21,8 +21,7 @@
 
         <p>Ce site vous permet de jouer à des parties de jeux de rôle type boîte mail avec vos camarades de promo que vous aimez tant; mais aussi de créer vos propres JDR et les inviter ! ...</p>
         <p>Placeat amet rem fuga. Iste earum dolor est dolorem. Labore nihil voluptas porro non et neque. Quaerat quaerat doloremque nihil alias consequatur. Rerum reprehenderit et dignissimos et.</p>
-        <p>Omnis aspernatur provident illum quod sit rerum provident aut. Tenetur alias in aut et porro. Necessitatibus id ut fugit qui ducimus sed non.</p>
-<?php
+        <p>Omnis aspernatur provident illum quod sit rerum provident aut. Tenetur alias in aut et porro. Necessitatibus id ut fugit qui ducimus sed non.</p><?php
     }
 ?>
 

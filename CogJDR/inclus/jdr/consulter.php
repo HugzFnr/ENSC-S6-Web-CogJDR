@@ -7,9 +7,7 @@
 
 <!-- table des joueurs -->
 <table class="container liste_joueurs">
-    <tr>
-        <th>Adresse e-mail</th><th>Pseudo</th><?php if ($donnees_jdr['est_mj']) foreach ($donnees_jdr['liste_equipe'] as $v) if ($v['titre_equipe'] != "MP") { ?><th><?=$v['titre_equipe']?></th><?php } ?><th></th>
-    </tr>
+    <th>Adresse e-mail</th><th>Pseudo</th><?php if ($donnees_jdr['est_mj'] || $etat_partie == "fin") foreach ($donnees_jdr['liste_equipe'] as $v) if ($v['titre_equipe'] != "MP") { ?><th><?=$v['titre_equipe']?></th><?php } ?><?php if ($etat_partie != "fin") { ?><th></th><?php } ?>
 
     <?php
         // TODO: optimiser cette partie en réduisant le nb d'appels à la base de données (possible ?) notament dans le foreach
@@ -31,8 +29,8 @@
                     ?></td>
                     <td><?=$joueur['pseudo']?></td>
                     <?php
-                        // si l'utilisateur est MJ dans ce JDR, ajout les colonnes indiquant les équipes de chaque joueur
-                        if ($donnees_jdr['est_mj']) {
+                        // si l'utilisateur est MJ dans ce JDR, ou que la partie est finie
+                        if ($donnees_jdr['est_mj'] || $etat_partie == "fin") { // ajout les colonnes indiquant les équipes de chaque joueur
                             foreach ($donnees_jdr['liste_equipe'] as $equipe) if ($equipe['titre_equipe'] != "MP") {
                                 if (sql_select(
                                             array('EstDans'),
@@ -48,28 +46,31 @@
                                 }
                             }
                         }
-                    ?>
-                    <td><?php
-                        // ajout des liens de MP..
-                        if ($joueur['id_utilisateur'] != $_SESSION['id']) { // .. s'il s'agit du joueur d'un autre utilisateur..
-                            $tmp = sql_select(
-                                    array('Equipe', 'EstDans'),
-                                    "COUNT(*)",
-                                    array(
-                                        'Equipe::id_modele_equipe' => 0,
-                                        'EstDans::id_equipe' => 'Equipe::id_equipe',
-                                        'EstDans::id_joueur' => array($joueur['id_joueur'], $donnees_jdr['est_mj'] ? null : $donnees_jdr['id_dans'])
-                                    )
-                                )->fetch();
-                            if ($tmp[0] != ($donnees_jdr['est_mj'] ? 1 : 2)) { // .. s'il n'existe pas déjà une discussion MJ entre ces deux joueurs ?>
-                                <a href="#" onclick="creerMP(event, <?=$joueur['id_joueur']?>, <?=$donnees_jdr['est_mj'] ? "null" : $donnees_jdr['id_dans']?>)">Envoyer un MP</a><?php
-                            }
+
+                        if ($etat_partie != "fin") { // si la partie n'est pas finie, ajoute les cases de MP ?>
+                            <td><?php
+                                // ajout des liens de MP..
+                                if ($joueur['id_utilisateur'] != $_SESSION['id']) { // .. s'il s'agit du joueur d'un autre utilisateur..
+                                    $tmp = sql_select(
+                                            array('Equipe', 'EstDans'),
+                                            "COUNT(*)",
+                                            array(
+                                                'Equipe::id_modele_equipe' => 0,
+                                                'EstDans::id_equipe' => 'Equipe::id_equipe',
+                                                'EstDans::id_joueur' => array($joueur['id_joueur'], $donnees_jdr['est_mj'] ? null : $donnees_jdr['id_dans'])
+                                            )
+                                        )->fetch();
+                                    if ($tmp[0] != ($donnees_jdr['est_mj'] ? 1 : 2)) { // .. s'il n'existe pas déjà une discussion MJ entre ces deux joueurs ?>
+                                        <a href="#" onclick="creerMP(event, <?=$joueur['id_joueur']?>, <?=$donnees_jdr['est_mj'] ? "null" : $donnees_jdr['id_dans']?>)">Envoyer un MP</a><?php
+                                    }
+                                }
+                            ?></td><?php
                         }
-                    ?></td>
+                    ?>
                 </tr><?php
-            } else { // reste des emplacements vide (cas où le JDR n'est pas plein : `$joueur` vaut `false` après le `fetch`)?>
+            } else { // reste des emplacements vide (cas où le JDR n'est pas plein : `$joueur` vaut `false` après le `fetch`) ?>
                 <tr>
-                    <td>-</td><td>-</td><?php if ($donnees_jdr['est_mj']) foreach ($donnees_jdr['liste_equipe'] as $v) if ($v['titre_equipe'] != "MP") { ?><td>-</td><?php } ?><td>-</td>
+            <td>-</td><td>-</td><?php if ($donnees_jdr['est_mj'] || $etat_partie == "fin") foreach ($donnees_jdr['liste_equipe'] as $v) if ($v['titre_equipe'] != "MP") { ?><td>-</td><?php } ?><?php if ($etat_partie != "fin") { ?><td>-</td><?php } ?>
                 </tr><?php
             }
         }
@@ -172,7 +173,7 @@
                                         if ($a_action) { ?>
                                             <button type="submit" name="action" value="effectuer" class="btn btn-secondary float-right">Effectuer l'action</button><?php
                                         } else { ?>
-                                            <span class="btn btn-secondary float-right" btn>Pas d'action&hellip;</span><?php
+                                            <span class="btn btn-secondary float-right">Pas d'action&hellip;</span><?php
                                         } ?>
                                     </form>
                                 </h4><?php
@@ -192,23 +193,36 @@
     }
 ?>
 <!-- FIN liste des actions -->
+<?php
+    if (@$donnees_jdr['est_mj'] && $etat_partie != "fin") { // s'il est MJ il peut finir la partie ?>
+        <hr>
+        <form class="w-100" action="./jdr.php">
+            <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
+
+            <button class="btn btn-primary btn-block w-auto" type="submit" name="action" value="etat_finir">Finir la partie</button>
+        </form><?php
+    }
+?>
 
 <script>
     // fonction appelée pour créer un MP
     creerMP = function(event, idA, idB) {
-        event.preventDefault();
-        $.post("./equipe.php", {
-                action: "creer",
-                id_modele_equipe: 0,
-                liste_id_joueur: [idA, idB],
-                redirection_succes: "./jdr.php?id=<?=$donnees_jdr['id_jdr']?>"
-            }).done(function(data) {
-                    // recharge la page pour afficher la nouvelle discussion
-                    location.reload();
-                    /*console.log(data);
-                    alert("coucou");*/
-                });
-    }
+            event.preventDefault();
+            $.post("./equipe.php", {
+                    action: "creer",
+                    id_modele_equipe: 0,
+                    liste_id_joueur: [idA, idB],
+                    redirection_succes: "./jdr.php?id=<?=$donnees_jdr['id_jdr']?>"
+                }).done(function(data) {
+                        // recharge la page pour afficher la nouvelle discussion
+                        location.reload();
+                        /*console.log(data);
+                        alert("coucou");*/
+                    });
+        }
 </script>
 
-<?php include "./inclus/discussion/discussion.php" ?>
+<?php
+    if ($etat_partie != "lancement")
+        include "./inclus/discussion/discussion.php"
+?>

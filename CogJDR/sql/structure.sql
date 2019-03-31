@@ -104,6 +104,7 @@ create table JDR (
     nb_max_joueurs integer not null,
     nb_min_joueurs integer not null,
     jours_ouvrables enum('5 jours', '6 jours', '7 jours') not null,
+    etat_partie enum('lancement', 'deroulement', 'fin') not null,
 
     foreign key (id_modele_jdr) references ModeleJDR (id_modele_jdr)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;

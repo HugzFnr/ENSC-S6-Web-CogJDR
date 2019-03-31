@@ -34,9 +34,13 @@
                 <tr>
                     <button type="submit" class="invisible position-absolute"></button>
                     <td><button class="btn btn-primary w-100" id="cacher_discussion_dans">Cacher</button></td>
-                    <td><input type="text" class="form-control w-100" name="message_text" id="discussion_boite_message" placeholder="Entrez votre message !" autocomplete="off">
-                    <input type="hidden" name="page_form" value="<?=$_SERVER['REQUEST_URI']?>"></td>
-                    <td><input class="btn btn-primary w-100" type="submit" value="Envoyer"></td>
+                    <?php
+                        if ($etat_partie != "fin") { ?>
+                            <td><input type="text" class="form-control w-100" name="message_text" id="discussion_boite_message" placeholder="Entrez votre message !" autocomplete="off">
+                            <input type="hidden" name="page_form" value="<?=$_SERVER['REQUEST_URI']?>"></td>
+                            <td><input class="btn btn-primary w-100" type="submit" value="Envoyer"></td><?php
+                        }
+                    ?>
                 </tr>
             </table>
         </form>

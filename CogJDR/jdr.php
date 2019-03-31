@@ -7,6 +7,9 @@
      *  1. `creer` : créer un jdr (note : après avoir renseigner les formulaires sur la page)
      *  0. `rejoindre` : rejoindre un jdr (note : après avoir cliquer sur rejoindre de la page `action=afficher`)
      *  0. `quitter` : quitter le jdr [?]
+     *  0. `virer` : retire un joueur de la partie (à n'utiliser que si la partie n'a pas commencé)
+     *  0. `etat_demarrer` : change l'état de la partie de "lancement" vers "deroulement"
+     *  0. `etat_finir` : change l'état de la partie de "deroulement" vers "fin"
      *  0. `afficher` : affiche les informations du jdr selon l'utilisateur (mj ou joueur) (fonctionne avec un code ou avec un id),
      *              c'est l'action par défaut si non précisée (ne redirige pas en cas de succès)
      *
@@ -23,6 +26,7 @@
     
     if (isset($_SESSION['indice_jdr_suivi']))
         maj_jdr_suivi($_REQUEST['id']);
+    $donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']];
 
     switch (isset($_REQUEST['action']) ? $_REQUEST['action'] : "afficher") {
         
@@ -37,13 +41,13 @@
         case "creer":
                 $code = substr(bin2hex(random_bytes(ceil(8 / 2))), 0, 8);
                 sql_insert('JDR', array(
-                    'id_jdr' => null,
-                    'id_modele_jdr' => $_REQUEST['id_modele_jdr'],
-                    'code_invite' => $code,
-                    'nb_max_joueurs' => empty($_REQUEST['nb_max_joueurs']) ? 0 : $_REQUEST['nb_max_joueurs'],
-                    'nb_min_joueurs' => empty($_REQUEST['nb_min_joueurs']) ? 0 : $_REQUEST['nb_min_joueurs'],
-                    'jours_ouvrables' => "7 jours" // voir l'énumération
-                ));
+                        'id_jdr' => null,
+                        'id_modele_jdr' => $_REQUEST['id_modele_jdr'],
+                        'code_invite' => $code,
+                        'nb_max_joueurs' => empty($_REQUEST['nb_joueurs_max']) ? 0 : $_REQUEST['nb_joueurs_max'],
+                        'nb_min_joueurs' => empty($_REQUEST['nb_joueurs_min']) ? 0 : $_REQUEST['nb_joueurs_min'],
+                        'jours_ouvrables' => $_REQUEST['occurence']." jours" // voir l'énumération
+                    ));
                 echo "code d'invitation: <a href=\"./jdr.php?code=$code\">$code";
             break;
 
@@ -120,6 +124,44 @@
             break;
 
         /**
+         * Retire le joueur de la partie (la partie doir être dans l'état "lancement") :
+         * 
+         * _REQUEST :
+         *  - id : id_jdr
+         *  - joueur : id_joueur
+         */
+        case 'virer':
+                if ($donnees_jdr['est_mj']) {
+                    sql_delete('Message_', array('id_joueur' => $_REQUEST['joueur']));
+                    sql_delete('EstDans', array('id_joueur' => $_REQUEST['joueur']));
+                    sql_delete('Joueur', array('id_joueur' => $_REQUEST['joueur']));
+                }
+            break;
+
+        /**
+         * Change l'état de la partie depuis "lancement" vers "deroulement" :
+         * 
+         * _REQUEST:
+         *  - id : id_jdr
+         */
+        case 'etat_demarrer':
+                if ($donnees_jdr['est_mj'])
+                    sql_update('JDR', array('etat_partie' => "deroulement"), array('id_jdr' => $donnees_jdr['id_jdr']));
+            break;
+
+        /**
+         * Change l'état de la partie depuis "deroulement" vers "fin" :
+         * 
+         * _REQUEST:
+         *  - id : id_jdr
+         */
+        case 'etat_finir':
+                if ($donnees_jdr['est_mj'])
+                    sql_update('JDR', array('etat_partie' => "fin"), array('id_jdr' => $donnees_jdr['id_jdr']));
+            break;
+
+
+        /**
          * Affiche des données pertinantes (selon l'utilisateur) sur un JDR :
          * 
          * _REQUEST :
@@ -145,6 +187,8 @@
                     // cherche le JDR correspondand
                     $jdr = $r->fetch();
                     if ($jdr && $modele = sql_select('ModeleJDR', "*", array('id_modele_jdr' => $jdr['id_modele_jdr']))->fetch()) {
+                        $etat_partie = $jdr['etat_partie'];
+
                         $__sous_titre = $modele['titre']." | ".$jdr['code_invite'];
                         $__css_necessaires = array("discussion", "jdr");
                         $__liste_equipes = array();
@@ -164,8 +208,9 @@
                                         exit;
                                     
                                     maj_donnees_jdr();
-            
-                                    if ($donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']]) {
+
+                                    // cette partie récupère toutes équipes à afficher dans la barre latérale
+                                    if ($donnees_jdr && $etat_partie != "lancement") {
                                         $compteur = 0;
 
                                         foreach ($donnees_jdr['liste_equipe'] as $k_ => $v_) if ($v_['discussion_autorisee'] || $donnees_jdr['est_mj']) {
@@ -206,11 +251,13 @@
                             }
 
                         include_once "./inclus/page_debut.php";
-                        
-                        if (!$a_rejoint) // s'il n'a pas encore rejoint
+
+                        // s'il n'a pas encore rejoint ou que la partie n'a pas encore commencé
+                        if ($etat_partie == "lancement" || !$a_rejoint)
                             include "./inclus/jdr/rejoindre.php";
                         else { // sinon ajoute un form pour quitter @Depreciated
-                            include "./inclus/jdr/consulter.php"; ?>
+                            include "./inclus/jdr/consulter.php";
+                            /*?>
 
                             <hr>
                             <form action="./jdr.php">
@@ -219,7 +266,7 @@
                                 <div class="text-right">
                                     <button class="btn btn-danger" type="submit" name="action" value="quitter">Quitter<!--? (retire TOUT, même les msg... -> idée : mettre l'ìd_utilisateur` à `null`) ?--></button>
                                 </div>
-                            </form><?php
+                            </form><?php*/
                         }
 
                         include_once "./inclus/page_fin.php";

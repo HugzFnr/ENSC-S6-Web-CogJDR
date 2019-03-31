@@ -90,9 +90,9 @@
                     elseif (count($a_vote_contre[$indices_majo[0]]) == count($votes)) // on a trouver une égalité
                         $indices_majo[] = $cible;
                     
-                    if (!isset($indices_mino) || count($votes) < count($a_vote_contre[$indices_mino])) // on a trouver un nouveau mino strict
+                    if (!isset($indices_mino) || count($votes) < count($a_vote_contre[$indices_mino[0]])) // on a trouver un nouveau mino strict
                         $indices_mino = array($cible);
-                    elseif (count($votes) < count($a_vote_contre[$indices_mino])) // on a trouver une égalité
+                    elseif (count($votes) == count($a_vote_contre[$indices_mino[0]])) // on a trouver une égalité
                         $indices_majo[] = $cible;
                 }
             }
@@ -139,11 +139,11 @@
                 switch ($modele['action_fct']) {
 
                     case 'voteMajoritaire':
-                            $message = effectuer_action($indice_majo, $context);
+                            $message = effectuer_action($indices_majo[0], $context);
                         break;
 
                     case 'voteMinoritaire':
-                            $message = effectuer_action($indice_mino, $context);
+                            $message = effectuer_action($indices_mino[0], $context);
                         break;
 
                     case 'pouvoir':
