@@ -79,7 +79,7 @@
                         array('EstDans::id_equipe' => $id_equipe)
                     )->fetch()[0];
                 
-                if (count($liste_id_joueur) + $deja_dedans < $taille_equipe_max)
+                if (-1 < $taille_equipe_max && count($liste_id_joueur) + $deja_dedans < $taille_equipe_max)
                     exit;
 
                 // pour ajouter tout les nouveaux membres en une requêtte, on construit tout les tuples de `VALUES`

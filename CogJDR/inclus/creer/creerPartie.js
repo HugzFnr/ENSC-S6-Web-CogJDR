@@ -81,6 +81,7 @@
     { //stocke dans des objets dans donnees{} les valeurs des champs associées à leurs noms
     //la fonction a besoin qu'on spécifie les champs à l'initialisation de donnees
     //avec une correspondance entre les IDs des elements input et les champs de donnees
+
         $.each(donnees, function(cle,val)
         {
         $.each(val, function(scle,sval)

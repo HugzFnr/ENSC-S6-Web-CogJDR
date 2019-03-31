@@ -12,8 +12,19 @@ $("#fleche8").click(function (e) { ClicFlechePair(8, e); });
 
 $("#fleche9").click(function (e) {
     e.preventDefault();
-    FormsVersObjet()
-    TableauxVersObjet();
+
+    if ($("#form5")[0].checkValidity()) {
+        FormsVersObjet()
+        TableauxVersObjet();
+
+        $.post("./inclus/creer/faire_modele.php.php", donnees, function(data) {
+                console.log(data);
+                document.location = "./creer?quoi=partie.php";
+            });
+    }
+    else {
+        alert("Encore un effort, un dernier formulaire dûment rempli stp !");
+    }
 });
 
 //$("#effecteur_action").click(function(){ MajChoixActions(); });     
@@ -253,7 +264,7 @@ var donnees = { //il s'agit de l'objet qui sera envoyé et traité pour la BDD
 function FormsVersObjet() {
     $.each(donnees, function (cle, val) {
         if (cle == 'equipes' || cle == 'roles' || cle == 'actions') {
-            console.log(cle);
+            //console.log(cle);
             $.each(val[0], function (scle, sval) {
                 val[0][scle] = $("#" + scle).val();
             })
@@ -265,7 +276,7 @@ function FormsVersObjet() {
         }
     })
 
-    console.log(donnees);
+    //console.log(donnees);
 }
 
 function TableauxVersObjet() {
@@ -297,14 +308,10 @@ function TableauxVersObjet() {
         donnees.actions.push({});
         k=0;
         $.each(donnees.actions[0], function (cle, val) {
-            console.log("cle :" + cle  + "val : " + val + " machin : ");
+            //console.log("cle :" + cle  + "val : " + val + " machin : ");
             donnees.actions[i+1][cle] = actions[i][k];
             //attention ici à la non correspondance index / objet si on rajoute des input
             k++
         })
     }
-    
-    $.post("./modele.php", donnees, function() {
-            document.location = "./creerPartie.php";
-        });
 }

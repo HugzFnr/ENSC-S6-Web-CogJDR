@@ -204,7 +204,7 @@
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="horaire_action"> <p>Horaire limite </p> </label>
-                            <input type="time" value="10:10 PM" name="horaire_action"  class="form-control" id="horaire_action" required>
+                            <input type="time" name="horaire_action"  class="form-control" id="horaire_action" required>
                         </div>
                     </div>                                                                    
 

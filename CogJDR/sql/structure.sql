@@ -32,7 +32,6 @@ create table ModeleJDR (
     img_banniere varchar(32) not null,
     img_fond varchar(32) not null,
     img_logo varchar(32) not null,
-    nb_equipes_max integer not null,
 
     foreign key (id_createur) references Utilisateur (id)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
