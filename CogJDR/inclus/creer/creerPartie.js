@@ -6,12 +6,15 @@
     $("#fleche2").click(function(e) { ClicFlechePair(2,e); });
     $("#fleche4").click(function(e) { ClicFlechePair(4,e); });
 
+    $("#fleche5").click(function(e){ e.preventDefault(); FormsVersObjet
+        (); });
+
     //$("#effecteur_action").click(function(){ MajChoixActions(); });     
 
     //ce tableau de 5 lignes contient les éléments de chaque menu, pour pouvoir les désactiver ou activer facilement
 
     var elts_menu = [ [$("#boutonCreer"),$("#choix_modele"),$("#bouton1")],
-    [$("#nom_jeu"),$("#nb_joueurs_max"),$("#nb_joueurs_min"),$("#date_ouverture"),$("#date_lancement"),$("#occurence"),$("#bouton21"),$("#bouton22")],
+    [$("#nb_joueurs_max"),$("#nb_joueurs_min"),$("#occurence"),$("#bouton21"),$("#bouton22")],
     [$("#bouton31"),$("#bouton32")],
     ];
 
@@ -68,3 +71,21 @@
     }
 
     var options;
+
+    var donnees = {
+        modele : { choix_modele : -1 },
+        parametres : { nb_joueurs_max : -1, nb_joueurs_min : -1, occurence : -1}
+    };
+
+    function FormsVersObjet()
+    { //stocke dans des objets dans donnees{} les valeurs des champs associées à leurs noms
+    //la fonction a besoin qu'on spécifie les champs à l'initialisation de donnees
+    //avec une correspondance entre les IDs des elements input et les champs de donnees
+        $.each(donnees, function(cle,val)
+        {
+        $.each(val, function(scle,sval)
+            {
+                val[scle] = $("#"+scle).val();
+            })
+        })
+    }

@@ -7,8 +7,6 @@
         <div class="col">
             <div class="container actif" id="menu1">
                 <form id="form1" class="form sign-in" role="form" action="./creerPartie.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="redirection_echec" value="./#">
-                    <input type="hidden" name="redirection_succes" value="./#">
 
                     <h3 class="text-center"> Choix du modèle </h3>
                     <div class="form-group" id="fleche0">
@@ -19,7 +17,7 @@
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
-                            <label for="nb_equipes"> <p>Faire apparaître les modèles pré existaaants</p> </label>
+                            <label for="choix_modele"> <p>Faire apparaître les modèles pré existaaants</p> </label>
                             <input type="number" value="1" min="1" max="99" name="choix_modele" class="form-control" id="choix_modele" required>
                         </div>
                     </div>
@@ -27,7 +25,7 @@
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="nb_roles"> <p>Mauvais placeholder</p> </label>
-                            <input type="number" value="1" min="1" max="99" name="nb_roles" class="form-control disabled" id="nb_roles" required>
+                            <input type="number" value="1" min="1" max="99" name="nb_roles" class="form-control" id="nb_roles" required>
                         </div>
                     </div>
 
@@ -46,49 +44,27 @@
         <div class="col">
             <div class="container invisible" id="menu2">
                 <form id="form2" class="form sign-in" role="form" action="./creerPartie.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="redirection_echec" value="./#">
-                    <input type="hidden" name="redirection_succes" value="./#">
 
                     <h3 class="text-center"> Paramètres de la partie</h3>
+
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
-                            <label for="nom_equipe"> <p>Nom du jeu </p> </label>
-                            <input type="text" name="nom_jeu" class="form-control" id="nom_jeu" placeholder="Un nom qu'on veut y jouer" required autofocus>
+                            <label for="taille_equipe"> <p>Nombre max. de joueurs</p> </label>
+                            <input type="number" value="12" min="1" max="999" name="nb_joueurs_max" class="form-control" id="nb_joueurs_max" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
-                            <label for="taille_equipe"> <p>Nombre max de joueurs</p> </label>
-                            <input type="number" value="12" min="1" max="999" name="nb_joueurs_max" class="form-control" id="nb_joueurs_min" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-sm-10 offset-sm-1">
-                            <label for="discussion"> <p>Nombre min de joueurs</p> </label>
+                            <label for="nb_joueurs_min"> <p>Nombre min. de joueurs</p> </label>
                             <input type="number" value="12" min="1" max="999" name="nb_joueurs_min" class="form-control" id="nb_joueurs_min" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
-                            <label for="discussion"> <p>Date d'ouverture</p> </label>
-                            <input type="date" name="date_ouverture" class="form-control" id="date_ouverture" required>
-                        </div>
-                    </div>                    
-
-                    <div class="form-group">
-                        <div class="col-sm-10 offset-sm-1">
-                            <label for="discussion"> <p>Date de lancement </p> </label>
-                            <input type="date" name="date_lancement" class="form-control" id="date_lancement" required>
-                        </div>
-                    </div> 
-
-                    <div class="form-group">
-                        <div class="col-sm-10 offset-sm-1">
                             <label for="effet_action"> <p>Occurence (jours de fonctionnement) </p> </label>
-                            <select name="occurence" class="form-control" id="occurence" required>
+                            <select name="occurence" form="form2" class="form-control" id="occurence" required>
                                 <option value="6"> Tous les jours sauf le dimanche
                                 <option value="5"> Tous les jours sauf le week-end
                                 <option value="7"> Tous les jours
@@ -121,8 +97,6 @@
         <div class="col">
             <div class="container invisible" id="menu3">
                 <form id="form3" class="form sign-in" role="form" action="./creerPartie.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="redirection_echec" value="./#">
-                    <input type="hidden" name="redirection_succes" value="./#">
 
                     <h3 class="text-center"> Lancement de la partie </h3>
                     <div class="form-group">

@@ -1,4 +1,5 @@
-<?php include "./inclus/page_debut.php" ?>
+<?php $__sous_titre="Creer modèle JDR";
+ include "./inclus/page_debut.php" ?>
 
     <h1 class="text-center"> Créer un modèle de JDR </h1>
     <!-- partie 'Paramètres généraux' -->
@@ -7,8 +8,6 @@
         <div class="col">
             <div class="container actif" id="menu1">
                 <form id="form1" class="form sign-in" role="form" action="./creer.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="redirection_echec" value="./#">
-                    <input type="hidden" name="redirection_succes" value="./#">
 
                     <h3 class="text-center"> Paramètres généraux </h3>
                     <div class="form-group">
@@ -54,8 +53,6 @@
         <div class="col">
             <div class="container invisible" id="menu2">
                 <form id="form2" class="form sign-in" role="form" action="./creer.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="redirection_echec" value="./#">
-                    <input type="hidden" name="redirection_succes" value="./#">
 
                     <h3 class="text-center"> Créer l'équipe <b class="rouge" id="equipe_actuel"> ?? </b>/<b id="equipe_total"> ?? </b> </h3>
                     <div class="form-group">
@@ -76,8 +73,8 @@
                         <div class="col-sm-10 offset-sm-1">
                             <label for="discussion"> <p>Discussion autorisée</p> </label>
                             <select name="discussion" class="form-control" id="discussion" required>
-                                <option> Oui
-                                <option> Non
+                                <option value=true> Oui
+                                <option value=false> Non
                             </select>
                         </div>
                     </div>
@@ -107,8 +104,6 @@
         <div class="col">
             <div class="container invisible" id="menu3">
                 <form id="form3" class="form sign-in" role="form" action="./creer.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="redirection_echec" value="./#">
-                    <input type="hidden" name="redirection_succes" value="./#">
 
                     <h3 class="text-center"> Créer le rôle <b class="rouge" id="role_actuel"> ?? </b>/<b id="role_total"> ?? </b> </h3>
                     <div class="form-group">
@@ -157,8 +152,6 @@
         <div class="col">
             <div class="container invisible" id="menu4">
                 <form id="form4" class="form sign-in" role="form" action="./creer.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="redirection_echec" value="./#">
-                    <input type="hidden" name="redirection_succes" value="./#">
 
                     <h3 class="text-center"> Créer l'action <b class="rouge" id="action_actuel"> ?? </b>/<b id="action_total"> ?? </b> </h3>
                     <div class="form-group">
@@ -218,7 +211,7 @@
                     <div class="form-group">
                         <div class="col-sm-10 offset-sm-1">
                             <label for="msg_action"> <p>Message automatique de l'action (optionnel)</p> </label>
-                            <textarea name="msg_action" class="form-control" id="msg_action" placeholder="Pour avertir vos joueurs de ce qu'il s'est passé dans le chat général !" required></textarea>
+                            <textarea name="msg_action" class="form-control" id="msg_action" placeholder="Pour avertir vos joueurs de ce qu'il s'est passé dans le chat général !"></textarea>
                             
                         </div>
                     </div>
@@ -255,8 +248,6 @@
         <div class="col">
             <div class="container invisible" id="menu5">
                 <form id="form5" class="form sign-in" role="form" action="./creer.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="redirection_echec" value="./#">
-                    <input type="hidden" name="redirection_succes" value="./#">
 
                     <h3 class="text-center"> Finaliser le modèle de JDR</h3>
                     <div class="form-group">
