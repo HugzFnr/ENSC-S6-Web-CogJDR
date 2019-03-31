@@ -45,6 +45,7 @@
             var mdp = document.getElementById("mdp");
             var mdp_confirm = document.getElementById("mdp_confirm");
 
+            // utilisée pour vérivier que les champs sont les même
             function validerMPD() {
                 mdp_confirm.setCustomValidity(mdp.value != mdp_confirm.value ? "Les mots de passe ne correspondent pas" : "");
             }

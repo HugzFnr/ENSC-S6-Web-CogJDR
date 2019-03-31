@@ -1,6 +1,7 @@
 <?php
     session_start();
 
+    // synchronise la variable `$_SESSION` avec la base de données (voir `_session.txt`)
     function maj_donnees_jdr() {
         if (!isset($_SESSION['id']))
             return false;
@@ -93,10 +94,15 @@
         $_SESSION['indice_jdr_suivi'] = count($liste_constructeur) - 1; // indice dans la liste d'au dessus :)
     }
 
-    function maj_jdr_suivi() {
+    /**
+     * Trouve, dans la liste `liste_donnees_jdr`, l'indice du JDR d'ID `$id_jdr`
+     * et met `indice_jdr_suivi`à jour. Retourn `false` si l'ID n'a pas été trouvé
+     * (équivalent à l'utilisateur n'a pas rejoint ce JDR).
+     */
+    function maj_jdr_suivi($id_jdr) {
         if ($_SESSION['indice_jdr_suivi'] < 0)
             foreach ($_SESSION['liste_donnees_jdr'] as $k => $v)
-                if ($v['id_jdr'] == $_REQUEST['id']) {
+                if ($v['id_jdr'] == $id_jdr) {
                     $_SESSION['indice_jdr_suivi'] = $k;
                     return true;
                 }

@@ -3,7 +3,6 @@ div.page {
     width: 90%;
     margin-left: auto;
     margin-right: auto;
-
 }
 
 body {
@@ -31,6 +30,7 @@ h3 {
 a {
     color: darkblue;
 }
+
 .container, .container-fluid {
     background-color: rgba(211, 211, 211, 0.733);
     border-radius : 15px;
