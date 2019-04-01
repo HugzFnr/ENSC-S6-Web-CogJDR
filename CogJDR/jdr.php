@@ -270,6 +270,7 @@
                                         exit;
                                     
                                     maj_donnees_jdr();
+                                    $donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']];
 
                                     // cette partie récupère toutes équipes à afficher dans la barre latérale
                                     if ($donnees_jdr && $etat_partie != "lancement") {

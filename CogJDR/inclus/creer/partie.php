@@ -18,18 +18,18 @@
                     <div class="col-sm-10 offset-sm-1">
                     <label for="choix_modele"> <p> Choix du modèle</p> </label>
                         <select name="choix_modele" class="form-control" id="choix_modele" required>
-
-                        <?php $modelesDispos = sql_select('ModeleJdr',array('titre','id_modele_jdr','img_logo'),array('ModeleJDR::id_createur'=>$_SESSION['id']));
-                        while ($modeleDispo = $modelesDispos->fetch()) { ?>
-                            <option value="<?=$modeleDispo['id_modele_jdr']?>"><?=$modeleDispo['titre']?></option>
-                            <div class='hidden' id="img_cachee.<?=$modeleDispo['id_modele_jdr']?>"><?php echo $modeleDispo['img_logo']; ?>test</div>"; 
-                            <!-- pour récupérer la valeur du logo du jdr choisi et l'afficher en-dessous ensuite -->
-                             <?php
-                        }                    
-                        ?>
-
+                            <?php
+                                $modelesDispos = sql_select(
+                                        'ModeleJdr',
+                                        array('titre', 'id_modele_jdr', 'img_logo'),
+                                        array('ModeleJDR::id_createur' => $_SESSION['id'])
+                                    );
+                                while ($modeleDispo = $modelesDispos->fetch()) { // pour récupérer la valeur du logo du jdr choisi et l'afficher en-dessous ensuite ?>
+                                    <option id="image_choix_<?=$modeleDispo['id_modele_jdr']?>" label="<?=$modeleDispo['titre']?>" value="<?=$modeleDispo['id_modele_jdr']?>"><?=$modeleDispo['img_logo']?></option><?php 
+                                }                    
+                            ?>
                         </select>
-                        <img class="img_logo" id="logo_choix" alt="Le logo du JDR choisi">    
+                        <img class="img_logo" id="logo_choix" alt="Le logo du JDR choisi" src="images/defaut/logo_jdr.png">
                     </div>
                 </div>
 
