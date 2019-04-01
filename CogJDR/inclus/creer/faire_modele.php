@@ -1,9 +1,10 @@
 <?php
-    var_dump($_REQUEST);
-    exit;
 
     require_once "./../connexion.php";
     require_once "./../session.php";
+
+    //sql_insert('Message_',array('id_message'=>null,'id_joueur'=>1,'id_equipe'=>1,'horaire_publi'=>null,'texte'=>var_export($_REQUEST,true)));
+    var_dump($_REQUEST);
 
     /*- création du modèle */
     //$envoi_banniere = send_image($_REQUEST['finaux']['img_banniere'], "banniere_".$_REQUEST['parametres']['titre_modele'], "images/jdr/");
