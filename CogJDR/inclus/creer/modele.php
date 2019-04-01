@@ -261,7 +261,7 @@
                 <div class="form-group">
                     <div class="col-sm-10 offset-sm-1">
                         <label for="fichier_regles"> <p>Fichier de règles</p> </label>
-                        <input type="file" name="fichier_regles" accept=".pdf,.docx,.doc,.odt"  class="form-control" id="fichier_regles" required>
+                        <input type="file" name="fichier_regles" accept=".pdf"  class="form-control" id="fichier_regles" required>
                     </div>
                 </div>
 

@@ -29,11 +29,56 @@ $("#fleche9").click(function (e) {
             TableauxVersObjet();
 
             // TODO: felix-it
-            $.post("./inclus/creer/faire_modele.php", donnees, function(data) {
-                    console.log(data);
-                    alert("coucou");
-                    //document.location = "./creer.php?quoi=partie";
-                });
+            // $.post("./inclus/creer/faire_modele.php", donnees, function(data) {
+            //         console.log(data);
+            //         alert("coucou");
+            //         document.location = "./creer.php?quoi=partie";
+            //     });
+
+            console.log('debut requete');
+    
+            var donneesFormData = objectToFormData(donnees);
+    
+            console.log(donneesFormData);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "./inclus/creer/faire_modele.php", true);
+
+            xhr.onload = function(oEvent) {
+                if (xhr.status == 200) {
+                    console.log("UPLOADED!");
+                }
+            }
+            console.log(donneesFormData.get('desc_modele'));
+            xhr.send(donneesFormData);
+            //$.post("faire_modele.php",donneesFormData);   
+            
+            //fd.append( 'file', input.files[0] );
+            
+            // $.ajax({
+            //   url: "./inclus/creer/faire_modele.php",
+            //   data: donneesFormData,
+            //   processData: false,
+            //   contentType: false,
+            //   type: 'POST',
+            //   dataType: "json",              
+            //   success: function(data){
+            //     console.log('ajax: ' + data);
+            //   },
+            //   error:function(data){
+            //       console.log('error :' + data);
+            //   }
+            // });
+
+            console.log('data sent');
+
+            for (var pair of donneesFormData.entries())
+            {
+            console.log(pair[0]+ ', '+ pair[1]); 
+            }
+
+            //document.location = "./creer.php?quoi=partie";                                
+            
         } else
             alert("Encore un effort, un dernier formulaire dûment rempli stp !");
     });
@@ -179,7 +224,6 @@ function ClicFlechePair(numeroFleche, e) //les fleches paires sont les boutons d
         DesactiverPanneau(Math.floor(numeroFleche / 2) + 1);
         ActiverPanneau(Math.floor(numeroFleche / 2));
     }
-
 }
 
 function DesactiverPanneau(numero) {
@@ -265,7 +309,7 @@ function insererOptions (select,newOptions) //cette fonction nettoie et insere d
 //ces 3 fonctions, appelées à la fin de la création du modèle, permettent de récupérer les données dans un format pertinent (notamment avec des clés et non des index)
 
 
-var donnees = { //il s'agit de l'objet qui sera envoyé et traité pour la BDD
+var donnees = { //structure des données récupérées
     parametres: { titre_modele: "", nb_equipes: -1, nb_roles: -1, nb_actions: -1 },
 
     equipes: [{ nom_equipe: "", taille_equipe: -1, discussion: true }],
@@ -278,12 +322,22 @@ var donnees = { //il s'agit de l'objet qui sera envoyé et traité pour la BDD
     finaux: { desc_modele: "", fichier_regles: "", img_banniere: "", img_fond: "", img_logo: "" },
 };
 
+// var donneesFormData = new FormData(); //il s'agit de l'objet qui sera envoyé et traité pour la BDD par une requete XMLHttp qui conserve les images
+// donneesFormData.append('parametres',donnees.parametres);
+// donneesFormData.append('equipes',donnees.equipes);
+// donneesFormData.append('roles',donnees.roles);
+// donneesFormData.append('actions',donnees.actions);
+// donneesFormData.append('finaux',donnees.finaux);
+
+
 function FormsVersObjet() {
     $.each(donnees, function (cle, val) {
         if (cle == 'equipes' || cle == 'roles' || cle == 'actions') {
             //console.log(cle);
             $.each(val[0], function (scle, sval) {
-                val[0][scle] = $("#" + scle).val();
+                val[0][scle] = $("#" + scle).val();                        
+
+            
             })
         }
         else {
@@ -331,4 +385,43 @@ function TableauxVersObjet() {
             k++
         })
     }
+
+    // console.log(donnees);
+    // $.each(donnees, function (cle, val) {
+    //     console.log("cle :" + cle + " val :" + val);
+    //     donneesFormData.append(cle,val);
+    // });
+
 }
+
+var objectToFormData = function(obj, form, namespace) {
+    
+    var fd = form || new FormData();
+    var formKey;
+    
+    for(var property in obj) {
+      if(obj.hasOwnProperty(property)) {
+        
+        if(namespace) {
+          formKey = namespace + '[' + property + ']';
+        } else {
+          formKey = property;
+        }
+       
+        // if the property is an object, but not a File,
+        // use recursivity.
+        if(typeof obj[property] === 'object' && !(obj[property] instanceof File)) {
+          
+          objectToFormData(obj[property], fd, property);
+          
+        } else {          
+          // if it's a string or a File object
+          fd.append(formKey, obj[property]);
+        }
+        
+      }
+    }
+    
+    return fd;
+      
+  };
