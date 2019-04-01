@@ -112,5 +112,7 @@ function MajImage()
 {
     console.log($("#choix_modele").val());
     //alert($("#img_cachee")[0].innerHTML);
-    $("#logo_choix").attr('src',$("#img_cachee").html());
+    var id = $("#choix_modele").val();
+    var img = $("#image_choix_" + id)[0].innerHTML;
+    $("#logo_choix").attr('src', img);
 }
