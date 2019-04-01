@@ -22,6 +22,8 @@ $("#fleche5").click(function(e) {
             });
     });
 
+$("#choix_modele").attr('oninput','MajImage()');
+
 //$("#effecteur_action").click(function(){ MajChoixActions(); });     
 
 //ce tableau de 5 lignes contient les éléments de chaque menu, pour pouvoir les désactiver ou activer facilement
@@ -102,4 +104,9 @@ function FormsVersObjet()
             val[scle] = $("#"+scle).val();
         })
     })
+}
+
+function MajImage()
+{
+    $("#logo_choix").attr('src','././images/jdr/logospace.png')
 }

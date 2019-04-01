@@ -68,5 +68,15 @@ ol {
     list-style-type : none;
 }
 
+.img_logo {
+    max-width : 150 px;
+    max-height : 150 px;
+    display : block;
+    margin-left : auto;
+    margin-right : auto;
+    margin-top : 5%;
+
+}
+
 
 

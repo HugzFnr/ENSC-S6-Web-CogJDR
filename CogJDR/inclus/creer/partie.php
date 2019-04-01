@@ -16,8 +16,16 @@
 
                 <div class="form-group">
                     <div class="col-sm-10 offset-sm-1">
-                        <label for="choix_modele"> <p>Faire apparaître les modèles pré existaaants</p> </label>
-                        <input type="number" value="1" min="1" max="99" name="choix_modele" class="form-control" id="choix_modele" required>
+                    <label for="choix_modele"> <p> Choix du modèle</p> </label>
+                        <select name="choix_modele" class="form-control" id="choix_modele" required>
+
+                        <?php $modelesDispos = sql_select('ModeleJdr',array('titre','id_modele_jdr'),array('ModeleJDR::id_createur'=>$_SESSION['id']));
+                        while ($modeleDispo = $modelesDispos->fetch()) { 
+                            echo "<option value=$modeleDispo[id_modele_jdr]> $modeleDispo[titre] </option>";
+                        }                    
+                        ?>
+                        </select>
+                        <img class="img_logo" id="logo_choix" alt="Le logo du JDR choisi">    
                     </div>
                 </div>
 

@@ -208,9 +208,9 @@ function MajChoixActions() //met à jour les options d'effecteurs et de cibles d
 {
 
     var newOptions = {
-        'Vivants': 'Vivants',
-        'Morts': 'Morts',
-        'Tous': 'Tous'
+        1: 'Vivants',
+        2: 'Morts',
+        0: 'Tous',
     };
 
     for (i = 0; i < equipes.length; i++) {
