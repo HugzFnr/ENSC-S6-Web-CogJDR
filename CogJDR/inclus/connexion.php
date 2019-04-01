@@ -193,7 +193,7 @@
             unlink($target_file);
         }
 
-        if($image_type != "jpg" && $image_type != "png" && $image_type != "jpeg" && $image_type != "gif" ) {
+        if ($image_type != "jpg" && $image_type != "png" && $image_type != "jpeg" && $image_type != "gif" ) {
             $r.= "Sorry, only JPG, JPEG, PNG & GIF files are allowed. ";
             $upload_success = false;
         }
@@ -209,8 +209,38 @@
         return array('msg' => $r, 'success' => $upload_success, 'fileName' => "$name.$image_type");
     }
 
-    function recup_enum($table,$colonne)
-    {
+    function send_file($file, $name, $target_dir, $ext=array()) {
+        $name = str_replace("%", "_", rawurlencode(str_replace(" ", "-", $name)));
+
+        $file_type = strtolower(pathinfo($target_dir.basename($file["name"]), PATHINFO_EXTENSION));
+
+        $target_file = "$target_dir$name.$file_type";
+
+        $upload_success = true;
+        $r = "";
+
+        if (file_exists($target_file)) {
+            $r.= "File existed. ";
+            unlink($target_file);
+        }
+
+        if (!empty($ext) && !in_array($file_type, $ext)) {
+            $r.= "Sorry, only ".join(", ", $ext)." files are allowed. ";
+            $upload_success = false;
+        }
+
+        if ($upload_success) {
+            if (move_uploaded_file($file["tmp_name"], $target_file))
+                $r.= "The file ".basename($file["name"])." has been uploaded. ";
+
+            else
+                $r.= "Sorry, there was an error uploading your file. ";
+        }
+
+        return array('msg' => $r, 'success' => $upload_success, 'fileName' => "$name.$file_type");
+    }
+
+    function recup_enum($table,$colonne) {
         $sql = "SHOW COLUMNS FROM `$table` LIKE '$colonne'";
         $result = sql_query($sql);
         $row = $result->fetch();

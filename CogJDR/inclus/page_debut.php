@@ -120,7 +120,7 @@
 							$liste_masterisees = [];
 
 							if (!empty($_SESSION['liste_donnees_jdr']))
-								foreach ($_SESSION['liste_donnees_jdr'] as $v) {
+								foreach ($_SESSION['liste_donnees_jdr'] as $v) if ($v['etat_partie'] != "fin") {
 									if ($v['est_mj'])
 										$liste_masterisees[] = $v;
 									else

@@ -3,21 +3,31 @@
     require_once "./../session.php";
 
     /*- création du modèle */
+    $envoi_banniere = send_image($_REQUEST['finaux']['img_banniere'], "banniere_".$_REQUEST['parametres']['titre_modele'], "images/jdr/");
+    $envoi_fond = send_image($_REQUEST['finaux']['img_fond'], "fond_".$_REQUEST['parametres']['titre_modele'], "images/jdr/");
+    $envoi_logo = send_image($_REQUEST['finaux']['img_logo'], "logo_".$_REQUEST['parametres']['titre_modele'], "images/jdr/");
+    $envoi_regles = send_file($_REQUEST['finaux']['fichier_regles'], "regles_".$_REQUEST['parametres']['titre_modele'], "fichiers/jdr/", array("pdf"));
+
+    echo $envoi_banniere['msg']."\n"; // TODO: c'est du debug (x5)
+    echo $envoi_fond['msg']."\n";
+    echo $envoi_logo['msg']."\n";
+    echo $envoi_regles['msg']."\n";
+
     $modele_jdr = array(
             'id_modele_jdr' => null,
             'id_createur' => $_SESSION['id'],
             'titre' => $_REQUEST['parametres']['titre_modele'],
             'desc_jdr' => $_REQUEST['finaux']['desc_modele'],
-            'fichier_regles' => $_REQUEST['finaux']['fichier_regles'],
-            'img_banniere' => $_REQUEST['finaux']['img_banniere'],
-            'img_fond' => $_REQUEST['finaux']['img_fond'],
-            'img_logo' => $_REQUEST['finaux']['img_logo']
+            'fichier_regles' => $envoi_regles['fileName'],
+            'img_banniere' => $envoi_banniere['fileName'],
+            'img_fond' => $envoi_fond['fileName'],
+            'img_logo' => $envoi_logo['fileName']
         );
 
     sql_insert('ModeleJDR', $modele_jdr);
     $id_modele_jdr = sql_select('ModeleJDR', 'MAX(id_modele_jdr)')->fetch()[0];
 
-    /*- équipe vivants / tous / morts */
+    /*- équipes vivants / tous / morts */
     $equipe_tous = array(
             'id_modele_equipe' => null,
             'id_modele_jdr' => $id_modele_jdr,
@@ -62,11 +72,14 @@
 
     /*- liste des roles */
     foreach ($_REQUEST['roles'] as $req_role) {
+        $envoi_role = send_image($req_role['img_role'], "role_".$_REQUEST['parametres']['titre_modele']."_".$req_role['nom_role'], "images/jdr/");
+        echo $envoi_role['msg']."\n";
+
         $role = array(
                 'id_role' => null,
                 'id_modele_jdr' => $id_modele_jdr,
                 'nom_role' => $req_role['nom_role'],
-                'img_role' => $req_role['img_role'],
+                'img_role' => $envoi_role['fileName'],
                 'desc_role' => $req_role['desc_role']
             );
         sql_insert('Role', $role);
@@ -103,6 +116,4 @@
             );
         sql_insert('Cible', $cible);
     }
-
-    echo "\n<br>FIN\n";
 ?>

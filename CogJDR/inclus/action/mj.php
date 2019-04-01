@@ -129,7 +129,7 @@
                 // context de l'action : /!\\ surveiller son contenu pour des raisons de sécurité (ie. pas de mdp dedant lol)
                 $context = array(
                         'action' => $modele,
-                        'vote' => array( // todo
+                        'vote' => array(
                                 'nb_majoritaire' => count($a_vote_contre[$indices_majo[0]]),
                                 'nb_minoritaire' => count($a_vote_contre[$indices_mino[0]]),
                                 'nb_total' => $compteur_vote
@@ -138,20 +138,58 @@
                     );
 
                 switch ($modele['action_fct']) {
-
-                    case 'voteMajoritaire':
-                            $message = effectuer_action($indices_majo[0], $context);
+                    
+                    case 'voteMajoritaireTous': // cas où touts les votes son comptés
+                            foreach ($indices_majo as $id_cible)
+                                $messages[] = effectuer_action($id_cible, $context);
                         break;
 
-                    case 'voteMinoritaire':
-                            $message = effectuer_action($indices_mino[0], $context);
+                    case 'voteMinoritaireTous': // cas où touts les votes son comptés
+                            foreach ($indices_mino as $id_cible)
+                                $messages[] = effectuer_action($id_cible, $context);
                         break;
 
-                    case 'pouvoir':
+                    case 'voteMajoritairePremier': // cas où seul le plus rapide est compé
+                            // détermine pour qui on a voté en premier
+                            $retenu_horaire = strtotime($modele['horaire_activ']);
+                            foreach ($indices_majo as $k => $indice_cible) // pour chaque cible
+                                foreach ($a_vote_contre[$indice_cible] as $indice_votant => $horaires) { // pour chaque votant
+                                    $tmp = strtotime($horaire);
+                                    if ($tmp < $retenu_horaire) { // s'il a voté avant
+                                        $retenu_horaire = $tmp;
+                                        $retenu_cible = $indice_cible;
+                                    }
+                                }
+                            $context['vote']['nb_majoritaire'] = count($a_vote_contre[$retenu_cible]);
+                            $messages = array(effectuer_action($retenu_cible, $context));
+                        break;
+
+                    case 'voteMinoritairePremier': // cas où seul le plus rapide est compé
+                            // détermine pour qui on a voté en premier
+                            $retenu_horaire = strtotime($modele['horaire_activ']);
+                            foreach ($indices_mino as $k => $indice_cible) // pour chaque cible
+                                foreach ($a_vote_contre[$indice_cible] as $indice_votant => $horaires) { // pour chaque votant
+                                    $tmp = strtotime($horaire);
+                                    if ($tmp < $retenu_horaire) { // s'il a voté avant
+                                        $retenu_horaire = $tmp;
+                                        $retenu_cible = $indice_cible;
+                                    }
+                                }
+                            $context['vote']['nb_majoritaire'] = count($a_vote_contre[$retenu_cible]);
+                            $messages = array(effectuer_action($retenu_cible, $context));
+                        break;
+                        
+                    case 'voteMajoritaireNul': // cas où l'action est annulée
+                    case 'voteMinoritaireNul': // cas où l'action est annulée
+                            $messages = array("Il y a eu égalité au vote : l'action n'a donc pas eu lieu...");
+                        break;
+
+                    case 'pouvoir': // TODO
                         break;
                 }
 
-                echo "LeMessage: $message //<br><br>\n";
+                foreach ($messages as $k => $message)
+                    echo "<h5>Message $k:</h5>\n<p>$message</p><br><br>\n\n";
             }
         }
     ?>

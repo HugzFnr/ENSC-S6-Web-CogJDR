@@ -1,7 +1,13 @@
 //on associe les bonnes fonctions aux boutons suivant et précédent
 
 $("#fleche1").click(function (e) { ClicFlecheImpair(1, e); });
-$("#fleche3").click(function (e) { ClicFlecheImpair(3, e); });
+$("#fleche3").click(function (e) {
+        nom = $("#nom_equipe").val().toLowerCase();
+        if (nom == "tous" || nom == "vivants" || nom == "morts" || nom == "vivant" || nom == "mort") {
+            e.preventDefault();
+            alert("T'inquiete pas : les équipes 'tous', 'vivants' et 'morts' sont créées automatiquement... Trouve un autre nom !")
+        } else ClicFlecheImpair(3, e);
+    });
 $("#fleche5").click(function (e) { ClicFlecheImpair(5, e); });
 $("#fleche7").click(function (e) { ClicFlecheImpair(7, e); });
 
@@ -11,21 +17,26 @@ $("#fleche6").click(function (e) { ClicFlechePair(6, e); });
 $("#fleche8").click(function (e) { ClicFlechePair(8, e); });
 
 $("#fleche9").click(function (e) {
-    e.preventDefault();
+        e.preventDefault();
 
-    if ($("#form5")[0].checkValidity()) {
-        FormsVersObjet()
-        TableauxVersObjet();
+        if (!$("#fichier_regles").val().endsWith("pdf")) {
+            alert("Seul les finchiers PDF sont pris en compte.");
+            return;
+        }
 
-        $.post("./inclus/creer/faire_modele.php.php", donnees, function(data) {
-                console.log(data);
-                document.location = "./creer?quoi=partie.php";
-            });
-    }
-    else {
-        alert("Encore un effort, un dernier formulaire dûment rempli stp !");
-    }
-});
+        if ($("#form5")[0].checkValidity()) {
+            FormsVersObjet()
+            TableauxVersObjet();
+
+            // TODO: felix-it
+            $.post("./inclus/creer/faire_modele.php", donnees, function(data) {
+                    console.log(data);
+                    alert("coucou");
+                    //document.location = "./creer.php?quoi=partie";
+                });
+        } else
+            alert("Encore un effort, un dernier formulaire dûment rempli stp !");
+    });
 
 //$("#effecteur_action").click(function(){ MajChoixActions(); });     
 
@@ -197,10 +208,9 @@ function MajChoixActions() //met à jour les options d'effecteurs et de cibles d
 {
 
     var newOptions = {
-        'vivants': 'Vivants',
-        'morts': 'Morts',
-        'tous': 'Tous',
-        'pyrouxmane': 'pyrouxmane',
+        'Vivants': 'Vivants',
+        'Morts': 'Morts',
+        'Tous': 'Tous'
     };
 
     for (i = 0; i < equipes.length; i++) {

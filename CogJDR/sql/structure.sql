@@ -20,18 +20,18 @@ create table Utilisateur (
     id integer not null primary key auto_increment,
     mdp varchar(32) not null,
     email varchar(32) not null,
-    img varchar(48) not null
+    img varchar(128) not null
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 create table ModeleJDR (
     id_modele_jdr integer not null primary key auto_increment, 
     id_createur integer,
     titre varchar(32) not null,
-    desc_jdr varchar(256) not null,
-    fichier_regles varchar(32) not null,
-    img_banniere varchar(32) not null,
-    img_fond varchar(32) not null,
-    img_logo varchar(32) not null,
+    desc_jdr varchar(1024) not null,
+    fichier_regles varchar(128) not null,
+    img_banniere varchar(128) not null,
+    img_fond varchar(128) not null,
+    img_logo varchar(128) not null,
 
     foreign key (id_createur) references Utilisateur (id)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
@@ -49,9 +49,9 @@ create table ModeleEquipe (
 create table Role_ (
     id_role integer not null primary key auto_increment,
     id_modele_jdr integer,
-    img_role varchar(32) not null,
-    nom_role varchar(32) not null,
-    desc_role varchar(256) not null,
+    img_role varchar(128) not null,
+    nom_role varchar(128) not null,
+    desc_role varchar(512) not null,
 
     foreign key (id_modele_jdr) references ModeleJDR (id_modele_jdr)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
@@ -60,12 +60,12 @@ create table ModeleAction (
     id_modele_action integer not null primary key auto_increment,
     id_modele_jdr integer,
     titre_action varchar(32) not null,
-    desc_action varchar(256) not null,
-    message_action varchar(256) not null,
+    desc_action varchar(512) not null,
+    message_action varchar(1024) not null,
     horaire_activ time not null,
     action_effet_id_modele_equipe_depart integer,
     action_effet_id_modele_equipe_arrive integer,
-    action_fct enum('voteMajoritaire', 'voteMinoritaire', 'pouvoir') not null,
+    action_fct enum('voteMajoritaireTous', 'voteMinoritaireTous', 'voteMajoritairePremier', 'voteMinoritairePremier', 'voteMajoritaireNul', 'voteMinoritaireNul', 'pouvoir') not null,
 
     foreign key (action_effet_id_modele_equipe_depart) references ModeleEquipe (id_modele_equipe),
     foreign key (action_effet_id_modele_equipe_arrive) references ModeleEquipe (id_modele_equipe),
@@ -176,7 +176,7 @@ create table Message_ (
     id_joueur integer,
     id_equipe integer,
     horaire_publi timestamp not null default CURRENT_TIMESTAMP,
-    texte varchar(256) not null,
+    texte varchar(1024) not null,
 
     foreign key (id_joueur) references Joueur (id_joueur),
     foreign key (id_equipe) references Equipe (id_equipe)

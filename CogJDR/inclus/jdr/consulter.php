@@ -2,13 +2,13 @@
 
 <img class="img_banniere" src="<?=$modele['img_banniere']?>" alt="Oof">
 
-    <div class="col-sm-12 text-center">
-        <a target="blank" href="<?=sql_select(array('JDR','ModeleJDR'),'fichier_regles',array('JDR::id_modele_jdr'=> 'ModeleJDR::id_modele_jdr','JDR::id_jdr'=>$jdr['id_jdr'])) -> fetch()['fichier_regles'] ?>"> <b> Télécharger les règles <b> </a>
+<div class="col-sm-12 text-center">
+    <a target="blank" href="<?=sql_select(array('JDR','ModeleJDR'),'fichier_regles',array('JDR::id_modele_jdr'=> 'ModeleJDR::id_modele_jdr','JDR::id_jdr'=>$jdr['id_jdr']))->fetch()['fichier_regles'] ?>"><b>Télécharger les règles</b></a>
 
-        <hr>
-        <p> <b> Joueurs actuellement inscrits à cette partie </b> </p>
+    <hr>
+    <p><b>Joueurs actuellement inscrits à cette partie</b></p>
+
     <!-- table des joueurs -->
-
     <table class="container liste_joueurs">
         <th>Adresse e-mail</th><th>Pseudo</th><?php if ($donnees_jdr['est_mj'] || $etat_partie == "fin") foreach ($donnees_jdr['liste_equipe'] as $v) if ($v['titre_equipe'] != "MP") { ?><th><?=$v['titre_equipe']?></th><?php } ?><?php if ($etat_partie != "fin") { ?><th></th><?php } ?>
 
@@ -80,15 +80,13 @@
         ?>
     </table>
     <!-- FIN table des joueurs -->
+</div>
 
-    <hr>
-
-    </div>
-
-    <div class="col-sm-12">
-
+<div class="col-sm-12">
     <?php
         if ($etat_partie != "fin") { ?>
+            <hr>
+
             <!-- liste des actions -->
             <h2>Liste des actions</h2>
             <ol class="liste-actions">
@@ -222,10 +220,9 @@
                         });
             }
     </script>
+</div>
 
-    </div>
-
-    <div class="col-sm-6 offset-sm-5">
+<div class="col-sm-6 offset-sm-5">
     <?php
         if (@$donnees_jdr['est_mj'] && $etat_partie != "fin") { // s'il est MJ il peut finir la partie ?>
             <hr>
@@ -237,7 +234,7 @@
             </form><?php
         }
     ?>
-    </div>
+</div>
 
 <script>
     // fonction appelée pour créer un MP
@@ -257,8 +254,7 @@
         }
 </script>
 
-    <?php
-        if ($etat_partie != "lancement")
-            include "./inclus/discussion/discussion.php"
-    ?>
-
+<?php
+    if ($etat_partie != "lancement")
+        include "./inclus/discussion/discussion.php"
+?>

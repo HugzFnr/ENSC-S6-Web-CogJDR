@@ -13,6 +13,8 @@ liste_donnees_jdr:
             "ID du JDR en question"
         titre_jdr:
             "titre du JDR par jointure avec `JDR` et `ModeleJDR`"
+        etat_partie:
+            "etat de la pertie dans 'lancement', 'deroulement' ou 'fin'"
 
         id_dans:
             "ID de joueur de l'utilisateur dans le JDR, `null` s'il est MJ"

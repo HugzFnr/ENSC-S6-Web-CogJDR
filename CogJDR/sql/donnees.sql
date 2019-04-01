@@ -17,8 +17,8 @@ insert into Utilisateur (`id`, `mdp`, `email`, `img`) values
     (null, 'piou', 'mj@cog.jdr', 'mj_40cog.jdr.png'),
     (null, '1234', 'cgrenier003@ensc.fr', 'cgrenier003_40ensc.fr.gif');
 
-insert into ModeleJDR (`id_modele_jdr`, `id_createur`, `titre`, `desc_jdr`, `fichier_regles`, `img_banniere`, `img_fond`, `img_logo`, `nb_equipes_max`) values
-    (null, 1, 'Jeux Rigolo', 'Ceci est la description du Jeux Rigolo :). Du coup je remplis cet espace avec un texte long et plein de fautes de fran&ccedil;ais en tout genre. Dailleurs, ce jeu, tout aussi rigolo qu&apos;il soit, ne se joue qu&apos;à 12 joueurs max... donc bon, voil&agrave;.', 'fichier/regles.pdf', 'images/jdr/banniereRigolo.png', 'images/jdr/fondRigolo.png', 'images/jdr/logoRigolo.png', 12);
+insert into ModeleJDR (`id_modele_jdr`, `id_createur`, `titre`, `desc_jdr`, `fichier_regles`, `img_banniere`, `img_fond`, `img_logo`) values
+    (null, 1, 'Jeux Rigolo', 'Ceci est la description du Jeux Rigolo :). Du coup je remplis cet espace avec un texte long et plein de fautes de fran&ccedil;ais en tout genre. Dailleurs, ce jeu, tout aussi rigolo qu&apos;il soit, ne se joue qu&apos;à 12 joueurs max... donc bon, voil&agrave;.', 'fichier/regles.pdf', 'images/jdr/banniereRigolo.png', 'images/jdr/fondRigolo.png', 'images/jdr/logoRigolo.png');
 
 insert into JDR (`id_jdr`, `id_modele_jdr`, `code_invite`, `nb_max_joueurs`, `nb_min_joueurs`, `jours_ouvrables`, `etat_partie`) values
     (null, 1, "12da0fde", 12, 0, '7 jours', 'lancement');
@@ -31,19 +31,23 @@ insert into Joueur (`id_joueur`, `id_utilisateur`, `id_jdr_participe`, `pseudo`)
     (null, 3, 1, 'Sel');
 
 insert into ModeleEquipe (`id_modele_equipe`, `id_modele_jdr`, `titre_equipe`, `taille_equipe_max`, `discussion_autorisee`) values
-    (null, 1, 'Les Vivants', 10, 1),
+    (null, 1, 'Vivants', -1, 1),
     (null, 1, 'Sac', 11, 1),
-    (null, 1, 'Les Morts', 9, 0);
+    (null, 1, 'Morts', -1, 0),
+    (null, 1, 'Tous', -1, 1);
 
 insert into Equipe (`id_equipe`, `id_modele_equipe`, `id_jdr`) values
     (null, 1, 1),
     (null, 2, 1),
-    (null, 3, 1);
+    (null, 3, 1),
+    (null, 4, 1);
 
 insert into EstDans (`id_joueur`, `id_equipe`) values
     (1, 1),
     (2, 1),
-    (2, 2);
+    (2, 2),
+    (1, 4),
+    (2, 4);
 
 insert into Message_ (`id_message`, `id_joueur`, `id_equipe`, `horaire_publi`, `texte`) values
     (null, 1, 1, NOW(), "Hey, salut !"),
