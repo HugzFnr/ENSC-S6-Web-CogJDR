@@ -91,7 +91,7 @@
         return $r;
     }
 
-    function sql_insert($table, $data, $multiple=null) {
+    function sql_insert($table, $data, $multiple=null, $id_return=false) {
         global $conn;
 
         $keywords_builder = "";
@@ -130,7 +130,12 @@
             $tuple_builder = join("), (", $tuple_builder);
         }
 
-        return $conn->prepare("INSERT INTO `$table` ($keywords_builder) VALUES ($tuple_builder)")->execute($execute_array);
+        $r = $conn->prepare("INSERT INTO `$table` ($keywords_builder) VALUES ($tuple_builder)")->execute($execute_array);
+
+        if (!$id_return)
+            return $r;
+
+        return sql_select($table, "MAX($id_return)")->fetch()[0];
     }
 
     function sql_update($table, $data, $where) {

@@ -1,4 +1,7 @@
 <?php
+    var_dump($_REQUEST);
+    exit;
+
     require_once "./../connexion.php";
     require_once "./../session.php";
 
@@ -23,9 +26,7 @@
             'img_fond' => "images/jdr/waterfall.gif",//$envoi_fond['fileName'],
             'img_logo' => "images/jdr/logoRigolo.png"//$envoi_logo['fileName']
         );
-
-    sql_insert('ModeleJDR', $modele_jdr);
-    $id_modele_jdr = sql_select('ModeleJDR', 'MAX(id_modele_jdr)')->fetch()[0];
+    $id_modele_jdr = sql_insert('ModeleJDR', $modele_jdr, 'id_modele_jdr');
 
     /*- équipes vivants / tous / morts */
     $equipe_tous = array(
@@ -35,8 +36,7 @@
             'taille_equipe_max' => -1,
             'discussion_autorisee' => true
         );
-    sql_insert('ModeleEquipe', $equipe_tous);
-    $id_modele_equipe_tous = sql_select('ModeleEquipe', 'MAX(id_modele_equipe)')->fetch()[0];
+    $id_modele_equipe_tous = sql_insert('ModeleEquipe', $equipe_tous, null, 'id_modele_equipe');
 
     $equipe_vivant = array(
             'id_modele_equipe' => null,
@@ -45,8 +45,7 @@
             'taille_equipe_max' => -1,
             'discussion_autorisee' => true
         );
-    sql_insert('ModeleEquipe', $equipe_tous);
-    $id_modele_equipe_vivant = sql_select('ModeleEquipe', 'MAX(id_modele_equipe)')->fetch()[0];
+    $id_modele_equipe_vivant = sql_insert('ModeleEquipe', $equipe_tous, null, 'id_modele_equipe');
 
     $equipe_morts = array(
             'id_modele_equipe' => null,
@@ -55,8 +54,9 @@
             'taille_equipe_max' => -1,
             'discussion_autorisee' => false
         );
-    sql_insert('ModeleEquipe', $equipe_tous);
-    $id_modele_equipe_morts = sql_select('ModeleEquipe', 'MAX(id_modele_equipe)')->fetch()[0];
+    $id_modele_equipe_morts = sql_insert('ModeleEquipe', $equipe_tous, null, 'id_modele_equipe');
+
+    $id_equipes = array($id_modele_equipe_tous, $id_modele_equipe_vivant, $id_modele_equipe_morts);
 
     /*- liste des équipes customs */
     foreach ($_REQUEST['equipes'] as $req_equipe) {
@@ -67,7 +67,7 @@
                 'taille_equipe_max' => $req_equipe['taille_equipe'],
                 'discussion_autorisee' => $req_equipe['discussion']
             );
-        sql_insert('ModeleEquipe', $equipe);
+        $id_equipes[] = sql_insert('ModeleEquipe', $equipe, null, 'id_modele_equipe');
     }
 
     /*- liste des roles */
@@ -79,7 +79,7 @@
                 'id_role' => null,
                 'id_modele_jdr' => $id_modele_jdr,
                 'nom_role' => $req_role['nom_role'],
-                'img_role' => ,"images/defaut/utilisateur.png",//$envoi_role['fileName'],
+                'img_role' => "images/defaut/utilisateur.png",//$envoi_role['fileName'],
                 'desc_role' => $req_role['desc_role']
             );
         sql_insert('Role', $role);
@@ -101,8 +101,7 @@
                 'action_effet_id_modele_equipe_arrive' => $id_modele_equipe_arrive,
                 'desc_action' => $req_action['desc_action']
             );
-        sql_insert('ModeleAction', $role);
-        $id_modele_action = sql_select('ModeleAction', 'MAX(id_modele_action)')->fetch()[0];
+        $id_modele_action = sql_insert('ModeleAction', $role, null, 'id_modele_action');
 
         $autorise = array(
                 'id_modele_equipe_autorise' => $req_action['effecteur_action'],
