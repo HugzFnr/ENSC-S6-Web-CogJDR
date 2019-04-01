@@ -45,7 +45,7 @@ $("#fleche9").click(function (e) {
 var elts_menu = [[$("#titre_modele"), $("#nb_equipes"), $("#nb_roles"), $("#nb_actions"), $("#bouton1")],
 [$("#nom_equipe"), $("#taille_equipe"), $("#discussion"), $("#bouton21"), $("#bouton22")],
 [$("#nom_role"), $("#img_role"), $("#desc_role"), $("#bouton31"), $("#bouton32")],
-[$("#titre_action"), $("#effecteur_action"), $("#cibles_action"), $("#fct_action"), $("#effet_action"),
+[$("#titre_action"), $("#effecteur_action"), $("#cibles_action"), $("#fct_origine_action"), $("#fct_arrivee_action"), $("#effet_action"),
 $("#horaire_action"), $("#msg_action"), $("#desc_action"), $("#bouton41"), $("#bouton42")],
 [$("#desc_modele"), $("#fichier_regles"), $("#img_banniere"), $("#img_fond"), $("#img_logo"), $("#bouton51"), $("#bouton52")],
 ];

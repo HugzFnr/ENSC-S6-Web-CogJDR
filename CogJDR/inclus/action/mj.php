@@ -188,8 +188,11 @@
                         break;
                 }
 
-                foreach ($messages as $k => $message)
-                    echo "<h5>Message $k:</h5>\n<p>$message</p><br><br>\n\n";
+                if (@$messages) {
+                    foreach ($messages as $k => $message)
+                        echo "<h5>Message $k:</h5>\n<p>$message</p><br><br>\n\n";
+                    sql_delete('Action_', array('id_modele_action' => $_REQUEST['id'], 'id_jdr' => $donnees_jdr['id_jdr']));
+                }
             }
         }
     ?>
@@ -197,7 +200,7 @@
 
 <?php
     // s'il existe des `Action_` pour ce `ModeleAction`, ajoute un boutton pour effectuer (ou forcer si on est avant l'horaire prévu)
-    if (0 < sql_select('Action_', 'COUNT(*)', array('id_modele_action' => $_REQUEST['id']))->fetch()[0]) { ?>
+    if (0 < sql_select('Action_', 'COUNT(*)', array('id_modele_action' => $_REQUEST['id'], 'id_jdr' => $donnees_jdr['id_jdr']))->fetch()[0]) { ?>
         <hr>
 
         <div class="text-right">

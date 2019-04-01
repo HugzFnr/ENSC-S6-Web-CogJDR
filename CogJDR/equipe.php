@@ -58,8 +58,11 @@
          *  - liste_id_joueur
          */
         case "ajouter":
-                if (!isset($id_equipe))
+                if (!isset($id_equipe)) {
+                    if (!$donnees_jdr['est_mj'])
+                        exit;
                     $id_equipe = $_REQUEST['id'];
+                }
 
                 $liste_id_joueur = $_REQUEST['liste_id_joueur'];
 
@@ -78,13 +81,13 @@
                         'COUNT(*)',
                         array('EstDans::id_equipe' => $id_equipe)
                     )->fetch()[0];
-                
-                if (-1 < $taille_equipe_max && count($liste_id_joueur) + $deja_dedans < $taille_equipe_max)
+
+                if (-1 < $taille_equipe_max && $taille_equipe_max < count($liste_id_joueur) + $deja_dedans)
                     exit;
 
                 // pour ajouter tout les nouveaux membres en une requêtte, on construit tout les tuples de `VALUES`
                 $equipe_constructeur = [];
-        
+
                 foreach ($liste_id_joueur as $id_joueur) if ($id_joueur)
                     $equipe_constructeur[] = array($id_joueur, $id_equipe);
 
@@ -102,9 +105,26 @@
                                 )
                             )->fetch()['titre_equipe']
                     );
-                $_SESSION['indice_jdr_suivi'] = count($_SESSION['liste_donnees_jdr']) - 1;
+                $_SESSION['indice_jdr_suivi'][$_SESSION['indice_jdr_suivi']]['indice_equipe_discussion_suivi'] = count($_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']]['liste_equipe']) - 1;
 
                 unset($redirige);
+
+                if (isset($_REQUEST['id']))
+                    $redirige = $_REQUEST['redirection_succes'];
+            break;
+
+        /**
+         * Retire des joueurs d'une équipe du JDR :
+         * 
+         * _REQUEST :
+         *  - id
+         *  - liste_id_joueur
+         */
+        case "retirer":
+                if (!$donnees_jdr['est_mj'])
+                    exit;
+                sql_delete('EstDans', array('id_equipe' => $_REQUEST['id'], 'id_joueur' => $_REQUEST['liste_id_joueur']));
+                $redirige = $_REQUEST['redirection_succes'];
             break;
 
         /**

@@ -87,8 +87,9 @@
 
     /*- liste des actions (avec cible et autorise) */
     foreach ($_REQUEST['actions'] as $req_action) {
-        $id_modele_equipe_depart = $id_modele_equipe_tous;
-        $id_modele_equipe_arrive = $id_modele_equipe_tous;
+        if ($req_action['fct_origine_action'] != 0) // on évite que le MJ retire quelqu'un de l'équipe "Tous"
+            $id_modele_equipe_depart = $id_equipes[$req_action['fct_origine_action']];
+        $id_modele_equipe_arrive = $id_equipes[$req_action['fct_arrivee_action']];
 
         $action = array(
                 'id_modele_action' => null,

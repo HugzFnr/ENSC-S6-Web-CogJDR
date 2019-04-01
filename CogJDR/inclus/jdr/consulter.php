@@ -36,16 +36,25 @@
                             if ($donnees_jdr['est_mj'] || $etat_partie == "fin") { // ajout les colonnes indiquant les équipes de chaque joueur
                                 foreach ($donnees_jdr['liste_equipe'] as $equipe) if ($equipe['titre_equipe'] != "MP") {
                                     if (sql_select(
-                                                array('EstDans'),
+                                                array('Equipe', 'ModeleEquipe'),
+                                                'ModeleEquipe.titre_equipe',
+                                                array(
+                                                        'ModeleEquipe::id_modele_equipe' => 'Equipe::id_modele_equipe',
+                                                        'Equipe::id_equipe' => $equipe['id_equipe']
+                                                    )
+                                            )->fetch()['titre_equipe'] == "Tous") { // si c'est l'équipe "Tous", on de l'affiche pas... ?>
+                                        <td></td><?php
+                                    } elseif (sql_select(
+                                                'EstDans',
                                                 "*",
                                                 array(
-                                                    'id_joueur' => $joueur['id_joueur'],
-                                                    'id_equipe' => $equipe['id_equipe']
-                                                )
+                                                        'id_joueur' => $joueur['id_joueur'],
+                                                        'id_equipe' => $equipe['id_equipe']
+                                                    )
                                             )->fetch()) { ?>
-                                        <td>&cross;</td><?php
+                                        <td><a title="Retirer de" href="./equipe.php?action=retirer&id=<?=$equipe['id_equipe']?>&liste_id_joueur[]=<?=$joueur['id_joueur']?>&redirection_succes=./jdr.php?id=<?=$donnees_jdr['id_jdr']?>">&cross;</a></td><?php
                                     } else { ?>
-                                        <td></td><?php
+                                        <td><a title="Ajouter à" href="./equipe.php?action=ajouter&id=<?=$equipe['id_equipe']?>&liste_id_joueur[]=<?=$joueur['id_joueur']?>&redirection_succes=./jdr.php?id=<?=$donnees_jdr['id_jdr']?>">&plus;</a></td><?php
                                     }
                                 }
                             }
@@ -138,7 +147,7 @@
                         $compteur_action_ol1++;
 
                         if ($donnees_jdr['est_mj']) // s'il est MJ on compte le nombre de réponse ce form a eu
-                            $a_repondu = sql_select('Action_', 'COUNT(*)', array('Action_::id_modele_action' => $modele_action['id_modele_action']))->fetch()[0];
+                            $a_repondu = sql_select('Action_', 'COUNT(*)', array('id_modele_action' => $modele_action['id_modele_action'], 'id_jdr' => $donnees_jdr['id_jdr']))->fetch()[0];
                         else // sinon on veut savoir si ce joueur à répondu
                             $a_repondu = !$donnees_jdr['est_mj'] && sql_select(
                                     array('Action_'),
@@ -167,7 +176,6 @@
                     <ol class="liste-actions">
                         <?php
                             foreach ($action_finies as $modele_action) { ?>
-
                                 <li>
                                     <?php
                                         if ($donnees_jdr['est_mj']) {
@@ -197,6 +205,35 @@
                             }
                         ?>
                     </ol><?php
+                } else { // dans le cas d'un joueur lambda, on regarde s'il a un rôle à jouer
+                    $r = sql_select(
+                            array('Joueur', 'JDR', 'ModeleAction', 'Permet', 'Role_', 'EstUn'),
+                            array('Role_.id_role', 'Role_.img_role', 'Role_.nom_role', 'Role_.desc_role', 'Permet.id_modele_action'),
+                            array(
+                                    'Joueur::id_joueur' => 'EstUn::id_joueur',
+                                    'EstUn::id_role' => 'Role_::id_role',
+                                    'Role_::id_modele_jdr' => 'JDR::id_modele_jdr',
+                                    'JDR::id_jdr' => $donnees_jdr['id_jdr'],
+                                    'Permet::id_role' => 'Role_::id_role',
+                                    'Joueur::id_joueur' => $donnees_jdr['id_dans']
+                                )
+                        );
+
+                    if (0 < $r->rowCount()) { ?>
+                        <h2>Vos actions disponibles</h2>
+                        <ol class="liste-actions">
+                            <?php
+                                while ($role = $r->fetch()) { ?>
+                                    <li>
+                                        <h4><?=$role['nom_role']?></h4>
+                                        <img src="images/jdr/<?=$role['img_role']?>" alt="Oof">
+                                        <p><?=$role['desc_role']?></p>
+                                        <a href="./action?id=<?=$role['id_modele_action']?>">aller faire l'action lol</a>
+                                    </li><?php
+                                }
+                            ?>
+                        </ol><?php
+                    }
                 }
             ?>
             <!-- FIN liste des actions --><?php

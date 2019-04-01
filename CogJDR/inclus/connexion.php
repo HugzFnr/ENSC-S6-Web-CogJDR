@@ -20,6 +20,16 @@
         return $string;
     }
 
+    function prepare_execute($conn, $string, $data) {
+        /*-*/
+        /*-echo "<code class=\"sql-request\">".prepared($string, $data)."</code><br>\n";*/
+        /*-*/
+
+        $r = $conn->prepare($string);
+        $r->execute($data);
+        return $r;
+    }
+
     function sql_select($table, $value, $where=array(), $order=null, $distinct=false) {
         global $conn;
 
@@ -82,13 +92,10 @@
                 $sep = ", ";
             }
 
-        /*-*/
-        /*-echo "<code>".prepared("$value_builder $table_builder $where_builder $order_builder", $execute_array)."</code><br>\n";*/
-        /*-*/
-
-        $r = $conn->prepare("$value_builder $table_builder $where_builder $order_builder");
+        /*$r = $conn->prepare("$value_builder $table_builder $where_builder $order_builder");
         $r->execute($execute_array);
-        return $r;
+        return $r;*/
+        return prepare_execute($conn, "$value_builder $table_builder $where_builder $order_builder", $execute_array);
     }
 
     function sql_insert($table, $data, $multiple=null, $id_return=false) {
@@ -130,7 +137,8 @@
             $tuple_builder = join("), (", $tuple_builder);
         }
 
-        $r = $conn->prepare("INSERT INTO `$table` ($keywords_builder) VALUES ($tuple_builder)")->execute($execute_array);
+        //$r = $conn->prepare("INSERT INTO `$table` ($keywords_builder) VALUES ($tuple_builder)")->execute($execute_array);
+        $r = prepare_execute($conn, "INSERT INTO `$table` ($keywords_builder) VALUES ($tuple_builder)", $execute_array);
 
         if (!$id_return)
             return $r;
@@ -149,29 +157,89 @@
             $sep = ", ";
         }
 
-        $where_builder = "";
-        $sep = "";
+        $execute_array = array();
+        $execute_index = 'a';
 
+        $where_builder = empty($where) ? "1" : "";
+        $sep = "";
         foreach ($where as $k => $v) {
-            $where_builder.= "$sep$k = :$k";
+            if (is_string($k) && strpos($k, "::") !== false)
+                $where_builder.= "$sep".str_replace("::", ".", $k);
+            else
+                $where_builder.= "$sep$k";
+
+            if (is_array($v)) {
+                $where_builder.= " IN (";
+                $sep_ = "";
+                foreach ($v as $v_) {
+                    if (strpos($v_, "::") !== false)
+                        $where_builder.= "$sep_".str_replace("::", ".", $v_);
+                    else {
+                        $where_builder.= "$sep_:$execute_index";
+                        $execute_array[$execute_index++] = $v_;
+                    }
+
+                    $sep_ = ", ";
+                }
+                $where_builder.= ")";
+            } else {
+                if (strpos($v, "::") !== false)
+                    $where_builder.= "= ".str_replace("::", ".", $v);
+                else {
+                    $where_builder.= "= :$execute_index";
+                    $execute_array[$execute_index++] = $v;
+                }
+            }
+
             $sep = " AND ";
         }
 
-        return $conn->prepare("UPDATE `$table` SET $change_builder WHERE $where_builder")->execute($data + $where);
+        //return $conn->prepare("UPDATE `$table` SET $change_builder WHERE $where_builder")->execute($data + $execute_array);
+        return prepare_execute($conn, "UPDATE `$table` SET $change_builder WHERE $where_builder", $data + $execute_array);
     }
 
     function sql_delete($table, $where) {
         global $conn;
 
-        $where_builder = "";
-        $sep = "";
+        $execute_array = array();
+        $execute_index = 'a';
 
+        $where_builder = empty($where) ? "1" : "";
+        $sep = "";
         foreach ($where as $k => $v) {
-            $where_builder.= "$sep$k = :$k";
+            if (is_string($k) && strpos($k, "::") !== false)
+                $where_builder.= "$sep".str_replace("::", ".", $k);
+            else
+                $where_builder.= "$sep$k";
+
+            if (is_array($v)) {
+                $where_builder.= " IN (";
+                $sep_ = "";
+                foreach ($v as $v_) {
+                    if (strpos($v_, "::") !== false)
+                        $where_builder.= "$sep_".str_replace("::", ".", $v_);
+                    else {
+                        $where_builder.= "$sep_:$execute_index";
+                        $execute_array[$execute_index++] = $v_;
+                    }
+
+                    $sep_ = ", ";
+                }
+                $where_builder.= ")";
+            } else {
+                if (strpos($v, "::") !== false)
+                    $where_builder.= "= ".str_replace("::", ".", $v);
+                else {
+                    $where_builder.= "= :$execute_index";
+                    $execute_array[$execute_index++] = $v;
+                }
+            }
+
             $sep = " AND ";
         }
 
-        return $conn->prepare("DELETE FROM `$table` WHERE $where_builder")->execute($where);
+        //return $conn->prepare("DELETE FROM `$table` WHERE $where_builder")->execute($execute_array);
+        return prepare_execute($conn, "DELETE FROM `$table` WHERE $where_builder", $execute_array);
     }
 
     function send_image($file, $name, $target_dir="./images/") {
