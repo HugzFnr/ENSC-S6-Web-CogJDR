@@ -1,5 +1,7 @@
 //on associe les bonnes fonctions aux boutons suivant et précédent
 
+$("#fleche0").click(function(e) { e.preventDefault();});
+
 $("#fleche1").click(function(e) {
         if ($("#pseudo_mj").val() == "") {
             e.preventDefault();
@@ -108,5 +110,7 @@ function FormsVersObjet()
 
 function MajImage()
 {
-    $("#logo_choix").attr('src','././images/jdr/logospace.png')
+    console.log($("#choix_modele").val());
+    //alert($("#img_cachee")[0].innerHTML);
+    $("#logo_choix").attr('src',$("#img_cachee").html());
 }
