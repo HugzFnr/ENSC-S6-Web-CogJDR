@@ -21,7 +21,7 @@ insert into ModeleJDR (`id_modele_jdr`, `id_createur`, `titre`, `desc_jdr`, `fic
     (null, 1, 'Jeux Rigolo', 'Ceci est la description du Jeux Rigolo :). Du coup je remplis cet espace avec un texte long et plein de fautes de fran&ccedil;ais en tout genre. Dailleurs, ce jeu, tout aussi rigolo qu&apos;il soit, ne se joue qu&apos;à 12 joueurs max... donc bon, voil&agrave;.', 'fichiers/regles.pdf', 'images/jdr/banniereRigolo.png', 'images/jdr/fondRigolo.png', 'images/jdr/logoRigolo.png');
 
 insert into ModeleJDR (`id_modele_jdr`, `id_createur`, `titre`, `desc_jdr`, `fichier_regles`, `img_banniere`, `img_fond`, `img_logo`) values
-    (null, 1, 'Jeu tres rigolo', 'Ceci est une description assez courte.', 'fichier/SpaceRegles.pdf', 'images/jdr/bannerspace.jpg', 'images/jdr/bgspace.jpg', 'images/jdr/logospace.png');
+    (null, 1, 'Jeu espace WOAW', 'Ceci est une description assez courte.', 'fichier/SpaceRegles.pdf', 'images/jdr/bannerspace.jpg', 'images/jdr/bgspace.jpg', 'images/jdr/logospace.png');
 
 insert into JDR (`id_jdr`, `id_modele_jdr`, `code_invite`, `nb_max_joueurs`, `nb_min_joueurs`, `jours_ouvrables`, `etat_partie`) values
     (null, 1, "12da0fde", 12, 0, '7 jours', 'lancement');

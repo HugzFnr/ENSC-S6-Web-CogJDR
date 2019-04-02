@@ -1,3 +1,5 @@
+<style type="text/css"> body { background-image: url("<?= $modele['img_fond'] ?>"); } </style>  <!-- //affiche le fond du JDR actif s'il existe -->
+
 <h1 class="text-center">JDR : <?=$modele['titre']?></h1>
 
 <img class="img_banniere" src="<?=$modele['img_banniere']?>" alt="Oof">
@@ -6,7 +8,7 @@
     <a target="blank" href="<?=sql_select(array('JDR','ModeleJDR'),'fichier_regles',array('JDR::id_modele_jdr'=> 'ModeleJDR::id_modele_jdr','JDR::id_jdr'=>$jdr['id_jdr']))->fetch()['fichier_regles'] ?>"><b>Télécharger les règles</b></a>
 
     <hr>
-    <p><b>Joueurs actuellement inscrits à cette partie</b></p>
+    <p><b> Joueurs actuellement inscrits à cette partie</b></p>
 
     <!-- table des joueurs -->
     <table class="container liste_joueurs">

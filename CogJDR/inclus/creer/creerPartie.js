@@ -110,9 +110,9 @@ function FormsVersObjet()
 
 function MajImage()
 {
-    console.log($("#choix_modele").val());
     //alert($("#img_cachee")[0].innerHTML);
     var id = $("#choix_modele").val();
-    var img = $("#image_choix_" + id)[0].innerHTML;
+    var img = $("#image_choix_" + id).attr('label');
+    console.log(img);
     $("#logo_choix").attr('src', img);
 }

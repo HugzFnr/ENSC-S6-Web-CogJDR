@@ -28,29 +28,27 @@ $("#fleche9").click(function (e) {
             FormsVersObjet()
             TableauxVersObjet();
 
-            // TODO: felix-it
-            // $.post("./inclus/creer/faire_modele.php", donnees, function(data) {
-            //         console.log(data);
-            //         alert("coucou");
-            //         document.location = "./creer.php?quoi=partie";
-            //     });
+            //TODO: felix-it
+            $.post("./inclus/creer/faire_modele.php", donnees, function(data) {
+                    document.location = "./creer.php?quoi=partie";
+                });
 
-            console.log('debut requete');
+            // console.log('debut requete');
     
-            var donneesFormData = objectToFormData(donnees);
+            // var donneesFormData = objectToFormData(donnees);
     
-            console.log(donneesFormData);
+            // console.log(donneesFormData);
 
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "./inclus/creer/faire_modele.php", true);
+            // var xhr = new XMLHttpRequest();
+            // xhr.open("POST", "./inclus/creer/faire_modele.php", true);
 
-            xhr.onload = function(oEvent) {
-                if (xhr.status == 200) {
-                    console.log("UPLOADED!");
-                }
-            }
-            console.log(donneesFormData.get('desc_modele'));
-            xhr.send(donneesFormData);
+            // xhr.onload = function(oEvent) {
+            //     if (xhr.status == 200) {
+            //         console.log("UPLOADED!");
+            //     }
+            // }
+            // console.log(donneesFormData.get('desc_modele'));
+            // xhr.send(donneesFormData);
             //$.post("faire_modele.php",donneesFormData);   
             
             //fd.append( 'file', input.files[0] );
@@ -70,12 +68,12 @@ $("#fleche9").click(function (e) {
             //   }
             // });
 
-            console.log('data sent');
+            // console.log('data sent');
 
-            for (var pair of donneesFormData.entries())
-            {
-            console.log(pair[0]+ ', '+ pair[1]); 
-            }
+            // for (var pair of donneesFormData.entries())
+            // {
+            // console.log(pair[0]+ ', '+ pair[1]); 
+            // }
 
             //document.location = "./creer.php?quoi=partie";                                
             

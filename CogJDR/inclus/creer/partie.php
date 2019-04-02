@@ -25,7 +25,7 @@
                                         array('ModeleJDR::id_createur' => $_SESSION['id'])
                                     );
                                 while ($modeleDispo = $modelesDispos->fetch()) { // pour récupérer la valeur du logo du jdr choisi et l'afficher en-dessous ensuite ?>
-                                    <option id="image_choix_<?=$modeleDispo['id_modele_jdr']?>" label="<?=$modeleDispo['titre']?>" value="<?=$modeleDispo['id_modele_jdr']?>"><?=$modeleDispo['img_logo']?></option><?php 
+                                    <option id="image_choix_<?=$modeleDispo['id_modele_jdr']?>" label="<?=$modeleDispo['img_logo']?>" value="<?=$modeleDispo['id_modele_jdr']?>"><?=$modeleDispo['titre']?></option><?php 
                                 }                    
                             ?>
                         </select>

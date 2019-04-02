@@ -113,7 +113,7 @@
 			<!-- ens des élm qui collapse -->
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<?php if (isset($_SESSION['id'])) { ?>
-					<!-- les 2 listes de JRD -->
+					<!-- les 2 listes de JDR -->
 					<ul class="navbar-nav mr-auto">
 						<?php
 							$liste_jouees = [];
