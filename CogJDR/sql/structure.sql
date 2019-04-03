@@ -18,7 +18,7 @@ drop table if exists Utilisateur;
 
 create table Utilisateur (
     id integer not null primary key auto_increment,
-    mdp varchar(32) not null,
+    mdp varchar(255) not null,
     email varchar(32) not null,
     img varchar(128) not null
 ) engine=innodb character set utf8 collate utf8_unicode_ci;

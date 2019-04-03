@@ -13,7 +13,7 @@
         while ($joueur = $r->fetch()) {
             $bla = sql_select(
                     array('JDR', 'ModeleJDR'),
-                    array('ModeleJDR.titre', 'JDR.etat_partie'),
+                    array('ModeleJDR.titre', 'ModeleJDR.img_fond', 'JDR.etat_partie'),
                     array(
                         'JDR::id_modele_jdr' => 'ModeleJDR::id_modele_jdr',
                         'JDR::id_jdr' => $joueur['id_jdr_participe'],
@@ -25,6 +25,7 @@
                     'id_jdr' => $joueur['id_jdr_participe'],
                     'titre_jdr' => $bla['titre'],
                     'etat_partie' => $bla['etat_partie'],
+                    'img_fond' => $bla['img_fond'],
 
                     'id_dans' => $joueur['id_joueur'],
                     'pseudo_dans' => $joueur['pseudo'],

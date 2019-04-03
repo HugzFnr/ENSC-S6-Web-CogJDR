@@ -13,6 +13,9 @@
 	 * 
 	 * 	- $__liste_equipes
 	 * 		affiche, si précisée, la liste des équipes dans la sidenav en `<a $v['href']>$v['text']</a>`
+	 * 
+	 * 	- $__fond_ecran
+	 * 		si précisé, se substitu au fond d'écran par défaut
 	 */
 ?>
 
@@ -28,8 +31,14 @@
 	
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/global.css">
 	<?php
+		// CSS selon les pages
 		if (!empty($__css_necessaires)) foreach ($__css_necessaires as $v) { ?>
 			<link rel="stylesheet" type="text/css" media="screen" href="./css/<?=$v?>.css"><?php
+		}
+
+		// fond d'acran selon les JDR
+		if (!empty($__fond_ecran)) { ?>
+			<style type="text/css"> body { background-image: url("<?=$__fond_ecran?>"); } </style><?php
 		}
 	?>
 

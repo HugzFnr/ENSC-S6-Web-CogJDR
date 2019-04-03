@@ -254,6 +254,7 @@
                         $__sous_titre = $modele['titre']." | ".$jdr['code_invite'];
                         $__css_necessaires = array("discussion", "jdr");
                         $__liste_equipes = array();
+                        $__fond_ecran = $modele['img_fond'];
 
                         $est_connecte = isset($_SESSION['id']);
 

@@ -1,5 +1,3 @@
-<style type="text/css"> body { background-image: url("<?= $modele['img_fond'] ?>"); } </style>  <!-- //affiche le fond du JDR actif s'il existe -->
-
 <h1 class="text-center">JDR : <?=$modele['titre']?></h1>
 
 <img class="img_banniere" src="<?=$modele['img_banniere']?>" alt="Oof">

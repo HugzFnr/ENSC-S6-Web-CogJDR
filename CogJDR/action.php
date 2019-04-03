@@ -6,16 +6,14 @@
      *  0. effectuer : (côté MJ) effectue les action programés par un `ModeleAction`
      */
 
-    $__css_necessaires[] = "jdr";
-    include_once "./inclus/page_debut.php";
-?>
-
-<?php
     require_once "./inclus/connexion.php";
     require_once "./inclus/session.php";
 
-    // cette ligne est importante car la variables est utilisée dans les fichiers inclus (`mj.php` et `joueur.php`)
     $donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']];
+
+    $__fond_ecran = $donnees_jdr['img_fond'];
+    $__css_necessaires[] = "jdr";
+    include_once "./inclus/page_debut.php";
 
     if ($donnees_jdr['est_mj'])
         include "./inclus/action/mj.php";

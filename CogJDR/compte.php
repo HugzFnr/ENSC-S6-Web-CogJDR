@@ -56,11 +56,18 @@
                     $envoi = send_image($_FILES['img'], $_REQUEST['email'], "images/compte/");
 
                 // si l'envoi à réussi, MAJ la BDD
-                $is = $envoi['success'] && sql_update('Utilisateur', array(
-                        'mdp' => $_REQUEST['mdp'],
-                        'email' => htmlentities($_REQUEST['email']),
-                        'img' => $envoi['fileName']
-                    ), array('id' => $_SESSION['id']));
+                if (isset($_REQUEST['mdp'])) {
+                    $is = $envoi['success'] && sql_update('Utilisateur', array(
+                            'mdp' => password_hash($_REQUEST['mdp'], PASSWORD_DEFAULT),
+                            'email' => htmlentities($_REQUEST['email']),
+                            'img' => $envoi['fileName']
+                        ), array('id' => $_SESSION['id']));
+                } else {
+                    $is = $envoi['success'] && sql_update('Utilisateur', array(
+                            'email' => htmlentities($_REQUEST['email']),
+                            'img' => $envoi['fileName']
+                        ), array('id' => $_SESSION['id']));
+                }
 
                     
                 if ($is)
@@ -100,7 +107,7 @@
                 // si la création de compte à réussie, continue sur la case suivant
                 if ($envoi['success'] && sql_insert('Utilisateur', array(
                             'id' => null,
-                            'mdp' => $_REQUEST['mdp'],
+                            'mdp' => password_hash($_REQUEST['mdp'], PASSWORD_DEFAULT),
                             'email' => htmlentities($_REQUEST['email']),
                             'img' => $envoi['fileName']
                         )))
@@ -122,7 +129,7 @@
                 $r = sql_select('Utilisateur', "*", array('email' => $_REQUEST['email']));
                 if ($utilisateur = $r->fetch()) {
                     // puis que le mot de passe est le bon
-                    if ($_REQUEST['mdp'] == $utilisateur['mdp']) {
+                    if (password_verify($_REQUEST['mdp'], $utilisateur['mdp'])) {
                         $_SESSION['id'] = $utilisateur['id'];
                         $_SESSION['email'] = $utilisateur['email'];
                         $_SESSION['img'] = $utilisateur['img'];
