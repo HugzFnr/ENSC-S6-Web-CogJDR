@@ -6,11 +6,11 @@
         include "./inclus/page_debut.php";
 
         include "./inclus/creer/partie.php";
-    } elseif ($quoi == "modele") {
+    } else/*if ($quoi == "modele")*/ {
         $__sous_titre = "Créer un nouveau modèle de JDR";
         include "./inclus/page_debut.php";
 
-        include "./inclus/creer/modele.php";
+        include "./inclus/creer/$quoi.php";
     }
 
     include "./inclus/page_fin.php";
