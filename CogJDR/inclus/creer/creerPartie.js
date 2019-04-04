@@ -20,6 +20,7 @@ $("#fleche5").click(function(e) {
 
         donnees.action = "creer";
         $.post("./jdr.php", donnees, function(data) {
+                console.log(data);
                 document.location = "./jdr.php?id=" + data;
             });
     });
@@ -38,7 +39,7 @@ var elts_menu = [ [$("#boutonCreer"),$("#choix_modele"),$("#pseudo_mj"),$("#bout
 function ClicFlecheImpair (numeroFleche,e) //les fleches impaires sont les boutons d'étape suivante
 {
     e.preventDefault();
-    console.log(numeroFleche);
+    //console.log(numeroFleche);
         
     if ($("#form"+(Math.floor(numeroFleche/2)+1))[0].checkValidity())  //on vérifie que tous les éléments de la partie du formulaire sont correctement remplis
     {
@@ -112,7 +113,6 @@ function MajImage()
 {
     //alert($("#img_cachee")[0].innerHTML);
     var id = $("#choix_modele").val();
-    var img = $("#image_choix_" + id).attr('label');
-    console.log(img);
-    $("#logo_choix").attr('src', img);
+    var img = $("#image_choix_" + id).attr('data-img');
+    $("#logo_choix").attr('src', "images/jdr/logo/" + img);
 }

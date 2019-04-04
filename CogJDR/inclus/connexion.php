@@ -21,9 +21,7 @@
     }
 
     function prepare_execute($conn, $string, $data) {
-        /*-*/
-        /*-echo "<code class=\"sql-request\">".prepared($string, $data)."</code><br>\n";*/
-        /*-*/
+        //echo "<code class=\"sql-request\">".prepared($string, $data)."</code><br>\n";
 
         $r = $conn->prepare($string);
         $r->execute($data);
@@ -251,13 +249,13 @@
         return array('msg' => $r, 'success' => $upload_success, 'fileName' => "$name.$file_type");
     }
 
-    function recup_enum($table,$colonne) {
-        $sql = "SHOW COLUMNS FROM `$table` LIKE '$colonne'";
+    function list_enum($table, $column) { // TODO: refaire ; en vrai c'est bien fait, mais on peut se passer d'utiliser une RegEX pour ça...
+        $sql = "SHOW COLUMNS FROM `$table` LIKE '$column'";
         $result = sql_query($sql);
         $row = $result->fetch();
         $type = $row['Type'];
         preg_match('/enum\((.*)\)$/', $type, $matches);
-        $vals = explode(',', $matches[1]);
+        $vals = explode(',', str_replace("'", "", $matches[1]));
         return ($vals);
     }
 ?>

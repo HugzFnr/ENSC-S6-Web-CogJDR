@@ -6,7 +6,7 @@ div.page {
 }
 
 body {
-    background-image:  url("../images/jdr/waterfall.gif");
+    background-image:  url("../images/defaut/fond_ecran.gif");
     background-size: cover;
     background-repeat: no-repeat;
     background-position:fixed;

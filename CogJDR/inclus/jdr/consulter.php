@@ -1,6 +1,6 @@
 <h1 class="text-center">JDR : <?=$modele['titre']?></h1>
 
-<img class="img_banniere" src="<?=$modele['img_banniere']?>" alt="Oof">
+<img class="img_banniere" src="images/jdr/banniere/<?=$modele['img_banniere']?>" alt="Oof">
 
 <div class="col-sm-12 text-center">
     <a target="blank" href="<?=sql_select(array('JDR','ModeleJDR'),'fichier_regles',array('JDR::id_modele_jdr'=> 'ModeleJDR::id_modele_jdr','JDR::id_jdr'=>$jdr['id_jdr']))->fetch()['fichier_regles'] ?>"><b>Télécharger les règles</b></a>
@@ -226,7 +226,7 @@
                                 while ($role = $r->fetch()) { ?>
                                     <li>
                                         <h4><?=$role['nom_role']?></h4>
-                                        <img src="images/jdr/<?=$role['img_role']?>" alt="Oof">
+                                        <img src="images/jdr/role/<?=$role['img_role']?>" alt="Oof">
                                         <p><?=$role['desc_role']?></p>
                                         <a href="./action?id=<?=$role['id_modele_action']?>">aller faire l'action lol</a>
                                     </li><?php

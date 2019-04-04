@@ -186,7 +186,7 @@
                         <label for="effet_action"> <p>Effet de l'action </p> </label>
                         <select name="effet_action" class="form-control" id="effet_action" required>
                             <?php
-                                $tab = recup_enum('modeleaction','action_fct');
+                                $tab = array_slice(list_enum('ModeleAction', 'action_fct'), 0, 6);
                                 foreach ($tab as $i) { ?>
                                     <option value=<?=$i?>><?=$i?></option><?php
                                 }

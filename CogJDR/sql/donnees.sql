@@ -13,15 +13,13 @@ delete from Utilisateur where 1;
 
 
 insert into Utilisateur (`id`, `mdp`, `email`, `img`) values
-    (null, 'mdp', 'exemple@email.voila', 'exemple_40email.voila.png'),
-    (null, 'piou', 'mj@cog.jdr', 'mj_40cog.jdr.png'),
-    (null, '1234', 'cgrenier003@ensc.fr', 'cgrenier003_40ensc.fr.gif');
+    (null, '$2y$10$hXBu1vDgRNw7cliHI2pZgOpNI5q4LlAshFU70Dg9KanzccApfiGy6', 'exemple@email.voila', 'exemple_40email.voila.png'),
+    (null, '$2y$10$lyClN0AX5HnrZAPFMyga2uF6CoIoKv2dq2Hnju3Q29n0PvKLg/5YW', 'mj@cog.jdr', 'mj_40cog.jdr.png'),
+    (null, '$2y$10$Bvs9nWFl89CtEFH18Iy9gOZ.QmpizdrYWFUtei5LvZWtmIfZVRwjy', 'coucou@coucou.coucou', 'coucou_40coucou.coucou.gif');
 
 insert into ModeleJDR (`id_modele_jdr`, `id_createur`, `titre`, `desc_jdr`, `fichier_regles`, `img_banniere`, `img_fond`, `img_logo`) values
-    (null, 1, 'Jeux Rigolo', 'Ceci est la description du Jeux Rigolo :). Du coup je remplis cet espace avec un texte long et plein de fautes de fran&ccedil;ais en tout genre. Dailleurs, ce jeu, tout aussi rigolo qu&apos;il soit, ne se joue qu&apos;à 12 joueurs max... donc bon, voil&agrave;.', 'fichiers/regles.pdf', 'images/jdr/banniereRigolo.png', 'images/jdr/fondRigolo.png', 'images/jdr/logoRigolo.png');
-
-insert into ModeleJDR (`id_modele_jdr`, `id_createur`, `titre`, `desc_jdr`, `fichier_regles`, `img_banniere`, `img_fond`, `img_logo`) values
-    (null, 1, 'Jeu espace WOAW', 'Ceci est une description assez courte.', 'fichier/SpaceRegles.pdf', 'images/jdr/bannerspace.jpg', 'images/jdr/bgspace.jpg', 'images/jdr/logospace.png');
+    (null, 2, 'Jeux Rigolo', 'Ceci est la description du Jeux Rigolo :). Du coup je remplis cet espace avec un texte long et plein de fautes de fran&ccedil;ais en tout genre. Dailleurs, ce jeu, tout aussi rigolo qu&apos;il soit, ne se joue qu&apos;à 12 joueurs max... donc bon, voil&agrave;.', 'Jeux-Rigolo.pdf', 'Jeux-Rigolo.png', 'Jeux-Rigolo.png', 'Jeux-Rigolo.png'),
+    (null, 2, 'Space', 'Ceci est une description assez courte. Un super JDR dans l&apos;espace, WOAW &num;paieTaDescription', 'Space.pdf', 'Space.jpg', 'Space.jpg', 'Space.png');
 
 insert into JDR (`id_jdr`, `id_modele_jdr`, `code_invite`, `nb_max_joueurs`, `nb_min_joueurs`, `jours_ouvrables`, `etat_partie`) values
     (null, 1, "12da0fde", 12, 0, '7 jours', 'lancement');
@@ -36,8 +34,8 @@ insert into Joueur (`id_joueur`, `id_utilisateur`, `id_jdr_participe`, `pseudo`)
 insert into ModeleEquipe (`id_modele_equipe`, `id_modele_jdr`, `titre_equipe`, `taille_equipe_max`, `discussion_autorisee`) values
     (null, 1, 'Vivants', -1, 1),
     (null, 1, 'Sac', 11, 1),
-    (null, 1, 'Morts', -1, 0),
-    (null, 1, 'Tous', -1, 1);
+    (null, 1, 'Morts', -1, 1),
+    (null, 1, 'Tous', -1, 0);
 
 insert into Equipe (`id_equipe`, `id_modele_equipe`, `id_jdr`) values
     (null, 1, 1),

@@ -18,15 +18,16 @@
                     <div class="col-sm-10 offset-sm-1">
                     <label for="choix_modele"> <p> Choix du modèle</p> </label>
                         <select name="choix_modele" class="form-control" id="choix_modele" required>
+                            <option id="image_choix_" value="" data-img="../../defaut/logo_jdr.png"></option>
                             <?php
                                 $modelesDispos = sql_select(
-                                        'ModeleJdr',
+                                        'ModeleJDR',
                                         array('titre', 'id_modele_jdr', 'img_logo'),
-                                        array('ModeleJDR::id_createur' => $_SESSION['id'])
+                                        array('id_createur' => $_SESSION['id'])
                                     );
-                                while ($modeleDispo = $modelesDispos->fetch()) { // pour récupérer la valeur du logo du jdr choisi et l'afficher en-dessous ensuite ?>
-                                    <option id="image_choix_<?=$modeleDispo['id_modele_jdr']?>" label="<?=$modeleDispo['img_logo']?>" value="<?=$modeleDispo['id_modele_jdr']?>"><?=$modeleDispo['titre']?></option><?php 
-                                }                    
+                                while ($modeleDispo = $modelesDispos->fetch()) { // `data-img=` pour récupérer le logo du jdr choisi et l'afficher en-dessous ensuite ?>
+                                    <option id="image_choix_<?=$modeleDispo['id_modele_jdr']?>" value="<?=$modeleDispo['id_modele_jdr']?>" data-img="<?=$modeleDispo['img_logo']?>"><?=$modeleDispo['titre']?></option><?php 
+                                }
                             ?>
                         </select>
                         <img class="img_logo" id="logo_choix" alt="Le logo du JDR choisi" src="images/defaut/logo_jdr.png">
@@ -141,6 +142,5 @@
 
 </div>
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"> // non, c'est celui là la framework pour l'effet de flash </script>
-
-<script src="inclus/creer/creerPartie.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+<script type="text/javascript" src="inclus/creer/creerPartie.js"></script>

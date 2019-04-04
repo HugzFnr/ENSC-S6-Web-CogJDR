@@ -38,7 +38,7 @@
 
 		// fond d'acran selon les JDR
 		if (!empty($__fond_ecran)) { ?>
-			<style type="text/css"> body { background-image: url("<?=$__fond_ecran?>"); } </style><?php
+			<style type="text/css"> body { background-image: url("images/jdr/fond/<?=$__fond_ecran?>"); } </style><?php
 		}
 	?>
 
@@ -189,7 +189,7 @@
 								<td>
 									<div class="dropdown">
 										<a class="dropdown-toggle" href="#" id="navbarDropdown_compte" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-											<img class="img" src="./images/compte/<?=$_SESSION['img']?>" alt="Oof">
+											<img class="img" src="images/compte/<?=$_SESSION['img']?>" alt="Oof">
 										</a>
 										<div class="dropdown-menu" aria-labelledby="navbarDropdown_compte">
 											<a class="dropdown-item" href="./compte.php?action=deconnecter&redirection_succes=<?=rawurlencode($_SERVER['REQUEST_URI'])?>">Se Déconnecter</a>

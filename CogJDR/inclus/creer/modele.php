@@ -197,8 +197,12 @@
                     <div class="col-sm-10 offset-sm-1">
                         <label for="effet_action"> <p>Effet de l'action </p> </label>
                         <select name="effet_action" class="form-control" id="effet_action" required>
-                        <?php $tab = recup_enum('modeleaction','action_fct'); foreach ($tab as $i) {
-                            echo("<option value=$i> $i"); } ?>
+                            <?php
+                                $tab = array_slice(list_enum('ModeleAction', 'action_fct'), 0, 6);
+                                foreach ($tab as $i) { ?>
+                                    <option value=<?=$i?>><?=$i?></option><?php
+                                }
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -308,6 +312,5 @@
 
 </div>
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"> // non, c'est celui là la framework pour l'effet de flash </script>
-
-<script src="inclus/creer/creerModele.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+<script type="text/javascript" src="inclus/creer/creerModele.js"></script>

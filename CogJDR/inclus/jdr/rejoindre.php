@@ -2,7 +2,7 @@
 
 <div class="container">
 
-    <img class="img_banniere" src="<?=$modele['img_banniere']?>" alt="Oof">
+    <img class="img_banniere" src="images/jdr/banniere/<?=$modele['img_banniere']?>" alt="Oof">
 
     <p class="desc_jdr"><?=$modele['desc_jdr']?></p>
 
