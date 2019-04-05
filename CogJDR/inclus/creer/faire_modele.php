@@ -1,6 +1,9 @@
 <?php
     require_once "./../connexion.php";
     require_once "./../session.php";
+
+    /*var_dump($_REQUEST);
+    exit;*/
     
     /*- création du modèle */
     //$envoi_banniere = send_image($_REQUEST['finaux']['img_banniere'], $_REQUEST['parametres']['titre_modele'], "images/jdr/banniere/");

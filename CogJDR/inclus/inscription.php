@@ -30,7 +30,7 @@
             <div class="form-group">
                 <div class="col-sm-6 offset-sm-3">
                     <label for="gestion_compte_img"> Image de profil </label>
-                    <input type="file" name="img" accept=".jpg,.png,.jpeg" id="gestion_compte_img">
+                    <input type="file" name="img" accept=".jpg,.png,.jpeg,.gif" id="gestion_compte_img">
                 </div>
             </div>
 

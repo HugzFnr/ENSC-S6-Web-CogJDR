@@ -11,7 +11,13 @@
         include "./inclus/page_debut.php";
 
         include "./inclus/creer/modele.php";
-    }
+    } elseif ($quoi == "modele_v2") {
+        $__sous_titre = "Créer un nouveau modèle de JDR";
+        include "./inclus/page_debut.php";
+
+        include "./inclus/creer/modele_v2.php";
+    } else
+        header("Location: ./#");
 
     include "./inclus/page_fin.php";
 ?>

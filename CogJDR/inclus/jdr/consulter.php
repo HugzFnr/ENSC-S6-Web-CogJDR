@@ -3,7 +3,7 @@
 <img class="img_banniere" src="images/jdr/banniere/<?=$modele['img_banniere']?>" alt="Oof">
 
 <div class="col-sm-12 text-center">
-    <a target="blank" href="<?=sql_select(array('JDR','ModeleJDR'),'fichier_regles',array('JDR::id_modele_jdr'=> 'ModeleJDR::id_modele_jdr','JDR::id_jdr'=>$jdr['id_jdr']))->fetch()['fichier_regles'] ?>"><b>Télécharger les règles</b></a>
+    <a target="blank" href="fichiers/jdr/regles/<?=sql_select(array('JDR', 'ModeleJDR'), 'fichier_regles', array('JDR::id_modele_jdr'=> 'ModeleJDR::id_modele_jdr', 'JDR::id_jdr' => $jdr['id_jdr']))->fetch()['fichier_regles']?>"><b>Télécharger les règles</b></a>
 
     <hr>
     <p><b> Joueurs actuellement inscrits à cette partie</b></p>
