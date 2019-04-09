@@ -9,9 +9,11 @@
 
     function prepared($string, $data) {
         $indexed = $data == array_values($data);
-        foreach ($data as $k=>$v) {
+        foreach ($data as $k => $v) {
             if (is_string($v))
                 $v = "'$v'";
+            if ($v === null)
+                $v = "NULL";
             if ($indexed)
                 $string = preg_replace('/\?/', $v, $string, 1);
             else

@@ -1,4 +1,8 @@
 <?php
+    require_once "./inclus/session.php";
+
+    assess_connected();
+
     $quoi = isset($_REQUEST['quoi']) ? $_REQUEST['quoi'] : "partie";
 
     if ($quoi == "partie") {

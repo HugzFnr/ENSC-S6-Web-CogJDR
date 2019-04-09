@@ -115,4 +115,10 @@
                 }
         return false;
     }
+
+    function assess_connected($loc="./#") {
+        if (!isset($_SESSION['id']))
+            header("Location: $loc");
+        return true;
+    }
 ?>

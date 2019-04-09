@@ -1,12 +1,10 @@
 <h1 class="text-center"> Créer un modèle de JDR </h1>
 
 <div class="row">
-    <form id="form_total" class="form sign-in" role="form" action="./inclus/creer/faire_modele.php" method="post" enctype="multipart/form-data">
+    <form id="form_total" class="form sign-in" role="form" action="./inclus/creer/faire_modele_v2.php" method="post" enctype="multipart/form-data">
         <!-- partie 'Paramètres généraux' -->
         <div class="col">
-            <input type="hidden" name="ca-passe" value="4">
             <div class="container actif menu-partie" id="menu1">
-                <input type="hidden" name="ca-casse" value="2">
                 <h3 class="text-center"> Paramètres généraux </h3>
                 <div class="form-group">
                     <div class="col-sm-10 offset-sm-1">
@@ -38,7 +36,7 @@
 
                 <div class="form-group" id="fleche1">
                     <div class="col-sm-10 offset-sm-1">
-                        <button name="action" value="creer" id="bouton12" class="btn btn-primary btn-block etape-suivante">Etape suivante</button>
+                        <button id="bouton12" class="btn btn-primary btn-block etape-suivante">Etape suivante</button>
                     </div>
                 </div>
             </div>
@@ -79,12 +77,12 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group" id="fleche2">
-                                <button name="action" value="creer" id="bouton21" class="btn btn-primary btn-block etape-liste-precedente">Etape précédente</button>
+                                <button id="bouton21" class="btn btn-primary btn-block etape-liste-precedente">Etape précédente</button>
                             </div>
                         </div>
                         <div class="col">   
                             <div class="form-group" id="fleche3">
-                                <button name="action" value="creer" id="bouton23" class="btn btn-primary btn-block etape-liste-suivante">Etape suivante</button>                            
+                                <button id="bouton23" class="btn btn-primary btn-block etape-liste-suivante">Etape suivante</button>                            
                             </div>
                         </div>
                     </div>
@@ -124,12 +122,12 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group" id="fleche4">
-                                <button name="action" value="creer" id="bouton32" class="btn btn-primary btn-block etape-liste-precedente">Etape précédente</button>
+                                <button id="bouton32" class="btn btn-primary btn-block etape-liste-precedente">Etape précédente</button>
                             </div>
                         </div>
                         <div class="col">   
                             <div class="form-group" id="fleche5">
-                                <button name="action" value="creer" id="bouton34" class="btn btn-primary btn-block etape-liste-suivante">Etape suivante</button>                            
+                                <button id="bouton34" class="btn btn-primary btn-block etape-liste-suivante">Etape suivante</button>                            
                             </div>
                         </div>
                     </div>
@@ -225,12 +223,12 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group" id="fleche6">
-                                <button name="action" value="creer" id="bouton43" class="btn btn-primary btn-block etape-liste-precedente">Etape précédente</button>
+                                <button id="bouton43" class="btn btn-primary btn-block etape-liste-precedente">Etape précédente</button>
                             </div>
                         </div>
                         <div class="col">   
                             <div class="form-group" id="fleche7">
-                                <button name="action" value="creer" id="bouton45" class="btn btn-primary btn-block etape-liste-suivante">Etape suivante</button>                            
+                                <button id="bouton45" class="btn btn-primary btn-block etape-liste-suivante">Etape suivante</button>                            
                             </div>
                         </div>
                     </div>
@@ -282,7 +280,7 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group" id="fleche8">
-                                <button name="action" value="creer" id="bouton54" class="btn btn-primary btn-block etape-precedente">Etape précédente</button>
+                                <button id="bouton54" class="btn btn-primary btn-block etape-precedente">Etape précédente</button>
                             </div>
                         </div>
                         <div class="col">   

@@ -105,7 +105,6 @@ $(".etape-liste-suivante").click(function(e) {
         if (validations[num - 1](current[num])) {
             if (!generated[num][current[num]]) {
                 $("#menu" + num).children().last().before(forms(num, current[num] + 1, current[num] < count[num]));
-                alert("adding shit");
                 generated[num][current[num]] = true;
             }
             onplace(num, current[num]++, current[num]);
@@ -162,7 +161,7 @@ function forms(num, index, islast) {
             '\n</div>',
 
             '\n<div id="num' + index + '">' +
-            '\n    <h3 class="text-center"> Créer le rôle <b class="rouge" id="role_actuel' + index + '"> ' + (index + 1) + ' </b>/<b id="role_total"> ' + count[index] + ' </b> </h3>' +
+            '\n    <h3 class="text-center"> Créer le rôle <b class="rouge" id="role_actuel' + index + '">' + (index + 1) + '</b>/<b id="role_total' + index + '">' + count[index] + '</b> </h3>' +
             '\n    <div class="form-group">' +
             '\n        <div class="col-sm-10 offset-sm-1">' +
             '\n            <label for="nom_role' + index + '"> <p>Nom du rôle</p> </label>' +
@@ -181,6 +180,81 @@ function forms(num, index, islast) {
             '\n        <div class="col-sm-10 offset-sm-1">' +
             '\n            <label for="desc_role' + index + '"> <p>Description du rôle</p> </label>' +
             '\n            <textarea name="desc_role' + index + '" class="form-control" id="desc_role' + index + '" placeholder="Décris donc qui est ce personnage !" required></textarea>                            ' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n</div>',
+
+            '\n<div id="num' + index + '">' +
+            '\n    <h3 class="text-center"> Créer l\'action <b class="rouge" id="action_actuel' + index + '">' + (index + 1) + '</b>/<b id="action_total' + index + '">' + count[index] + '</b> </h3>' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="titre_action' + index + '"> <p>Titre de l\'action</p> </label>' +
+            '\n            <input type="text" name="titre_action' + index + '" class="form-control" id="titre_action' + index + '" placeholder="Un titre explicite (genre \'envoyer au bûcher\') !" required autofocus>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="effecteur_action' + index + '"> <p>Effecteur de l\'action </p> </label>' +
+            '\n            <select name="effecteur_action' + index + '" class="form-control" id="effecteur_action' + index + '" required>' +
+            '\n                <option> Vivants </option>' +
+            '\n                <option> Morts </option>' +
+            '\n                <option> Tous </option>' +
+            '\n            </select>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="cibles_action' + index + '"> <p>Cibles potentielles de l\'action </p> </label>' +
+            '\n            <select name="cibles_action' + index + '" class="form-control" id="cibles_action' + index + '" required>' +
+            '\n                <option> Vivants </option>' +
+            '\n                <option> Morts </option>' +
+            '\n                <option> Tous </option>' +
+            '\n            </select>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="fct_origine_action' + index + '"> <p>Equipe d\'origine de la cible </p> </label>' +
+            '\n            <select name="fct_origine_action' + index + '" class="form-control" id="fct_origine_action' + index + '" required>' +
+            '\n                <option> Placeholder</option>' +
+            '\n            </select>' +
+            '\n            <label for="fct_arrivee_action' + index + '"> <p>Equipe d\'arrivee de la cible </p> </label>' +
+            '\n            <select name="fct_arrivee_action' + index + '" class="form-control" id="fct_arrivee_action' + index + '" required>' +
+            '\n                <option> Placeholder</option>' +
+            '\n            </select>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="effet_action' + index + '"> <p>Effet de l\'action </p> </label>' +
+            '\n            <select name="effet_action' + index + '" class="form-control" id="effet_action' + index + '" required>' +
+            '\n                ' + $("#effet_action0")[0].innerHTML +
+            '\n            </select>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="horaire_action' + index + '"> <p>Horaire limite </p> </label>' +
+            '\n            <input type="time" name="horaire_action' + index + '"  class="form-control" id="horaire_action' + index + '" required>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="msg_action' + index + '"> <p>Message automatique de l\'action (optionnel) </p> </label>' +
+            '\n            <textarea name="msg_action' + index + '" class="form-control" id="msg_action' + index + '" placeholder="Pour avertir vos joueurs de ce qu\'il s\'est passé dans le chat général !"></textarea>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="desc_action' + index + '"> <p>Description de l\'action</p> </label>' +
+            '\n            <textarea name="desc_action' + index + '"  class="form-control" id="desc_action' + index + '" placeholder="Explique ce que fait l\'action!" required></textarea>                            ' +
             '\n        </div>' +
             '\n    </div>' +
             '\n</div>'

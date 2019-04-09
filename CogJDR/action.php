@@ -9,6 +9,8 @@
     require_once "./inclus/connexion.php";
     require_once "./inclus/session.php";
 
+    assess_connected();
+
     $donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']];
 
     $__fond_ecran = $donnees_jdr['img_fond'];
