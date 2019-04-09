@@ -50,11 +50,11 @@ function change(from, to, positive)  {
     var next = $("#menu" + to);
 
     prev.removeClass("actif");
-    prev.find("input, textarea, select, button").attr("disabled", true);
+    prev.find("input, textarea, select, button").attr("readonly", true);
     prev.effect("highlight", { color: positive ? "#00c72b" : "#6b00a8" }, 1300);
 
     next.removeClass("invisible");
-    next.find("input, textarea, select, button").attr("disabled", false);
+    next.find("input, textarea, select, button").attr("readonly", false);
     next.addClass("actif");
 }
 
@@ -101,10 +101,11 @@ $(".etape-liste-suivante").click(function(e) {
             return;
         }
 
-        // sinon, traitment avec génération du form
+        // sinon, traitement avec génération du form
         if (validations[num - 1](current[num])) {
             if (!generated[num][current[num]]) {
                 $("#menu" + num).children().last().before(forms(num, current[num] + 1, current[num] < count[num]));
+                alert("adding shit");
                 generated[num][current[num]] = true;
             }
             onplace(num, current[num]++, current[num]);
@@ -137,21 +138,21 @@ function forms(num, index, islast) {
             '\n    <h3 class="text-center"> Créer l\'équipe  <b class="rouge" id="equipe_actuel' + index + '">' + (index + 1) + '</b>/<b id="equipe_total' + index + '">' + count[num] + '</b> </h3>' +
             '\n    <div class="form-group">' +
             '\n        <div class="col-sm-10 offset-sm-1">' +
-            '\n            <label for="nom_equipe"> <p>Nom de l\'équipe</p> </label>' +
+            '\n            <label for="nom_equipe' + index + '"> <p>Nom de l\'équipe</p> </label>' +
             '\n            <input type="text" name="nom_equipe' + index + '" class="form-control" id="nom_equipe' + index + '" placeholder="Un nom fédérateur !" required autofocus>' +
             '\n        </div>' +
             '\n    </div>' +
             '\n' +
             '\n    <div class="form-group">' +
             '\n        <div class="col-sm-10 offset-sm-1">' +
-            '\n            <label for="taille_equipe"> <p>Taille maximale de l\'équipe (-1 = &infin;)</p> </label>' +
+            '\n            <label for="taille_equipe' + index + '"> <p>Taille maximale de l\'équipe (-1 = &infin;)</p> </label>' +
             '\n            <input type="number" value="1" min="-1" max="99" name="taille_equipe' + index + '"  class="form-control" id="taille_equipe' + index + '" required>' +
             '\n        </div>' +
             '\n    </div>' +
             '\n' +
             '\n    <div class="form-group">' +
             '\n        <div class="col-sm-10 offset-sm-1">' +
-            '\n            <label for="discussion"> <p>Discussion autorisée</p> </label>' +
+            '\n            <label for="discussion' + index + '"> <p>Discussion autorisée</p> </label>' +
             '\n            <select name="discussion' + index + '" class="form-control" id="discussion' + index + '" required>' +
             '\n                <option value=true> Oui </option>' +
             '\n                <option value=false> Non </option>' +
@@ -161,25 +162,25 @@ function forms(num, index, islast) {
             '\n</div>',
 
             '\n<div id="num' + index + '">' +
-            '\n    <h3 class="text-center"> Créer le rôle <b class="rouge" id="role_actuel0"> ' + (index + 1) + ' </b>/<b id="role_total"> ' + count[index] + ' </b> </h3>' +
+            '\n    <h3 class="text-center"> Créer le rôle <b class="rouge" id="role_actuel' + index + '"> ' + (index + 1) + ' </b>/<b id="role_total"> ' + count[index] + ' </b> </h3>' +
             '\n    <div class="form-group">' +
             '\n        <div class="col-sm-10 offset-sm-1">' +
-            '\n            <label for="nom_role"> <p>Nom du rôle</p> </label>' +
+            '\n            <label for="nom_role' + index + '"> <p>Nom du rôle</p> </label>' +
             '\n            <input type="text" name="nom_role' + index + '" class="form-control" id="nom_role' + index + '" placeholder="Pas \'loup-garou\' stp " required autofocus>' +
             '\n        </div>' +
             '\n    </div>' +
             '\n' +
             '\n    <div class="form-group">' +
             '\n        <div class="col-sm-10 offset-sm-1">' +
-            '\n            <label for="img_role"> <p>Image du rôle</p> </label>' +
+            '\n            <label for="img_role' + index + '"> <p>Image du rôle</p> </label>' +
             '\n            <input type="file" name="img_role' + index + '" accept=".jpg,.png,.jpeg,.gif" class="form-control" id="img_role' + index + '">' +
             '\n        </div>' +
             '\n    </div>' +
             '\n' +
             '\n    <div class="form-group">' +
             '\n        <div class="col-sm-10 offset-sm-1">' +
-            '\n            <label for="desc_role"> <p>Description du rôle</p> </label>' +
-            '\n            <textarea name="discussion' + index + '" class="form-control" id="desc_role' + index + '" placeholder="Décris donc qui est ce personnage !" required></textarea>                            ' +
+            '\n            <label for="desc_role' + index + '"> <p>Description du rôle</p> </label>' +
+            '\n            <textarea name="desc_role' + index + '" class="form-control" id="desc_role' + index + '" placeholder="Décris donc qui est ce personnage !" required></textarea>                            ' +
             '\n        </div>' +
             '\n    </div>' +
             '\n</div>'
