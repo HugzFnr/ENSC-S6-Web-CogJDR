@@ -21,6 +21,6 @@
         include "./inclus/action/mj.php";
     else
         include "./inclus/action/joueur.php";
+    
+    include_once "./inclus/page_fin.php"
 ?>
-
-<?php include_once "./inclus/page_fin.php" ?>

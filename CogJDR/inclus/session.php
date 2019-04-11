@@ -59,7 +59,7 @@
         while ($mj = $r->fetch()) {
             $bla = sql_select(
                     array('JDR', 'ModeleJDR'),
-                    array('ModeleJDR.titre', 'JDR.etat_partie'),
+                    array('ModeleJDR.titre', 'ModeleJDR.img_fond', 'JDR.etat_partie'),
                     array(
                         'JDR::id_modele_jdr' => 'ModeleJDR::id_modele_jdr',
                         'JDR::id_jdr' => $mj['id_jdr_dirige'],
@@ -71,6 +71,7 @@
                     'id_jdr' => $mj['id_jdr_dirige'],
                     'titre_jdr' => $bla['titre'],
                     'etat_partie' => $bla['etat_partie'],
+                    'img_fond' => $bla['img_fond'],
 
                     'id_dans' => $mj['id_mj'],
                     'pseudo_dans' => $mj['pseudo_mj'],

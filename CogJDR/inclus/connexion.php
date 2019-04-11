@@ -177,7 +177,7 @@
         $where_builder = build_where($where, $execute_array);
         
         //return $conn->prepare("DELETE FROM `$table` WHERE $where_builder")->execute($execute_array);
-        return prepare_execute($conn, "DELETE FROM `$table` WHERE $where_builder", $execute_array);
+        return prepare_execute($conn, "DELETE FROM `$table` $where_builder", $execute_array);
     }
 
     function send_image($file, $name, $target_dir="./images/") {

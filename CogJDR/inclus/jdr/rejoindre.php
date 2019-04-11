@@ -31,7 +31,7 @@
                             <td><?=$joueur['pseudo']?></td>
                             <?php
                                 if (@$donnees_jdr['est_mj']) { ?>
-                                    <td><a href="./jdr.php?id=<?=$jdr['id_jdr']?>&action=virer&joueur=<?=$joueur['id_joueur']?>">Virer ce joueur</a></td><?php
+                                    <td><a href="./jdr.php?id=<?=$jdr['id_jdr']?>&action=virer&joueur=<?=$joueur['id_joueur']?>&redirection_succes=./jdr.php?id=<?=$jdr['id_jdr']?>">Virer ce joueur</a></td><?php
                                 }
                             ?>
                         </tr><?php
@@ -65,11 +65,10 @@
                         <form action="./jdr.php">
                             <input type="hidden" name="id" value="<?=$jdr['id_jdr']?>">
 
-                                    <label for="rejoindre_pseudo"> Pseudo pour la partie : </label>
-                                    <input class="form-control" type="text" name="pseudo" id="rejoindre_pseudo" placeholder="Choisisez un pseudonyme">
-                                    
-                                    <button class="btn btn-primary btn-block" type="submit" name="action" value="rejoindre">Rejoindre</button>
-                                
+                            <label for="rejoindre_pseudo"> Pseudo pour la partie : </label>
+                            <input class="form-control" type="text" name="pseudo" id="rejoindre_pseudo" placeholder="Choisisez un pseudonyme">
+                            
+                            <button class="btn btn-primary btn-block" type="submit" name="action" value="rejoindre">Rejoindre</button>
                         </form><?php
                     } else { // il  n'y a plus de place :'( ?>
                         <h2>Il n'y a plus de place !</h2><?php
@@ -78,9 +77,8 @@
                     <h2>Les inscriptions sont closes !</h2><?php
                 } elseif ($etat_partie == "fin") { // de même si la partie est finie ?>
                     <h2>Cette partie est finie !</h2><?php
-                }
-                else if ($a_rejoint) {
-                    echo("<h2> En attente du top départ du MJ ! </h2>");
+                } elseif ($a_rejoint) { ?>
+                    <h2>En attente du top départ du MJ !</h2><?php
                 }
             ?>
         </div>

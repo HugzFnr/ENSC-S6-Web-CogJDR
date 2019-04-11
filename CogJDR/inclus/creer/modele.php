@@ -15,7 +15,7 @@
 
                 <div class="form-group">
                     <div class="col-sm-10 offset-sm-1">
-                        <label for="nb_equipes"> <p>Nombre d'équipes différentes max.</p> </label>
+                        <label for="nb_equipes"> <p>Nombre d'équipes différentes</p> </label>
                         <input type="number" value="1" min="1" max="99" name="nb_equipes" class="form-control" id="nb_equipes" required>
                     </div>
                 </div>

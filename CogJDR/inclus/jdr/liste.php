@@ -21,7 +21,7 @@
             <li>
                 <a href="./jdr.php?id=<?=$jdr['id_jdr']?>">
                     <div class="card">
-                        <h2><?=$jdr['titre']?></h2>
+                        <h2><?=$jdr['titre']?> &mdash; par <?=sql_select('MJ', 'pseudo_mj', array('id_jdr_dirige' => $jdr['id_jdr']))->fetch()['pseudo_mj']?></h2>
                         <p class="desc_jdr"><?=$jdr['desc_jdr']?></P>
                         <?php if (empty($id_utilisateur)) { ?><p class="text-right">Rejoindre ce JDR ! (code : <?=$jdr['code_invite']?>)</p><?php } ?>
                     </div>

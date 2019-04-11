@@ -19,7 +19,7 @@ var validations = [
                         for (var j = 0; j < count[i]; j++)
                             generated[i][j] = false;
 
-                        if (1 < count[1])
+                        if (1 < count[i])
                             $("#menu" + i).children().slice(1, count[i]).remove();
                     }
 
@@ -61,8 +61,8 @@ function change(from, to, positive)  {
     prev.effect("highlight", { color: positive ? "#00c72b" : "#6b00a8" }, 1300);
 
     next.removeClass("invisible");
-    next.find("input, textarea, select").attr("readonly", false);
     next.find("button").attr("disabled", false);
+    next.find("input, textarea, select").attr("readonly", false);
     next.addClass("actif");
 }
 
@@ -106,7 +106,6 @@ $(".etape-liste-suivante").click(function(e) {
                 change(num++, num, true);
                 if (num == 4) { // cas particulier de vers les actions : on doit rentrer les options pour les selects
                     let sous_menu = $("#menu" + num + " #num0");
-                    console.log(sous_menu);
                     sous_menu.find("#effecteur_action0").html(buildOptions(options.equipes));
                     sous_menu.find("#cibles_action0").html(buildOptions(options.equipes));
                     sous_menu.find("#fct_origine_action0").html(buildOptions(options.equipes));
@@ -166,7 +165,7 @@ function forms(num, index, islast) {
             '\n    <div class="form-group">' +
             '\n        <div class="col-sm-10 offset-sm-1">' +
             '\n            <label for="taille_equipe' + index + '"> <p>Taille maximale de l\'équipe (-1 = &infin;)</p> </label>' +
-            '\n            <input type="number" value="1" min="-1" max="99" name="taille_equipe' + index + '"  class="form-control" id="taille_equipe' + index + '" required>' +
+            '\n            <input type="number" value="-1" min="-1" max="99" name="taille_equipe' + index + '"  class="form-control" id="taille_equipe' + index + '" required>' +
             '\n        </div>' +
             '\n    </div>' +
             '\n' +
@@ -182,7 +181,7 @@ function forms(num, index, islast) {
             '\n</div>',
 
             '\n<div id="num' + index + '">' +
-            '\n    <h3 class="text-center"> Créer le rôle <b class="rouge" id="role_actuel' + index + '">' + (index + 1) + '</b>/<b id="role_total' + index + '">' + count[index] + '</b> </h3>' +
+            '\n    <h3 class="text-center"> Créer le rôle <b class="rouge" id="role_actuel' + index + '">' + (index + 1) + '</b>/<b id="role_total' + index + '">' + count[num] + '</b> </h3>' +
             '\n    <div class="form-group">' +
             '\n        <div class="col-sm-10 offset-sm-1">' +
             '\n            <label for="nom_role' + index + '"> <p>Nom du rôle</p> </label>' +
@@ -206,7 +205,7 @@ function forms(num, index, islast) {
             '\n</div>',
 
             '\n<div id="num' + index + '">' +
-            '\n    <h3 class="text-center"> Créer l\'action <b class="rouge" id="action_actuel' + index + '">' + (index + 1) + '</b>/<b id="action_total' + index + '">' + count[index] + '</b> </h3>' +
+            '\n    <h3 class="text-center"> Créer l\'action <b class="rouge" id="action_actuel' + index + '">' + (index + 1) + '</b>/<b id="action_total' + index + '">' + count[num] + '</b> </h3>' +
             '\n    <div class="form-group">' +
             '\n        <div class="col-sm-10 offset-sm-1">' +
             '\n            <label for="titre_action' + index + '"> <p>Titre de l\'action</p> </label>' +

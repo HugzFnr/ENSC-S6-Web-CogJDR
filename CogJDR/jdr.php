@@ -26,6 +26,8 @@
     
     // si un ID est précisé, met à jour les données de session
     if (isset($_REQUEST['id'])) {
+        maj_donnees_jdr();
+
         if (isset($_SESSION['indice_jdr_suivi']))
             maj_jdr_suivi($_REQUEST['id']);
 
@@ -73,6 +75,10 @@
 
                 // ajoute l'équipe "Tous"
                 $id_modele_equipe_tous = sql_select('ModeleEquipe', 'id_modele_equipe', array('id_modele_jdr' => $id_modele_jdr, 'titre_equipe' => "Tous"))->fetch()['id_modele_equipe'];
+                sql_insert('Equipe', array('id_equipe' => null, 'id_modele_equipe' => $id_modele_equipe_tous, 'id_jdr' => $id_jdr));
+
+                // ajoute l'équipe "Vivants"
+                $id_modele_equipe_tous = sql_select('ModeleEquipe', 'id_modele_equipe', array('id_modele_jdr' => $id_modele_jdr, 'titre_equipe' => "Vivants"))->fetch()['id_modele_equipe'];
                 sql_insert('Equipe', array('id_equipe' => null, 'id_modele_equipe' => $id_modele_equipe_tous, 'id_jdr' => $id_jdr));
 
                 // création d'un MJ de ce JDR à partire de l'utilisateur
@@ -141,16 +147,29 @@
 
                         // ajouter le joueur à l'équipe "Tous" de ce JDR
                         $id_equipe_tous = sql_select(
-                                array('ModeleEquipe', 'Equipe', 'JDR'),
-                                'Equipe.id_equipe',
-                                array(
-                                        'Equipe::id_modele_equipe' => 'ModeleEquipe::id_modele_equipe',
-                                        'JDR::id_jdr' => $_REQUEST['id'],
-                                        'ModeleEquipe::id_modele_jdr' => 'JDR::id_modele_jdr',
-                                        'ModeleEquipe::titre_equipe' => "Tous"
-                                    )
-                            )->fetch()['id_equipe'];
+                                    array('ModeleEquipe', 'Equipe', 'JDR'),
+                                    'Equipe.id_equipe',
+                                    array(
+                                            'Equipe::id_modele_equipe' => 'ModeleEquipe::id_modele_equipe',
+                                            'JDR::id_jdr' => $_REQUEST['id'],
+                                            'ModeleEquipe::id_modele_jdr' => 'JDR::id_modele_jdr',
+                                            'ModeleEquipe::titre_equipe' => "Tous"
+                                        )
+                                )->fetch()['id_equipe'];
                         sql_insert('EstDans', array('id_joueur' => $id_joueur, 'id_equipe' => $id_equipe_tous));
+
+                        // ajouter le joueur à l'équipe "Vivants" de ce JDR
+                        $id_equipe_vivants = sql_select(
+                                    array('ModeleEquipe', 'Equipe', 'JDR'),
+                                    'Equipe.id_equipe',
+                                    array(
+                                            'Equipe::id_modele_equipe' => 'ModeleEquipe::id_modele_equipe',
+                                            'JDR::id_jdr' => $_REQUEST['id'],
+                                            'ModeleEquipe::id_modele_jdr' => 'JDR::id_modele_jdr',
+                                            'ModeleEquipe::titre_equipe' => "Vivants"
+                                        )
+                                )->fetch()['id_equipe'];
+                        sql_insert('EstDans', array('id_joueur' => $id_joueur, 'id_equipe' => $id_equipe_vivants));
 
                         // ajoute toutes les données de ce nouveau joueur concernant ce JDR dans la _SESSION
                         array_push($_SESSION['liste_donnees_jdr'], array(
@@ -270,7 +289,7 @@
                                     if ($_SESSION['indice_jdr_suivi'] < 0)
                                         exit;
                                     
-                                    maj_donnees_jdr();
+                                    //maj_donnees_jdr();
                                     $donnees_jdr = $_SESSION['liste_donnees_jdr'][$_SESSION['indice_jdr_suivi']];
 
                                     // cette partie récupère toutes équipes à afficher dans la barre latérale

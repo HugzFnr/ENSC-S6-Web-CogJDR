@@ -65,7 +65,7 @@ create table ModeleAction (
     horaire_activ time not null,
     action_effet_id_modele_equipe_depart integer,
     action_effet_id_modele_equipe_arrive integer,
-    action_fct enum('voteMajoritaireTous', 'voteMinoritaireTous', 'voteMajoritairePremier', 'voteMinoritairePremier', 'voteMajoritaireNul', 'voteMinoritaireNul', 'pouvoir') not null,
+    action_fct enum('Vote majoritaire tous', 'Vote minoritaire tous', 'Vote majoritaire premier', 'Vote minoritaire premier', 'Vote majoritaire nul', 'Vote minoritaire nul', 'Pouvoir') not null,
 
     foreign key (action_effet_id_modele_equipe_depart) references ModeleEquipe (id_modele_equipe),
     foreign key (action_effet_id_modele_equipe_arrive) references ModeleEquipe (id_modele_equipe),
