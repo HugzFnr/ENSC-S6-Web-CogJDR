@@ -1,3 +1,13 @@
+<?php
+    require_once "./inclus/connexion.php";
+    require_once "./inclus/session.php";
+
+    if (sql_select('Utilisateur', "email", array('email' => $_REQUEST['email']))->fetch()) {
+        $_SESSION['erreur'] = "Erreur e-mail déjà utilisé";
+        unset($_REQUEST['email']);
+    }
+?>
+
 <div class="container">
     <h1 class="text-center">Inscription</h1>
 
@@ -9,7 +19,7 @@
             <div class="form-group">
                 <div class="col-sm-6 offset-sm-3">
                     <label for="email"> <p>Adresse e-mail (sera visible)</p> </label>
-                    <input type="email" name="email" pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}" class="form-control" id="email" placeholder="E-mail"<?=empty($_REQUEST['email']) ? "" : " value=\"".$_REQUEST['email']."\""?> required<?=empty($_REQUEST['email']) ? " autofocus" : ""?>>
+                    <input type="email" name="email" pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}" class="form-control" id="email" placeholder="<?= empty($_SESSION['erreur']) ? "E-mail" : $_SESSION['erreur']?>"<?=empty($_REQUEST['email']) ? "" : " value=\"".$_REQUEST['email']."\""?> required<?=empty($_REQUEST['email']) ? " autofocus" : ""?>>
                 </div>
             </div>
 
@@ -55,3 +65,7 @@
         </script>
     </div>
 </div>
+
+<?php
+    unset($_SESSION['erreur']);
+?>

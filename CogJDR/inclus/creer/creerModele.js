@@ -1,425 +1,279 @@
-//on associe les bonnes fonctions aux boutons suivant et précédent
+var master = $("#form_tot");
 
-$("#fleche1").click(function (e) { ClicFlecheImpair(1, e); });
-$("#fleche3").click(function (e) {
-        nom = $("#nom_equipe").val().toLowerCase();
-        if (nom == "tous" || nom == "vivants" || nom == "morts" || nom == "vivant" || nom == "mort") {
-            e.preventDefault();
-            alert("T'inquiete pas : les équipes 'tous', 'vivants' et 'morts' sont créées automatiquement... Trouve un autre nom !")
-        } else ClicFlecheImpair(3, e);
-    });
-$("#fleche5").click(function (e) { ClicFlecheImpair(5, e); });
-$("#fleche7").click(function (e) { ClicFlecheImpair(7, e); });
+function validNb(val, min, max) { return min <= val && val <= max; }
+function µ(id) { return $("#" + id).val(); } // nouveau module JS ?!?
 
-$("#fleche2").click(function (e) { ClicFlechePair(2, e); });
-$("#fleche4").click(function (e) { ClicFlechePair(4, e); });
-$("#fleche6").click(function (e) { ClicFlechePair(6, e); });
-$("#fleche8").click(function (e) { ClicFlechePair(8, e); });
+generated = [null, null, [], [], []]; // track des cartes générées pour chaque liste
+count = []; // compte du nombre de cate a remplire pour chaque liste
+current = [null, null, 0, 0, 0]; // carte actuellement visée pour chaque liste
+options = { // options pour les choix cible, autorise et autre dans les actions
+        equipes: ["Tous", "Vivants", "Morts"],
+        roles: []
+    }
 
-$("#fleche9").click(function (e) {
+var validations = [
+        function() { // Paramètres généraux
+            if (µ("titre_modele") && validNb(µ("nb_equipes"), 1, 99) && validNb(µ("nb_roles"), 1, 99) && validNb(µ("nb_actions"), 1, 99)) {
+                if (0 < count.length)
+                    for (var i = 2; i < 4; i++) {
+                        for (var j = 0; j < count[i]; j++)
+                            generated[i][j] = false;
+
+                        if (1 < count[1])
+                            $("#menu" + i).children().slice(1, count[i]).remove();
+                    }
+
+                count[2] = µ("nb_equipes");
+                count[3] = µ("nb_roles");
+                count[4] = µ("nb_actions");
+
+                $("#equipe_total0").html(count[2]);
+                $("#role_total0").html(count[3]);
+                $("#action_total0").html(count[4]);
+
+                return true;
+            }
+            return false;
+        },
+        function(k) { // Equipes
+            let r = µ("nom_equipe" + k) && validNb(µ("taille_equipe" + k), -1, 99);
+            if (r) options.equipes[k + 3] = µ("nom_equipe" + k);
+            return r;
+        },
+        function(k) { // Rôles
+            return µ("nom_role" + k) && µ("desc_role" + k);
+        },
+        function(k) { // Actions
+            return µ("titre_action" + k) && µ("horaire_action" + k) && µ("desc_action" + k) && µ("effet_action" + k);
+        },
+        function() { // Final
+            return µ("desc_modele") && µ("fichier_regles") && µ("img_logo");
+        }
+    ];
+
+function change(from, to, positive)  {
+    var prev = $("#menu" + from);
+    var next = $("#menu" + to);
+
+    prev.removeClass("actif");
+    prev.find("input, textarea, select").attr("readonly", true);
+    prev.find("button").attr("disabled", true);
+    prev.effect("highlight", { color: positive ? "#00c72b" : "#6b00a8" }, 1300);
+
+    next.removeClass("invisible");
+    next.find("input, textarea, select").attr("readonly", false);
+    next.find("button").attr("disabled", false);
+    next.addClass("actif");
+}
+
+function onplace(num, from, to) {
+    var menu = $("#menu" + num);
+
+    var prev = menu.find("#num" + from);
+    var next = menu.find("#num" + to);
+
+    prev.hide();
+    next.show();
+}
+
+$(".etape-suivante").click(function(e) {
         e.preventDefault();
+        var id = e.target.id;
+        var num = id.charAt("button".length);
 
-        if (!$("#fichier_regles").val().endsWith("pdf")) {
-            alert("Seul les finchiers PDF sont pris en compte.");
+        if (validations[num - 1]())
+            change(num++, num, true);
+        else
+            alert("Veuillez renseigner correctement les champs.");
+    });
+
+$(".etape-precedente").click(function(e) {
+        e.preventDefault();
+        var id = e.target.id;
+        var num = id.charAt("button".length);
+
+        change(num--, num, false);
+    });
+
+$(".etape-liste-suivante").click(function(e) {
+        e.preventDefault();
+        var id = e.target.id;
+        var num = id.charAt("button".length);
+
+        // si c'est le dernier élement de la liste, process comme une case normale
+        if (current[num] + 1 == count[num]) {
+            if (validations[num - 1](current[num])) {
+                change(num++, num, true);
+                if (num == 4) { // cas particulier de vers les actions : on doit rentrer les options pour les selects
+                    let sous_menu = $("#menu" + num + " #num0");
+                    console.log(sous_menu);
+                    sous_menu.find("#effecteur_action0").html(buildOptions(options.equipes));
+                    sous_menu.find("#cibles_action0").html(buildOptions(options.equipes));
+                    sous_menu.find("#fct_origine_action0").html(buildOptions(options.equipes));
+                    sous_menu.find("#fct_arrivee_action0").html(buildOptions(options.equipes));
+                }
+            } else
+                alert("Veuillez renseigner correctement les champs.");
             return;
         }
 
-        if ($("#form5")[0].checkValidity()) {
-            FormsVersObjet()
-            TableauxVersObjet();
-
-            //TODO: felix-it
-            $.post("./inclus/creer/faire_modele.php", donnees, function(data) {
-                    document.location = "./creer.php?quoi=partie";
-                });
-
-            // console.log('debut requete');
-    
-            // var donneesFormData = objectToFormData(donnees);
-    
-            // console.log(donneesFormData);
-
-            // var xhr = new XMLHttpRequest();
-            // xhr.open("POST", "./inclus/creer/faire_modele.php", true);
-
-            // xhr.onload = function(oEvent) {
-            //     if (xhr.status == 200) {
-            //         console.log("UPLOADED!");
-            //     }
-            // }
-            // console.log(donneesFormData.get('desc_modele'));
-            // xhr.send(donneesFormData);
-            //$.post("faire_modele.php",donneesFormData);   
-            
-            //fd.append( 'file', input.files[0] );
-            
-            // $.ajax({
-            //   url: "./inclus/creer/faire_modele.php",
-            //   data: donneesFormData,
-            //   processData: false,
-            //   contentType: false,
-            //   type: 'POST',
-            //   dataType: "json",              
-            //   success: function(data){
-            //     console.log('ajax: ' + data);
-            //   },
-            //   error:function(data){
-            //       console.log('error :' + data);
-            //   }
-            // });
-
-            // console.log('data sent');
-
-            // for (var pair of donneesFormData.entries())
-            // {
-            // console.log(pair[0]+ ', '+ pair[1]); 
-            // }
-
-            //document.location = "./creer.php?quoi=partie";                                
-            
+        // sinon, traitement avec génération du form
+        if (validations[num - 1](current[num])) {
+            if (!generated[num][current[num]]) {
+                $("#menu" + num).children().last().before(forms(num, current[num] + 1, current[num] < count[num]));
+                generated[num][current[num]] = true;
+            }
+            onplace(num, current[num]++, current[num]);
         } else
-            alert("Encore un effort, un dernier formulaire dûment rempli stp !");
+            alert("Veuillez renseigner correctement les champs.");
     });
 
-//$("#effecteur_action").click(function(){ MajChoixActions(); });     
-
-//ce tableau de 5 lignes contient les éléments de chaque menu, pour pouvoir les désactiver ou activer facilement
-
-var elts_menu = [[$("#titre_modele"), $("#nb_equipes"), $("#nb_roles"), $("#nb_actions"), $("#bouton1")],
-[$("#nom_equipe"), $("#taille_equipe"), $("#discussion"), $("#bouton21"), $("#bouton22")],
-[$("#nom_role"), $("#img_role"), $("#desc_role"), $("#bouton31"), $("#bouton32")],
-[$("#titre_action"), $("#effecteur_action"), $("#cibles_action"), $("#fct_origine_action"), $("#fct_arrivee_action"), $("#effet_action"),
-$("#horaire_action"), $("#msg_action"), $("#desc_action"), $("#bouton41"), $("#bouton42")],
-[$("#desc_modele"), $("#fichier_regles"), $("#img_banniere"), $("#img_fond"), $("#img_logo"), $("#bouton51"), $("#bouton52")],
-];
-
-//compteurs du nombre d'équipes, roles et actions à modéliser
-
-var cpt_equipe = 1;
-var nb_equipes = 1;
-
-var cpt_role = 1;
-var nb_roles = 1;
-
-var cpt_action = 1;
-var nb_actions = 1;
-
-//tableaux permettant de temporairement stockés les valeurs des formulaires de création d'équipe, actions et roles
-
-var equipes = [];
-var roles = [];
-var actions = [];
-
-
-
-function ClicFlecheImpair(numeroFleche, e) //les fleches impaires sont les boutons d'étape suivante
-{
-    e.preventDefault();
-    if ((Math.floor(numeroFleche / 2) + 1) == 2 && cpt_equipe < nb_equipes) {
-        if ($("#form2")[0].checkValidity()) //si les champs sont correctement remplis, on peut passer à l'étape suivante
-        {
-            if (equipes[cpt_equipe - 1] == undefined)
-                equipes.push([$("#nom_equipe").val(), $("#taille_equipe").val(), $("#discussion").val()]); //on enregistre dans le tableau les valeurs du form
-            else equipes[cpt_equipe - 1] = [$("#nom_equipe").val(), $("#taille_equipe").val(), $("#discussion").val()]; //en faisant attention à ne pas dupliquer des forms
-            $("#form2")[0].reset(); //puis on le réinitialise
-            cpt_equipe++;
-            $("#equipe_actuel").text(cpt_equipe); //enfin, on notifie l'utilisateur qu'il passe à l'étape suivante
-            $("#menu2").effect("highlight", { color: "#00c72b" }, 1300);
-        }
-        else alert("Veuillez renseigner correctement les champs.");
-    }
-    else if ((Math.floor(numeroFleche / 2) + 1) == 3 && cpt_role < nb_roles) {
-        if ($("#form3")[0].checkValidity()) {
-            if (roles[cpt_role - 1] == undefined)
-                roles.push([$("#nom_role").val(), $("#img_role").val(), $("#desc_role").val()]);
-            else roles[cpt_role - 1] = [$("#nom_role").val(), $("#img_role").val(), $("#desc_role").val()];
-            $("#form3")[0].reset();
-            cpt_role++;
-            $("#role_actuel").text(cpt_role);
-            $("#menu3").effect("highlight", { color: "#00c72b" }, 1300);
-        }
-        else alert("Veuillez renseigner correctement les champs.");
-    }
-    else if ((Math.floor(numeroFleche / 2) + 1) == 4 && cpt_action < nb_actions) {
-        if ($("#form4")[0].checkValidity()) {
-            if (actions[cpt_action - 1] == undefined)
-                actions.push([$("#titre_action").val(), $("#effecteur_action").val(), $("#cibles_action").val(), $("#fct_action").val(),
-                $("#effet_action").val(), $("#horaire_action").val(), $("#msg_action").val(), $("#desc_action").val()]);
-            else actions[cpt_action - 1] = [$("#titre_action").val(), $("#effecteur_action").val(), $("#cibles_action").val(), $("#fct_action").val(),
-            $("#effet_action").val(), $("#horaire_action").val(), $("#msg_action").val(), $("#desc_action").val()];
-            $("#form4")[0].reset();
-            cpt_action++;
-            $("#action_actuel").text(cpt_action);
-            $("#menu4").effect("highlight", { color: "#00c72b" }, 1300);
-        }
-        else alert("Veuillez renseigner correctement les champs.");
-    }
-    else if ($("#form" + (Math.floor(numeroFleche / 2) + 1))[0].checkValidity())  //on vérifie que tous les éléments de la partie du formulaire sont correctement remplis
-    {
-
-        DesactiverPanneau(Math.floor(numeroFleche / 2) + 1);//désactive le panneau associé au bouton flèche
-        AfficherPanneau(Math.floor(numeroFleche / 2) + 2); //et affiche le panneau suivant
-        ActiverPanneau(Math.floor(numeroFleche / 2) + 2); //et le ré-active si besoin
-        $("#menu" + (Math.floor(numeroFleche / 2) + 1)).effect("highlight", { color: "#00c72b" }, 1300); //produit un flash vert sur le form validé                    
-
-        if (numeroFleche == 1) //le premier panneau détermine le nombre d'équipes, roles et actions à créer
-        {
-            nb_equipes = $("#nb_equipes").val();
-            nb_roles = $("#nb_roles").val();
-            nb_actions = $("#nb_actions").val();
-
-            $("#equipe_total").text(nb_equipes);
-            $("#role_total").text(nb_roles);
-            $("#action_total").text(nb_actions);
-
-            $("#equipe_actuel").text(cpt_equipe);
-            $("#role_actuel").text(cpt_role);
-            $("#action_actuel").text(cpt_action);
-        }
-        else if (numeroFleche == 5) //le second panneau, dont la fleche "suivante" est la numéro 3 transmet au 4eme des équipes qui vont apparaitre dans ses menus déroulants
-        {
-            MajChoixActions();
+$(".etape-liste-precedente").click(function(e) {
+        e.preventDefault();
+        var id = e.target.id;
+        var num = id.charAt("button".length);
+        
+        // si c'st le premier élement de la liste, process comme une case normale
+        if (current[num] == 0) {
+            change(num--, num, false);
+            return;
         }
 
-    }
-    else {
-        alert("Veuillez renseigner correctement les champs.");
-    }
-
-}
-
-function ClicFlechePair(numeroFleche, e) //les fleches paires sont les boutons d'étape précédente
-{
-    e.preventDefault();
-    if ((Math.floor(numeroFleche / 2) + 1) == 2 && cpt_equipe > 1) {
-        cpt_equipe--;
-        for (i = 0; i <= 2; i++) //on remet chaque champ aux valeurs précédémment validées par l'utilisateur
-        {
-            elts_menu[1][i].val(equipes[cpt_equipe - 1][i]);
-        }
-        $("#equipe_actuel").text(cpt_equipe); //enfin, on notifie l'utilisateur qu'il passe à l'étape précédente par un flash violet
-        $("#menu2").effect("highlight", { color: "#6b00a8" }, 1300);
-    }
-    else if ((Math.floor(numeroFleche / 2) + 1) == 3 && cpt_role > 1) {
-        cpt_role--;
-        for (i = 0; i <= 2; i++) {
-            elts_menu[2][i].val(roles[cpt_role - 1][i]);
-        }
-        $("#role_actuel").text(cpt_role);
-        $("#menu3").effect("highlight", { color: "#6b00a8" }, 1300);
-    }
-    else if ((Math.floor(numeroFleche / 2) + 1) == 4 && cpt_action > 1) {
-        cpt_action--;
-        for (i = 0; i <= 7; i++) //on remet chaque champ aux valeurs précédémment validées par l'utilisateur
-        {
-            elts_menu[3][i].val(actions[cpt_action - 1][i]);
-        }
-        $("#action_actuel").text(cpt_action); //enfin, on notifie l'utilisateur qu'il passe à l'étape précédente par un flash violet
-        $("#menu4").effect("highlight", { color: "#6b00a8" }, 1300);
-    }
-    else {
-
-        DesactiverPanneau(Math.floor(numeroFleche / 2) + 1);
-        ActiverPanneau(Math.floor(numeroFleche / 2));
-    }
-}
-
-function DesactiverPanneau(numero) {
-    $("#menu" + numero).removeClass("actif"); //pratique
-    elts_menu[numero - 1].forEach(function (element) {
-        element.attr('disabled', '');
-    })
-}
-
-function ActiverPanneau(numero)
-//active le menu associé au numéro demandé
-{
-    $("#menu" + numero).addClass("actif"); //pratique
-    elts_menu[numero - 1].forEach(function (element) {
-        element.removeAttr('disabled', '');
-    })
-}
-
-function AfficherPanneau(numero) {
-    $("#menu" + numero).removeClass("invisible"); //pratique
-}
-
-var options;
-
-function MajChoixActions() //met à jour les options d'effecteurs et de cibles dans la création des actions pour inclure les nouvelles équipes et roles
-{
-
-    var newOptions = {
-        1: 'Vivants',
-        2: 'Morts',
-        0: 'Tous',
-    };
-
-    for (i = 0; i < equipes.length; i++) {
-        newprop = equipes[i][0];
-        newOptions[newprop] = (equipes[i][0]);
-    }
-
-    newprop = $("#nom_equipe").val();
-    newOptions[newprop] = newprop;
-
-    var select_ori = $("#fct_origine_action"); //seules des équipes peuvent être sélectionnées
-    //comme arrivée ou origine d'un pouvoir
-    var select_arri = $("#fct_arrivee_action"); 
-
-    insererOptions(select_ori,newOptions);
-    insererOptions(select_arri,newOptions);
-
-
-    for (i = 0; i < roles.length; i++) {
-        newprop = roles[i][0];
-        newOptions[newprop] = (roles[i][0]);
-    }
-
-    newprop = $("#nom_role").val();
-    newOptions[newprop] = newprop;
-
-
-    var select1 = $('#effecteur_action');
-    var select2 = $("#cibles_action");
-
-    insererOptions(select1,newOptions);
-    insererOptions(select2,newOptions);
-
-}
-
-function insererOptions (select,newOptions) //cette fonction nettoie et insere de nouvelles options dans le menu select en argument
-{
-    if (select.prop) {
-        options = select.prop('options');
-    }
-    else {
-        options = select.attr('options');
-    }
-    $('option', select).remove();
-
-    $.each(newOptions, function (val, text) {
-        options[options.length] = new Option(text, val);
+        //$("#liste" + num).last().remove();
+        //generated[num + current[num]] = false;
+        onplace(num, current[num]--, current[num]);
     });
-    
+
+function buildOptions(optionsList) {
+    var r = "";
+    for (let k = 0; k < optionsList.length; r+= '\n<option value="' + k + '">' + optionsList[k++] + '</option>') ;
+    return r;
 }
 
-//ces 3 fonctions, appelées à la fin de la création du modèle, permettent de récupérer les données dans un format pertinent (notamment avec des clés et non des index)
 
+// monster
+function forms(num, index, islast) {
+    return [
+            '\n<div id="num' + index + '">' +
+            '\n    <h3 class="text-center"> Créer l\'équipe  <b class="rouge" id="equipe_actuel' + index + '">' + (index + 1) + '</b>/<b id="equipe_total' + index + '">' + count[num] + '</b> </h3>' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="nom_equipe' + index + '"> <p>Nom de l\'équipe</p> </label>' +
+            '\n            <input type="text" name="nom_equipe' + index + '" class="form-control" id="nom_equipe' + index + '" placeholder="Un nom fédérateur !" required autofocus>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="taille_equipe' + index + '"> <p>Taille maximale de l\'équipe (-1 = &infin;)</p> </label>' +
+            '\n            <input type="number" value="1" min="-1" max="99" name="taille_equipe' + index + '"  class="form-control" id="taille_equipe' + index + '" required>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="discussion' + index + '"> <p>Discussion autorisée</p> </label>' +
+            '\n            <select name="discussion' + index + '" class="form-control" id="discussion' + index + '" required>' +
+            '\n                <option value=true> Oui </option>' +
+            '\n                <option value=false> Non </option>' +
+            '\n            </select>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n</div>',
 
-var donnees = { //structure des données récupérées
-    parametres: { titre_modele: "", nb_equipes: -1, nb_roles: -1, nb_actions: -1 },
+            '\n<div id="num' + index + '">' +
+            '\n    <h3 class="text-center"> Créer le rôle <b class="rouge" id="role_actuel' + index + '">' + (index + 1) + '</b>/<b id="role_total' + index + '">' + count[index] + '</b> </h3>' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="nom_role' + index + '"> <p>Nom du rôle</p> </label>' +
+            '\n            <input type="text" name="nom_role' + index + '" class="form-control" id="nom_role' + index + '" placeholder="Pas \'loup-garou\' stp " required autofocus>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="img_role' + index + '"> <p>Image du rôle</p> </label>' +
+            '\n            <input type="file" name="img_role' + index + '" accept=".jpg,.png,.jpeg,.gif" class="form-control" id="img_role' + index + '">' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="desc_role' + index + '"> <p>Description du rôle</p> </label>' +
+            '\n            <textarea name="desc_role' + index + '" class="form-control" id="desc_role' + index + '" placeholder="Décris donc qui est ce personnage !" required></textarea>                            ' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n</div>',
 
-    equipes: [{ nom_equipe: "", taille_equipe: -1, discussion: true }],
-    roles: [{ nom_role: "", img_role: "", desc_role: "" }],
-    actions: [{
-        titre_action: "", effecteur_action: "", cibles_action: "", fct_action: "", effet_action: "",
-        horaire_action: "", msg_action: "", desc_action: ""
-    }],
-
-    finaux: { desc_modele: "", fichier_regles: "", img_banniere: "", img_fond: "", img_logo: "" },
-};
-
-// var donneesFormData = new FormData(); //il s'agit de l'objet qui sera envoyé et traité pour la BDD par une requete XMLHttp qui conserve les images
-// donneesFormData.append('parametres',donnees.parametres);
-// donneesFormData.append('equipes',donnees.equipes);
-// donneesFormData.append('roles',donnees.roles);
-// donneesFormData.append('actions',donnees.actions);
-// donneesFormData.append('finaux',donnees.finaux);
-
-
-function FormsVersObjet() {
-    $.each(donnees, function (cle, val) {
-        if (cle == 'equipes' || cle == 'roles' || cle == 'actions') {
-            //console.log(cle);
-            $.each(val[0], function (scle, sval) {
-                val[0][scle] = $("#" + scle).val();                        
-
-            
-            })
-        }
-        else {
-            $.each(val, function (scle, sval) {
-                val[scle] = $("#" + scle).val();
-            })
-        }
-    })
-
-    //console.log(donnees);
+            '\n<div id="num' + index + '">' +
+            '\n    <h3 class="text-center"> Créer l\'action <b class="rouge" id="action_actuel' + index + '">' + (index + 1) + '</b>/<b id="action_total' + index + '">' + count[index] + '</b> </h3>' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="titre_action' + index + '"> <p>Titre de l\'action</p> </label>' +
+            '\n            <input type="text" name="titre_action' + index + '" class="form-control" id="titre_action' + index + '" placeholder="Un titre explicite (genre \'envoyer au bûcher\') !" required autofocus>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="effecteur_action' + index + '"> <p>Effecteur de l\'action </p> </label>' +
+            '\n            <select name="effecteur_action' + index + '" class="form-control" id="effecteur_action' + index + '" required>' +
+            '\n                ' + $("#effecteur_action0")[0].innerHTML +
+            '\n            </select>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="cibles_action' + index + '"> <p>Cibles potentielles de l\'action </p> </label>' +
+            '\n            <select name="cibles_action' + index + '" class="form-control" id="cibles_action' + index + '" required>' +
+            '\n                ' + $("#cibles_action0")[0].innerHTML +
+            '\n            </select>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="fct_origine_action' + index + '"> <p>Equipe d\'origine de la cible </p> </label>' +
+            '\n            <select name="fct_origine_action' + index + '" class="form-control" id="fct_origine_action' + index + '" required>' +
+            '\n                ' + $("#fct_origine_action0")[0].innerHTML +
+            '\n            </select>' +
+            '\n            <label for="fct_arrivee_action' + index + '"> <p>Equipe d\'arrivee de la cible </p> </label>' +
+            '\n            <select name="fct_arrivee_action' + index + '" class="form-control" id="fct_arrivee_action' + index + '" required>' +
+            '\n                ' + $("#fct_arrivee_action0")[0].innerHTML +
+            '\n            </select>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="effet_action' + index + '"> <p>Effet de l\'action </p> </label>' +
+            '\n            <select name="effet_action' + index + '" class="form-control" id="effet_action' + index + '" required>' +
+            '\n                ' + $("#effet_action0")[0].innerHTML +
+            '\n            </select>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="horaire_action' + index + '"> <p>Horaire limite </p> </label>' +
+            '\n            <input type="time" name="horaire_action' + index + '"  class="form-control" id="horaire_action' + index + '" required>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="msg_action' + index + '"> <p>Message automatique de l\'action (optionnel) </p> </label>' +
+            '\n            <textarea name="msg_action' + index + '" class="form-control" id="msg_action' + index + '" placeholder="Pour avertir vos joueurs de ce qu\'il s\'est passé dans le chat général !"></textarea>' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n' +
+            '\n    <div class="form-group">' +
+            '\n        <div class="col-sm-10 offset-sm-1">' +
+            '\n            <label for="desc_action' + index + '"> <p>Description de l\'action</p> </label>' +
+            '\n            <textarea name="desc_action' + index + '"  class="form-control" id="desc_action' + index + '" placeholder="Explique ce que fait l\'action!" required></textarea>                            ' +
+            '\n        </div>' +
+            '\n    </div>' +
+            '\n</div>'
+        ][num - 2];
 }
-
-function TableauxVersObjet() {
-
-    //equipes
-    for (i = 0; i < equipes.length; i++) {
-        donnees.equipes.push({});
-        k=0;
-        $.each(donnees.equipes[0], function (cle, val) {
-            donnees.equipes[i+1][cle] = equipes[i][k];
-            //attention ici à la non correspondance index / objet si on rajoute des input
-            k++
-        })
-    }
-
-    //roles
-    for (i = 0; i < roles.length; i++) {
-        donnees.roles.push({});
-        k=0;
-        $.each(donnees.roles[0], function (cle, val) {
-            donnees.roles[i+1][cle] = roles[i][k];
-            //attention ici à la non correspondance index / objet si on rajoute des input
-            k++
-        })
-    }
-
-    //actions
-    for (i = 0; i < actions.length; i++) {
-        donnees.actions.push({});
-        k=0;
-        $.each(donnees.actions[0], function (cle, val) {
-            //console.log("cle :" + cle  + "val : " + val + " machin : ");
-            donnees.actions[i+1][cle] = actions[i][k];
-            //attention ici à la non correspondance index / objet si on rajoute des input
-            k++
-        })
-    }
-
-    // console.log(donnees);
-    // $.each(donnees, function (cle, val) {
-    //     console.log("cle :" + cle + " val :" + val);
-    //     donneesFormData.append(cle,val);
-    // });
-
-}
-
-var objectToFormData = function(obj, form, namespace) {
-    
-    var fd = form || new FormData();
-    var formKey;
-    
-    for(var property in obj) {
-      if(obj.hasOwnProperty(property)) {
-        
-        if(namespace) {
-          formKey = namespace + '[' + property + ']';
-        } else {
-          formKey = property;
-        }
-       
-        // if the property is an object, but not a File,
-        // use recursivity.
-        if(typeof obj[property] === 'object' && !(obj[property] instanceof File)) {
-          
-          objectToFormData(obj[property], fd, property);
-          
-        } else {          
-          // if it's a string or a File object
-          fd.append(formKey, obj[property]);
-        }
-        
-      }
-    }
-    
-    return fd;
-      
-  };
